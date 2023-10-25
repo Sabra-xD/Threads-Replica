@@ -82,4 +82,17 @@ const login = async (req,res) =>{
 
 }
 
-export {signUpuser,login};
+// When logging out we deny the token's verification by adjusting its age to minimum.
+const logout = (req,res) => {
+    try{
+        //It clears the access token and the cookie.
+        res.cookie("jwt"," ",{maxAge:1});
+        res.status(200).json({message: "User logged out sucessfully"});
+
+    }catch(error){
+        res.status(500).json({message: errr.message});
+        console.log("Error in LogOut:  ",error.message);
+    }
+}
+
+export {signUpuser,login,logout};
