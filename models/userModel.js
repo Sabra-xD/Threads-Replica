@@ -26,11 +26,14 @@ const userSchema = mongoose.Schema({
     type: String,
     default: "",
    },
+   followeing : {
+    type: [String],
+    default: [],
+   },
    followers : {
     type: [String],
     default: [],
    },
-
 
    bio: {
     type: String,
