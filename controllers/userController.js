@@ -95,6 +95,11 @@ const logout = (req,res) => {
     }
 }
 
+//In this function we get the user we are handling from the request.
+//We get the ID of the user that we are following/unfollowing from prams "link"
+//Find both users from the DataBase.
+//Read from the UserModel wehther that user is already followed or not and handle accordingly.
+//Pull user, by ID, from the followers list to delete and push to add.
 
 const followunfollowUser = async (req,res) => {
     try {
@@ -116,14 +121,14 @@ const followunfollowUser = async (req,res) => {
          //By removing the IDs from the following of both users.
          //Pull deltes from that object in the DB.
          await User.findByIdAndUpdate(req.user._id, {$pull: {following: id}});
-         await User.findByIdAndUpdate(id,{$pull: {following: req.user._id}});
+         await User.findByIdAndUpdate(id,{$pull: {followers: req.user._id}});
          res.status(200).json({message: "User unfollowed sucessfully"});
         }else{
             //Follow
             //By addinging the IDs to both users.
             //Push adds to it in the DB
             await User.findByIdAndUpdate(req.user._id, {$push: {following: id}});
-         await User.findByIdAndUpdate(id,{$push: {following: req.user._id}});
+         await User.findByIdAndUpdate(id,{$push: {followers: req.user._id}});
          res.status(200).json({message: "User followed sucessfully"});
 
         }
