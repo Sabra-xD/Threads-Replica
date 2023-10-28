@@ -1,5 +1,6 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import generateTokenAndSetCookie from "../utils/helpers/generateTokenAndSetCookie.js";
 
 const signUpuser = async (req,res) => {
@@ -16,7 +17,9 @@ const signUpuser = async (req,res) => {
     //Basically Salt is the key and we have a 10 sized key and we use it to hash our password and save
     // It in our DB.
     console.log(username)
+    //Generating key with Salt.
       const salt = await bcrypt.genSalt(10);
+      //Hashing with salt.
       const hashedPassword = await bcrypt.hash(password,salt);
       const newUser = new User({
         name,
@@ -76,8 +79,8 @@ const login = async (req,res) =>{
         })
 
     }catch(err){
-        res.status(500).json({message: errr.message});
-        console.log("Error in logIn:  ",error.message);
+        res.status(500).json({message: err.message});
+        console.log("Error in logIn:  ",err.message);
     }
 
 }
@@ -85,12 +88,17 @@ const login = async (req,res) =>{
 // When logging out we deny the token's verification by adjusting its age to minimum.
 const logout = (req,res) => {
     try{
+        const token = req.cookies.jwt;
+        if(!token){
+            //Adjust the Status Code Here.
+           return  res.status(404).json({message: "User is not signed in"});
+        }
         //It clears the access token and the cookie.
         res.cookie("jwt"," ",{maxAge:1});
         res.status(200).json({message: "User logged out sucessfully"});
 
     }catch(error){
-        res.status(500).json({message: errr.message});
+        res.status(500).json({message: error.message});
         console.log("Error in LogOut:  ",error.message);
     }
 }
@@ -106,11 +114,11 @@ const followunfollowUser = async (req,res) => {
         const { id } =  req.params; //To read the ID from the url.
 
         const userToModify = await User.findById(id);
+
         //This is used to locate the user that made the request.
-     
         const currentuser = await User.findById(req.user._id);
         
-        if (id == req.user._id) return res.status(400).json({message: "You can not follow yourself."});
+        if (id == req.user._id.toString()) return res.status(400).json({message: "You can not follow yourself."});
         if(!userToModify || !currentuser) return res.status(400).json({message: "User not found"});
         console.log(id)
         const isFollowing = currentuser.following.includes(id); //Following is an array in the DB
@@ -142,4 +150,68 @@ const followunfollowUser = async (req,res) => {
 
 }
 
-export {signUpuser,login,logout, followunfollowUser};
+
+const updateUser = async(req,res) => {
+    const {name,email,username,password,profilePic,bio} = req.body; //Getting the rest info from the body.
+    const userId = req.user._id; //Getting the user ID from the cookie I assume.
+    const {id} = req.params;
+    try{
+      
+        let user = await User.findById(userId);
+        if(!user) return res.status(400).json({message: "User was not found"});
+        
+        //  if(id !== userId.toString){
+        //     return res.status(400).json({message: "You can not update other profiles"});
+        //  }
+
+        if(password){
+            if(password.length<6) return res.status(400).json({message: "Password must be longer than 6 characters"});
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password,salt)
+            user.password = hashedPassword;
+            //Updating Password.
+        }
+
+        if(id !== userId.toString()){
+            return res.status(400).json({message: "You can not update other user's profile"});
+        }
+
+        if(username||email){
+            const foundUser = await User.findOne({$or: [{email},{username}]});
+            if(!foundUser){
+                user.username = username || user.username;
+                user.email = email || user.email;
+            } else{
+                return res.status(400).json({message: "Username or Email is already in use"});
+            }
+        }
+
+    //    user.name = name || user.name;
+    //    if(name || email){
+    //     const user = await await User.findOne({$or:[{email},{username}]});
+    //     if(!user){
+    //         user.username = username || user.username;
+    //         user.email = email || user.email;
+    //     } else{
+    //         return res.status(400).json({messa: "Username or email already in use"});
+    //     }
+
+    //    }
+    user.name = name || user.name;
+    // user.email = email || user.email;
+    // user.username = username || user.username;
+    user.profilePic = profilePic || user.profilePic;
+    user.bio = bio || user.bio;
+
+       user = await user.save();
+
+       res.status(200).json({message: "Profile was updated successfully"});
+
+    }catch(error){
+        res.status(500).json({message: error.message});
+        console.log(`Error in the updateUser:  ${error.message}`);
+    }
+
+}
+
+export {signUpuser,login,logout, followunfollowUser , updateUser};
