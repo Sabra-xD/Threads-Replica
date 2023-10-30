@@ -68,5 +68,32 @@ const getPost = async (req,res) => {
 }
 
 
+const deletePost = async (req,res) => {
+    try{
+        const {id} = req.params;
+        const post = await Post.findById(id);
+        if(!post) return res.status(404).json({message: "Post was not found"});
+        //We need to check if the user that is trying to delete this is the same user that has the post.
+        console.log(post.postedBy.toString())
+        console.log(req.user._id);
+        if(post.postedBy.toString()!==req.user._id.toString()){
+            return res.status(401).json({message: "Un-Authrized action taken"});
+        }
 
-export {createPost,getPost};
+        await Post.findByIdAndDelete(id);
+
+        res.status(200).json({message: "Post was deleted sucessfully"});
+
+
+
+
+        
+    }catch(error){
+        res.status(400).json({message: error.message});
+        console.log("Error in the getPost: ",error.message);
+    }
+
+}
+
+
+export {createPost,getPost,deletePost};
