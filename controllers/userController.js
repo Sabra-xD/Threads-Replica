@@ -3,6 +3,27 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import generateTokenAndSetCookie from "../utils/helpers/generateTokenAndSetCookie.js";
 
+
+const getUserProfile = async (req,res) => {
+    const {username} = req.params;
+    try{
+
+        let user = await User.findOne({username}).select("-password").select("-updatedAt");
+        //We had an error because we did not wait from the response.
+        // And we were already using it and it was nto assigned anything yet.
+        if(!user){
+            res.status(400).json({message: "User was not found"});
+        }
+        res.status(200).json(user);
+    }catch(error){
+        res.status(500).json({message: error.message});
+        console.log("Error in the getUserProfiler: ",error.message);
+    }
+    
+}
+
+
+
 const signUpuser = async (req,res) => {
     console.log(req.body);
     //Where the fuck is the body?
@@ -186,20 +207,7 @@ const updateUser = async(req,res) => {
             }
         }
 
-    //    user.name = name || user.name;
-    //    if(name || email){
-    //     const user = await await User.findOne({$or:[{email},{username}]});
-    //     if(!user){
-    //         user.username = username || user.username;
-    //         user.email = email || user.email;
-    //     } else{
-    //         return res.status(400).json({messa: "Username or email already in use"});
-    //     }
-
-    //    }
     user.name = name || user.name;
-    // user.email = email || user.email;
-    // user.username = username || user.username;
     user.profilePic = profilePic || user.profilePic;
     user.bio = bio || user.bio;
 
@@ -214,4 +222,8 @@ const updateUser = async(req,res) => {
 
 }
 
-export {signUpuser,login,logout, followunfollowUser , updateUser};
+
+
+
+
+export {signUpuser,login,logout, followunfollowUser , updateUser, getUserProfile};

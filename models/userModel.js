@@ -9,17 +9,17 @@ const userSchema = mongoose.Schema({
    username: {
     type: String,
     requred: true,
-    uinque: true,
+    unique: true,
    },
    email: {
     type: String,
     required: true,
-    uinque: true,
+    unique: true,
    },
    password: {
     type: String,
     required: true,
-    minLength: 6,
+    minlength: 6,
 
 },
    profilePic: {
