@@ -50,5 +50,23 @@ const createPost = async (req,res) => {
 };
 
 
+const getPost = async (req,res) => {
+    try{
+        const {id} = req.params;//Why though?
+        const post = await Post.findById(id);
 
-export {createPost};
+        if(!post) return res.status(404).json({message: "Post was not found"});
+
+        return res.status(200).json({message: "Post was found successfully", post});
+
+
+
+    }catch(error){
+        res.status(400).json({message: error.message});
+        console.log("Error in the getPost: ",error.message);
+    }
+}
+
+
+
+export {createPost,getPost};
