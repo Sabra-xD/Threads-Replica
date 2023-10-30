@@ -23,7 +23,6 @@ const getUserProfile = async (req,res) => {
 }
 
 
-
 const signUpuser = async (req,res) => {
     console.log(req.body);
     //Where the fuck is the body?
@@ -73,8 +72,6 @@ const signUpuser = async (req,res) => {
         console.log ("Error in Sign Up: ",err.message);
     }
 }
-
-
 
 const login = async (req,res) =>{
     try{

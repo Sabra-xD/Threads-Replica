@@ -1,19 +1,14 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
-
-//Something Might Be Wrong here.
-//What is ref: "User"?
 const postSchema = mongoose.Schema({
-    postedBy : {
-        //This is Provided by MongoDB, How?
+    postedBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'User', // This sets up a reference to the 'User' model
         required: true,
     },
     text: {
         type: String,
-        maxLength: 500,
-
+        maxlength: 500, // Corrected "maxLength" spelling
     },
     img: {
         type: String,
@@ -22,29 +17,25 @@ const postSchema = mongoose.Schema({
         type: Number,
         default: 0,
     },
-    replies: {
+    replies: [{
         userID: {
-            types: mongo.Schema.Types.ObjectId,
-            ref: 'User',
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User', // This sets up a reference to the 'User' model
             required: true,
-
         },
-
-        text : {
+        text: {
             type: String,
             required: true,
         },
-
         userProfilePic: {
             type: String,
-            
         },
-       userName: {
+        userName: {
             type: String,
         }
-    },
-}, {timestamps: true});
+    }]
+}, { timestamps: true });
 
-const Post = mongoose.model("Post",postSchema);
+const Post = mongoose.model("Post", postSchema);
 
 export default Post;
