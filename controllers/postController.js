@@ -130,5 +130,90 @@ const likeunlikePost = async (req,res) => {
   }
 }
 
+const replyToPost = async (req, res) => {
+    try {
+        const { id:postId } = req.params;
+        const userId = req.user._id; // Getting userId from the JWT token.
+        console.log(userId);
+        const post = await Post.findById(postId);
+        const { text } = req.body;
+        const userProfilePic = req.user.profilePic; // Use 'profilePic' instead of 'ProfilePic'
+        const username = req.user.username;
 
-export {createPost,getPost,deletePost,likeunlikePost};
+        if (!text) {
+            return res.status(400).json({ message: "Text field is required" });
+        }
+
+        if (!post) {
+            return res.status(404).json({ message: "Post was not found" });
+        }
+
+        const reply = {
+            userId,
+            text,
+            username,
+            userProfilePic,
+        };
+
+        post.replies.push(reply);
+
+        await post.save();
+
+        return res.status(200).json({ message: "Reply was sent successfully" });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+// const deleteReply = async(req,res) => {
+//     try{
+//         const userId = req.user._id;
+//         const postId = req.params.id;
+//         const replyId = req.params.replyId;
+
+        
+
+        
+
+//         const post = await Post.findOne({_id: postId, 'replies.replyId':replyId});
+//         if(!post) return res.status(404).json({message: "Post or reply were not found"});
+//         // const reply = post.includes.replies(replyId); //Finding the specific reply using the replyId;
+        
+
+
+
+
+        
+
+
+//     }catch(error){
+//         res.status(500).json({message: error.message});
+//         console.log("Erorr in the deleteReply function: ",error.message);
+//     }
+// }
+
+
+
+const getFeedPost = async(req,res) => {
+    try{
+        const userId = req.user._id;
+        const user = await User.findById(userId);
+
+        if(!user) return res.status(404).json({message: "User was not found"});
+
+        const following = user.following;
+        const feedPosts = await Post.find({postedBy:{$in: following}}).sort({createdAt: -1});
+
+
+        res.status(200).json(feedPosts);
+
+
+
+    }catch(error){
+        res.status(500).json({message: error.message});
+        console.log("error in the getFeedPost:  ",error.message);
+    }
+}
+
+
+export {createPost,getPost,deletePost,likeunlikePost,replyToPost,getFeedPost};

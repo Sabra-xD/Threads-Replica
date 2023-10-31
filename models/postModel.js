@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import {v4 as uuidv4} from "uuid";
 
 const postSchema = mongoose.Schema({
     postedBy: {
@@ -19,7 +20,12 @@ const postSchema = mongoose.Schema({
        default: []
     },
     replies: [{
-        userID: {
+
+        replyId: {
+         type: String,
+         defauly: uuidv4,
+        },
+        userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User', // This sets up a reference to the 'User' model
             required: true,
