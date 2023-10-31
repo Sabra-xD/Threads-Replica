@@ -95,5 +95,40 @@ const deletePost = async (req,res) => {
 
 }
 
+const likeunlikePost = async (req,res) => {
+  try{
+    const {id:postId} = req.params;
+    const userId = req.user._id; //Getting the userId from the token.
 
-export {createPost,getPost,deletePost};
+    const post = await Post.findById(postId);
+
+    if(!post){
+        return res.status(404).json({message: "Post was not found"});
+    }
+    
+    const userLike = post.likes.includes(userId); //Checking if the array in the schema of the Post includes this user.
+
+    if(userLike){
+      //Unlike the post
+      await Post.updateOne({_id:postId},{$pull: {likes: userId}}); //Removing the user from the likes array.
+      return res.status(200).json({message: "Post was unliked sucessfully."});
+    }else{
+     //Like the post by adding the user to the likes array.
+     post.likes.push(userId);
+     await post.save();
+     return res.status(200).json({message: "Post was like sucessfully."});
+
+    }
+
+
+
+
+
+  }catch(error){
+    res.status(500).json({message: error.message});
+    console.log("Error in the likeUnlikeFunction: ",error.message);
+  }
+}
+
+
+export {createPost,getPost,deletePost,likeunlikePost};
