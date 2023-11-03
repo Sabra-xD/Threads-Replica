@@ -177,14 +177,28 @@ try{
     const post = await Post.findById(postId);
     if(!post) res.status(404).json({message: "Post was not found"});
 
-    const replyIndex = post.replies.findIndex((reply)=> reply._id.toString() == replyId);
-    console.log(replyIndex);
-    if(replyIndex == -1) return res.status(404).json({message: "Reply was not found"});
+    const result = post.replies.find((reply,index) => reply._id.toString() == replyId);
 
-    post.replies.splice(replyIndex,1);
+    if(result){
+        const reply = result;
+        const replyIndex = post.replies.indexOf(reply);
+        if(replyIndex == -1) return res.status(404).json({message: "Reply was not found"});
+        console.log(reply);
+        if(reply.userId.toString() == userId){
+            post.replies.splice(replyIndex,1);
+            await post.save();
+              
+            return res.status(200).json({message: "Reply was deleted sucessfully"});
+        }
+        return res.status(400).json({message: "Unauthrorized Action"});
 
-    await post.save();
-    return res.status(200).json({message: "Reply was deleted sucessfully"});
+    }else{
+        return res.status(404).json({message: "Reply was not found"});
+    }
+
+
+
+
 
 }catch(error){
     res.status(500).json({message: error.message});
