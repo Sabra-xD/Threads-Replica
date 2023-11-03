@@ -165,33 +165,34 @@ const replyToPost = async (req, res) => {
     }
 };
 
-// const deleteReply = async(req,res) => {
-//     try{
-//         const userId = req.user._id;
-//         const postId = req.params.id;
-//         const replyId = req.params.replyId;
+const deleteReply = async (req, res) => {
 
-        
+try{
+    const userId = req.user._id;
+    const postId = req.params.id;
+    const replyId = req.params.replyId;
+    
+    const user = await User.findById(userId);
+    if(!user) res.status(400).json({message: "Action failed: Please login to take this action"});
+    const post = await Post.findById(postId);
+    if(!post) res.status(404).json({message: "Post was not found"});
 
-        
+    const replyIndex = post.replies.findIndex((reply)=> reply._id.toString() == replyId);
+    console.log(replyIndex);
+    if(replyIndex == -1) return res.status(404).json({message: "Reply was not found"});
 
-//         const post = await Post.findOne({_id: postId, 'replies.replyId':replyId});
-//         if(!post) return res.status(404).json({message: "Post or reply were not found"});
-//         // const reply = post.includes.replies(replyId); //Finding the specific reply using the replyId;
-        
+    post.replies.splice(replyIndex,1);
 
+    await post.save();
+    return res.status(200).json({message: "Reply was deleted sucessfully"});
 
+}catch(error){
+    res.status(500).json({message: error.message});
+    consloge.log("Error in the deleteReply Function: ",error.message)
+}
 
-
-        
-
-
-//     }catch(error){
-//         res.status(500).json({message: error.message});
-//         console.log("Erorr in the deleteReply function: ",error.message);
-//     }
-// }
-
+};
+  
 
 
 const getFeedPost = async(req,res) => {
@@ -202,6 +203,7 @@ const getFeedPost = async(req,res) => {
         if(!user) return res.status(404).json({message: "User was not found"});
 
         const following = user.following;
+        //Basically what he did there was that he looked into all posts that had the following of the user in them and sorted them and sent them back to the user.
         const feedPosts = await Post.find({postedBy:{$in: following}}).sort({createdAt: -1});
 
 
@@ -216,4 +218,4 @@ const getFeedPost = async(req,res) => {
 }
 
 
-export {createPost,getPost,deletePost,likeunlikePost,replyToPost,getFeedPost};
+export {createPost,getPost,deletePost,likeunlikePost,replyToPost,getFeedPost,deleteReply};

@@ -21,10 +21,7 @@ const postSchema = mongoose.Schema({
     },
     replies: [{
 
-        replyId: {
-         type: String,
-         defauly: uuidv4,
-        },
+
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User', // This sets up a reference to the 'User' model
