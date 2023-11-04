@@ -1,2 +1,0 @@
---------------------------Bisect----------------------
-It is a binary search tree in which we insert elements in their correct order.
