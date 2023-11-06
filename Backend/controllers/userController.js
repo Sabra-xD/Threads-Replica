@@ -87,6 +87,7 @@ const login = async (req,res) =>{
             return res.status(400).json({message: "Invalid username or password"});
         }
         console.log("Generated a Token");
+        console.log("User logged in sucessfully");
         generateTokenAndSetCookie(user._id,res);
 
         res.status(200).json({

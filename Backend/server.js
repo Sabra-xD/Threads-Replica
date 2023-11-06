@@ -4,6 +4,7 @@ import connectDB from "./Database/dbconnect.js";
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userRoutes.js"
 import postRotues from "./routes/postRoutes.js"
+import cors from "cors";
 dotenv.config();
 const app = express();
 
@@ -14,6 +15,7 @@ connectDB();
 const PORT = process.env.PORT || 5000;
 //Allows us to parse JSON data from the body.
 app.use(express.json());
+app.use(cors())
 // To Parse data in req.body as well
 //But it is nested inside so the single object can be
 // Text : {
