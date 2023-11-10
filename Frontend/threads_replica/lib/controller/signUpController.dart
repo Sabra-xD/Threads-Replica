@@ -1,36 +1,50 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-Future<void> signIp(username, email, name, password, bio) async {
-  const String url = "http://localhost:3000/api/users/login";
+class SignUpController extends GetxController {
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+  final emailController = TextEditingController();
+  final nameController = TextEditingController();
+  final bioController = TextEditingController();
+  final imageController = TextEditingController();
 
-  final Map<String, String> headers = {
-    'Content-Type': 'application/json',
-  };
+  Future<void> signup() async {
+    print("Inside the Sign UP Function");
+    const String url = "http://localhost:3000/api/users/signup";
 
-  final Map<String, String> data = {
-    'username': username,
-    'email': email,
-    'name': name,
-    'password': password,
-    'bio': bio,
-  };
+    final Map<String, String> headers = {
+      'Content-Type': 'application/json',
+    };
 
-  if (username != null && password != null && name != null) {
-    try {
-      final response = await http.post(Uri.parse(url),
-          headers: headers, body: json.encode(data));
+    final Map<String, String> data = {
+      'username': usernameController.text,
+      'email': emailController.text,
+      'name': nameController.text,
+      'password': passwordController.text,
+      'bio': bioController.text,
+    };
 
-      if (response.statusCode == 200) {
-        print("Response Data:${response.body}");
-      } else {
-        print("Error: ${response.body}");
+    if (usernameController.text.isNotEmpty &&
+        passwordController.text.isNotEmpty &&
+        nameController.text.isNotEmpty) {
+      try {
+        final response = await http.post(Uri.parse(url),
+            headers: headers, body: json.encode(data));
+
+        if (response.statusCode == 200) {
+          print("Response Data:${response.body}");
+        } else {
+          print("Error: ${response.body}");
+        }
+      } catch (error) {
+        print(error);
       }
-    } catch (error) {
-      print(error);
+    } else {
+      print("Post was failed due to insuficient input.");
     }
-  } else {
-    print("Post was failed due to insuficient input.");
   }
 }
