@@ -5,18 +5,21 @@ class TextFieldInput extends StatelessWidget {
   final bool isPass;
   final String hintText;
   final TextInputType textInputType;
+  final String? Function(String?) validator;
   const TextFieldInput(
       {super.key,
       required this.textEditingController,
       this.isPass = false,
       required this.hintText,
-      required this.textInputType});
+      required this.textInputType,
+      required this.validator});
 
   @override
   Widget build(BuildContext context) {
     final inputBorder =
         OutlineInputBorder(borderSide: Divider.createBorderSide(context));
-    return TextField(
+    return TextFormField(
+      validator: validator,
       controller: textEditingController,
       obscureText: isPass,
       keyboardType: textInputType,

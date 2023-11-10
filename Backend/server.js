@@ -15,7 +15,7 @@ connectDB();
 const PORT = process.env.PORT || 5000;
 //Allows us to parse JSON data from the body.
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 // To Parse data in req.body as well
 //But it is nested inside so the single object can be
 // Text : {
@@ -29,4 +29,4 @@ app.use(cookieParser());
 app.use("/api/users",userRoutes);
 app.use("/api/posts",postRotues);
 
-app.listen( PORT , () => console.log(`Server Started At Local Host Listening on Port ${PORT}`));
+app.listen( PORT ,() => console.log(`Server Started At Local Host Listening on Port ${PORT}`));
