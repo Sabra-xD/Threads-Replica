@@ -32,7 +32,7 @@ const signUpuser = async (req,res) => {
       const user = await User.findOne({$or:[{email},{username}]});
 
       if(user){
-        return res.status(400).json({message: "User already exists"});
+        return res.status(409).json({message: "User already exists"});
       }
     //Basically Salt is the key and we have a 10 sized key and we use it to hash our password and save
     // It in our DB.
