@@ -11,6 +11,7 @@ class SignUpController extends GetxController {
   final nameController = TextEditingController();
   final bioController = TextEditingController();
   final imageController = TextEditingController();
+  RxInt statusCode = RxInt(0);
 
   Future<void> signup() async {
     print("Inside the Sign UP Function");
@@ -34,6 +35,8 @@ class SignUpController extends GetxController {
       try {
         final response = await http.post(Uri.parse(url),
             headers: headers, body: json.encode(data));
+
+        statusCode.value = response.statusCode;
 
         if (response.statusCode == 200) {
           print("Response Data:${response.body}");

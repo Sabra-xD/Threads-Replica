@@ -7,6 +7,8 @@ class SignInController extends GetxController {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
+  RxInt statusCode = RxInt(0);
+
   Future<void> confirmSignIn() async {
     print("We are inside the confirmSignIn Function");
     const String url = "http://localhost:3000/api/users/login";
@@ -26,9 +28,11 @@ class SignInController extends GetxController {
         final response = await http.post(Uri.parse(url),
             headers: headers, body: json.encode(data));
 
+        statusCode.value = response.statusCode;
+
         if (response.statusCode == 200) {
           print("Response Data:${response.body}");
-        } else {}
+        }
       }
     } catch (error) {
       print("Error in the confirm Sign In Function : ${error.toString()}");

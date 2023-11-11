@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class TextFieldInput extends StatelessWidget {
   final TextEditingController textEditingController;
-  final bool isPass;
+  bool isPass;
   final String hintText;
   final TextInputType textInputType;
+  final bool? showObsecure;
+  RxBool obsecurePassword = RxBool(true);
   final String? Function(String?)? validator;
-  const TextFieldInput(
+  TextFieldInput(
       {super.key,
       required this.textEditingController,
       this.isPass = false,
       required this.hintText,
       required this.textInputType,
-      this.validator});
+      this.validator,
+      this.showObsecure});
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +28,21 @@ class TextFieldInput extends StatelessWidget {
       obscureText: isPass,
       keyboardType: textInputType,
       decoration: InputDecoration(
+        suffixIcon: showObsecure == true
+            ? GestureDetector(
+                onTap: () {
+                  obsecurePassword.toggle();
+                  isPass = !isPass;
+                },
+                child: Icon(
+                  obsecurePassword.value
+                      ? Icons.visibility_off
+                      : Icons.visibility,
+                  color: Colors.red,
+                  size: 25,
+                ),
+              )
+            : null,
         hintText: hintText,
         filled: true,
         border: inputBorder,

@@ -101,6 +101,26 @@ class SignUpScreen extends StatelessWidget {
             const SizedBox(
               height: 12,
             ),
+            Obx(() {
+              if (signUpController.statusCode.value == 201) {
+                return const Text("Sign up sucessful",
+                    style: TextStyle(color: primaryColor, fontSize: 12));
+              }
+              if (signUpController.statusCode.value == 409) {
+                return const Text("Username or email are already in use",
+                    style: TextStyle(color: primaryColor, fontSize: 12));
+              }
+              if (signUpController.statusCode.value == 400) {
+                return const Text("Invalid input Data",
+                    style: TextStyle(color: primaryColor, fontSize: 12));
+              }
+              if (signUpController.statusCode.value > 0) {
+                return Text(
+                    "Error in SignUp with statusCode of: ${signUpController.statusCode.value}",
+                    style: const TextStyle(color: primaryColor, fontSize: 12));
+              }
+              return Container();
+            }),
             InkWell(
               onTap: () {
                 print("Inside the on Tap");

@@ -45,6 +45,7 @@ class SignInScreen extends StatelessWidget {
                     TextFieldInput(
                       textEditingController:
                           signInController.passwordController,
+                      showObsecure: true,
                       hintText: "Enter your password",
                       textInputType: TextInputType.text,
                       isPass: true,
@@ -60,6 +61,41 @@ class SignInScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              //Must Return Something
+              Obx(() {
+                if (signInController.statusCode.value == 200) {
+                  return Container(
+                    padding: const EdgeInsets.all(15),
+                    child: const Text(
+                      "Sign In Sucessful",
+                      style: TextStyle(color: primaryColor, fontSize: 12),
+                    ),
+                  );
+                } else {
+                  if (signInController.statusCode.value == 400) {
+                    return Container(
+                      padding: const EdgeInsets.all(15),
+                      child: const Text(
+                        "Invalid Username or Password",
+                        style: TextStyle(color: primaryColor, fontSize: 12),
+                      ),
+                    );
+                  } else {
+                    if (signInController.statusCode.value > 0) {
+                      return Container(
+                        padding: const EdgeInsets.all(15),
+                        child: Text(
+                          "Error with statusCode: ${signInController.statusCode.value}",
+                          style: const TextStyle(
+                              color: primaryColor, fontSize: 12),
+                        ),
+                      );
+                    }
+                    return Container();
+                  }
+                }
+              }),
+
               InkWell(
                 onTap: () {
                   if (_formKey.currentState!.validate()) {
@@ -79,6 +115,7 @@ class SignInScreen extends StatelessWidget {
                   child: const Text("Log in"),
                 ),
               ),
+
               const SizedBox(
                 height: 12,
               ),
