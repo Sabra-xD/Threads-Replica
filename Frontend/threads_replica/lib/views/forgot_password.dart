@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/forgotPasswordController.dart';
+import 'package:threads_replica/utils/colors.dart';
 import 'package:threads_replica/widgets/text_input_field.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
@@ -8,8 +9,8 @@ class ForgotPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final forgottPasswordController forgotPasswordController =
-        Get.put(forgottPasswordController());
+    final ForgotPasswordController forgotPasswordController =
+        Get.put(ForgotPasswordController());
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: Colors.black,
@@ -24,6 +25,12 @@ class ForgotPasswordScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     TextFieldInput(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Please enter your username";
+                          }
+                          return null;
+                        },
                         textEditingController:
                             forgotPasswordController.usernameController,
                         hintText: "Enter your username",
@@ -32,14 +39,38 @@ class ForgotPasswordScreen extends StatelessWidget {
                       height: 12,
                     ),
                     TextFieldInput(
+                        validator: (value) {
+                          if (value!.isEmpty) return "Please enter your email";
+                          return null;
+                        },
                         textEditingController:
-                            forgotPasswordController.oldPassowrdController,
+                            forgotPasswordController.emailController,
+                        hintText: "Enter your email",
+                        textInputType: TextInputType.text),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    TextFieldInput(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Please enter your old password";
+                          }
+                          return null;
+                        },
+                        textEditingController:
+                            forgotPasswordController.oldPasswordController,
                         hintText: "Enter your old password",
                         textInputType: TextInputType.text),
                     const SizedBox(
                       height: 12,
                     ),
                     TextFieldInput(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Please enter your new password";
+                          }
+                          return null;
+                        },
                         textEditingController:
                             forgotPasswordController.newPasswordController,
                         hintText: "Enter your new password",
@@ -49,10 +80,20 @@ class ForgotPasswordScreen extends StatelessWidget {
                     ),
                   ],
                 )),
+            Obx(() {
+              return AnimatedOpacity(
+                opacity:
+                    forgotPasswordController.statusCode.value > 0 ? 1.0 : 0.0,
+                duration:
+                    const Duration(seconds: 1), // Adjust the duration as needed
+                child: _buildContent(forgotPasswordController),
+              );
+            }),
             InkWell(
               onTap: () {
                 if (_formKey.currentState!.validate()) {
                   //Call the function here.
+                  forgotPasswordController.forgotPassword();
                 }
               },
               child: Container(
@@ -72,5 +113,32 @@ class ForgotPasswordScreen extends StatelessWidget {
         ),
       )),
     );
+  }
+}
+
+Widget _buildContent(ForgotPasswordController forgotPasswordController) {
+  if (forgotPasswordController.statusCode.value == 200) {
+    return Container(
+      padding: const EdgeInsets.all(15),
+      child: const Text(
+        "Password was changed successfully",
+        style: TextStyle(color: Colors.lightBlue, fontSize: 12),
+      ),
+    );
+  } else {
+    if (forgotPasswordController.statusCode.value > 0) {
+      return Container(
+        padding: const EdgeInsets.all(15),
+        child: Text(
+          forgotPasswordController.problemType.value,
+          style: const TextStyle(
+              color: Colors.redAccent,
+              fontSize: 12,
+              fontWeight: FontWeight.w900),
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 }

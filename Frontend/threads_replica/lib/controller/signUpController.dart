@@ -50,4 +50,15 @@ class SignUpController extends GetxController {
       print("Post was failed due to insuficient input.");
     }
   }
+
+  @override
+  void onClose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    emailController.dispose();
+    imageController.dispose();
+    bioController.dispose();
+    nameController.dispose();
+    super.onClose();
+  }
 }
