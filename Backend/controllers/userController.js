@@ -169,6 +169,54 @@ const followunfollowUser = async (req,res) => {
 
 }
 
+const forgotPassword = async(req,res) => {
+    const {username,email,oldPassword,newPassword} = req.body;
+    try{
+          if(email==null || oldPassword==null || newPassword==null || username==null){
+            return res.status(400).json({message: "Fill are required forms"});
+          }
+
+          let user = await User.findOne({email});
+          if(!user) return res.status(404).json({message: "Invalid email. User not found"});
+          console.log(user)
+        //   console.log(user.password);
+
+          const isPasswordCorrect = await bcrypt.compare(oldPassword,user?.password || " ");
+
+          if(!isPasswordCorrect) return res.status(400).json({message: "Password is a mismatch"});
+          console.log("PASSWORD IS CORRECT");
+
+          if(newPassword.length < 6) return res.status(400).json({message: "New Password must be atleast 6 characters or more"});
+
+          const isPasswordSimilar = await bcrypt.compare(newPassword,user?.password || " ");
+          if(isPasswordSimilar) return res.status(400).json({message: "New password can not be the same as the old password"});
+
+          const salt = await bcrypt.genSalt(10); //Creating the private key.
+          const hashedPassword = await bcrypt.hash(newPassword,salt);
+          console.log("MOVED ON FROM SALT");
+
+          user.password = hashedPassword;
+          console.log("ASsigned it to user.password");
+          user = await user.save();
+          console.log("IT should've saved it?");
+          res.status(200).json({
+            _id:user._id,
+            name: user.name,
+            email: user.email,
+            username: user.username,
+        })
+
+        //   res.status(200).json({message: "Password was changed sucessfully"});
+
+
+          
+
+    }catch(error){
+        res.status(500).json({message: error.message});
+        console.log("Error with the forgotPassword functuniality: ",error.message);
+    }
+
+}
 
 const updateUser = async(req,res) => {
     const {name,email,username,password,profilePic,bio} = req.body; //Getting the rest info from the body.
@@ -224,4 +272,4 @@ const updateUser = async(req,res) => {
 
 
 
-export {signUpuser,login,logout, followunfollowUser , updateUser, getUserProfile};
+export {signUpuser,login,logout, followunfollowUser , updateUser, getUserProfile, forgotPassword};
