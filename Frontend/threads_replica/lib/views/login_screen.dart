@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:threads_replica/utils/colors.dart';
 import 'package:threads_replica/widgets/text_input_field.dart';
 
+import '../widgets/building_response_widget_auth.dart';
+
 class SignInScreen extends StatelessWidget {
   final SignInController signInController = Get.put(SignInController());
 
@@ -63,37 +65,12 @@ class SignInScreen extends StatelessWidget {
               ),
               //Must Return Something
               Obx(() {
-                if (signInController.statusCode.value == 200) {
-                  return Container(
-                    padding: const EdgeInsets.all(15),
-                    child: const Text(
-                      "Sign In Sucessful",
-                      style: TextStyle(color: primaryColor, fontSize: 12),
-                    ),
-                  );
-                } else {
-                  if (signInController.statusCode.value == 400) {
-                    return Container(
-                      padding: const EdgeInsets.all(15),
-                      child: const Text(
-                        "Invalid Username or Password",
-                        style: TextStyle(color: primaryColor, fontSize: 12),
-                      ),
-                    );
-                  } else {
-                    if (signInController.statusCode.value > 0) {
-                      return Container(
-                        padding: const EdgeInsets.all(15),
-                        child: Text(
-                          "Error with statusCode: ${signInController.statusCode.value}",
-                          style: const TextStyle(
-                              color: primaryColor, fontSize: 12),
-                        ),
-                      );
-                    }
-                    return Container();
-                  }
-                }
+                return AnimatedOpacity(
+                  opacity: signInController.statusCode.value > 0 ? 1.0 : 0.0,
+                  duration:
+                      Duration(seconds: 1), // Adjust the duration as needed
+                  child: buildLoginResponseHandling(signInController),
+                );
               }),
 
               InkWell(

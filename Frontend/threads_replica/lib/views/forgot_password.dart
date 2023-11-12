@@ -4,6 +4,8 @@ import 'package:threads_replica/controller/forgotPasswordController.dart';
 import 'package:threads_replica/utils/colors.dart';
 import 'package:threads_replica/widgets/text_input_field.dart';
 
+import '../widgets/building_response_widget_auth.dart';
+
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});
 
@@ -86,13 +88,12 @@ class ForgotPasswordScreen extends StatelessWidget {
                     forgotPasswordController.statusCode.value > 0 ? 1.0 : 0.0,
                 duration:
                     const Duration(seconds: 1), // Adjust the duration as needed
-                child: _buildContent(forgotPasswordController),
+                child: buildContent(forgotPasswordController),
               );
             }),
             InkWell(
               onTap: () {
                 if (_formKey.currentState!.validate()) {
-                  //Call the function here.
                   forgotPasswordController.forgotPassword();
                 }
               },
@@ -113,32 +114,5 @@ class ForgotPasswordScreen extends StatelessWidget {
         ),
       )),
     );
-  }
-}
-
-Widget _buildContent(ForgotPasswordController forgotPasswordController) {
-  if (forgotPasswordController.statusCode.value == 200) {
-    return Container(
-      padding: const EdgeInsets.all(15),
-      child: const Text(
-        "Password was changed successfully",
-        style: TextStyle(color: Colors.lightBlue, fontSize: 12),
-      ),
-    );
-  } else {
-    if (forgotPasswordController.statusCode.value > 0) {
-      return Container(
-        padding: const EdgeInsets.all(15),
-        child: Text(
-          forgotPasswordController.problemType.value,
-          style: const TextStyle(
-              color: Colors.redAccent,
-              fontSize: 12,
-              fontWeight: FontWeight.w900),
-        ),
-      );
-    } else {
-      return Container();
-    }
   }
 }
