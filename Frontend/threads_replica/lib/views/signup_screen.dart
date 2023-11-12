@@ -37,6 +37,7 @@ class SignUpScreen extends StatelessWidget {
                           if (value!.isEmpty) {
                             return "Please enter your username";
                           }
+                          return null;
                         }),
                     const SizedBox(
                       height: 24,
@@ -50,6 +51,7 @@ class SignUpScreen extends StatelessWidget {
                           if (value!.isEmpty) {
                             return "Please enter your Email";
                           }
+                          return null;
                         }),
                     const SizedBox(
                       height: 24,
@@ -63,6 +65,7 @@ class SignUpScreen extends StatelessWidget {
                           if (value!.isEmpty) {
                             return "Please enter your name";
                           }
+                          return null;
                         }),
                     const SizedBox(
                       height: 24,
@@ -77,6 +80,7 @@ class SignUpScreen extends StatelessWidget {
                           if (value!.isEmpty) {
                             return "Please enter your username";
                           }
+                          return null;
                         }),
                     const SizedBox(
                       height: 24,

@@ -39,6 +39,7 @@ class SignInScreen extends StatelessWidget {
                         if (value!.isEmpty) {
                           return "Please Enter your username";
                         }
+                        return null;
                       },
                     ),
                     const SizedBox(
@@ -55,6 +56,7 @@ class SignInScreen extends StatelessWidget {
                         if (value!.isEmpty) {
                           return "Please Enter your Passowrd";
                         }
+                        return null;
                       },
                     ),
                     const SizedBox(
@@ -67,8 +69,8 @@ class SignInScreen extends StatelessWidget {
               Obx(() {
                 return AnimatedOpacity(
                   opacity: signInController.statusCode.value > 0 ? 1.0 : 0.0,
-                  duration:
-                      Duration(seconds: 1), // Adjust the duration as needed
+                  duration: const Duration(
+                      seconds: 1), // Adjust the duration as needed
                   child: buildLoginResponseHandling(signInController),
                 );
               }),

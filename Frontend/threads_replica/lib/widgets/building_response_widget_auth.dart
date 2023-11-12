@@ -48,8 +48,7 @@ Widget buildLoginResponseHandling(SignInController signInController) {
         style: TextStyle(color: primaryColor, fontSize: 12),
       ),
     );
-  } else if (signInController.statusCode.value != null &&
-      signInController.statusCode.value > 0) {
+  } else if (signInController.statusCode.value > 0) {
     return Container(
       padding: const EdgeInsets.all(15),
       child: Text(

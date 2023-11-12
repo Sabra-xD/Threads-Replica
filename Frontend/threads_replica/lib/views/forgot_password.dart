@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/forgotPasswordController.dart';
-import 'package:threads_replica/utils/colors.dart';
 import 'package:threads_replica/widgets/text_input_field.dart';
 
 import '../widgets/building_response_widget_auth.dart';
