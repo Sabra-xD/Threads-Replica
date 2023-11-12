@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:threads_replica/views/forgot_password.dart';
+import 'package:threads_replica/views/posts/add_post.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,6 +35,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     //Disable the debug banner here.
-    return ForgotPasswordScreen();
+    return PostScreen();
   }
 }
