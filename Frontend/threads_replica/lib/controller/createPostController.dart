@@ -8,25 +8,30 @@ import 'package:threads_replica/controller/token_saver.dart';
 class createPostController extends GetxController {
   final threadText = TextEditingController();
   final threadImage = TextEditingController();
-  AuthToken userToken = AuthToken();
+  AuthToken userCookie = AuthToken();
   RxInt statusCode = RxInt(0);
 
   Future<void> createPost() async {
-    String url = "http://localhost:3000/api/posts/create";
+    String url = "http://10.0.2.2:3000/api/posts/create";
 
-    print("Printing from inside create Post: ${await userToken.getToken()}");
+    String authToken = await userCookie.getToken();
+
+    print("Printing from inside create Post: ${authToken}");
 
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
+      'cookie': 'jwt=$authToken',
     };
 
     final Map<String, String> data = {
-      'postedBy': "655169c480275623b6eb4eff",
+      'postedBy': authToken,
       'text': threadText.text,
     };
+    print("Header: ${headers}");
+    print(data);
 
     try {
-      print("Printing from inside create Post: ${await userToken.getToken()}");
+      print("Printing from inside create Post: ${await userCookie.getToken()}");
       if (threadText.text.isNotEmpty) {
         //Now we fucking post it.
         final response = await http.post(

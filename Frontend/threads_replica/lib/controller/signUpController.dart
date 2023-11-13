@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -12,13 +13,13 @@ class SignUpController extends GetxController {
   final nameController = TextEditingController();
   final bioController = TextEditingController();
   final imageController = TextEditingController();
-  late AuthToken saver = AuthToken();
+  AuthToken saver = AuthToken();
   String token = "";
   RxInt statusCode = RxInt(0);
 
   Future<void> signup() async {
     print("Inside the Sign UP Function");
-    const String url = "http://localhost:3000/api/users/signup";
+    const String url = "http://10.0.2.2:3000/api/users/signup";
 
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -44,12 +45,14 @@ class SignUpController extends GetxController {
         if (response.statusCode == 200) {
           print("Response Data:${response.body}");
           final Map<String, dynamic> receivedData = json.decode(response.body);
-          token = receivedData['token'];
-          if (token != "") {
-            print("OMW TO SAVE TOKEN: ${token}");
-            saver.saveToken(token);
-            print("Saved Token: ${await saver.getToken()}");
-          }
+          String? setCookieHeader = response.headers['set-cookie'];
+          Cookie cookie = Cookie.fromSetCookieValue(setCookieHeader!);
+          print("Cookie name: ${cookie.name}");
+          print("Cookie received in the Sign UP Function: ${cookie.value}");
+
+          saver.saveToken(cookie.value);
+
+          print("Cookie saved value: ${await saver.getToken()}");
         } else {
           print("Error: ${response.body}");
         }
