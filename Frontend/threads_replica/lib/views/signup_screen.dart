@@ -131,6 +131,10 @@ class SignUpScreen extends StatelessWidget {
                 if (_formKey.currentState!.validate()) {
                   print("Pressing on the Sign UP Button");
                   signUpController.signup();
+                  if (signUpController.statusCode.value == 200) {
+                    //Route to the homePage
+                    signUpController.dispose();
+                  }
                 }
               },
               child: Container(

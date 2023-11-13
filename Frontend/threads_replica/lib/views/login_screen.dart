@@ -79,6 +79,10 @@ class SignInScreen extends StatelessWidget {
                 onTap: () {
                   if (_formKey.currentState!.validate()) {
                     signInController.confirmSignIn();
+                    if (signInController.statusCode.value == 200) {
+// Rotue * Clean
+                      signInController.dispose();
+                    }
                   }
                 },
                 child: Container(

@@ -94,6 +94,10 @@ class ForgotPasswordScreen extends StatelessWidget {
               onTap: () {
                 if (_formKey.currentState!.validate()) {
                   forgotPasswordController.forgotPassword();
+                  if (forgotPasswordController.statusCode.value == 200) {
+                    //Route ot new Page & Clean:
+                    forgotPasswordController.dispose();
+                  }
                 }
               },
               child: Container(

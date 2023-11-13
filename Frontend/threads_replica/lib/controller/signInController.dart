@@ -1,11 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
+import 'package:threads_replica/controller/token_saver.dart';
 
 class SignInController extends GetxController {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  AuthToken saver = AuthToken();
+  String token = "";
 
   RxInt statusCode = RxInt(0);
 
@@ -25,13 +29,23 @@ class SignInController extends GetxController {
     try {
       if (usernameController.text.isNotEmpty &&
           passwordController.text.isNotEmpty) {
-        final response = await http.post(Uri.parse(url),
-            headers: headers, body: json.encode(data));
+        final response = await http.post(
+          Uri.parse(url),
+          headers: headers,
+          body: json.encode(data),
+        );
 
         statusCode.value = response.statusCode;
 
         if (response.statusCode == 200) {
-          print("Response Data:${response.body}");
+          final Map<String, dynamic> receivedData = json.decode(response.body);
+          token = receivedData['token'];
+          if (token != "") {
+            print("OMW TO SAVE TOKEN: ${token}");
+            //We should save it in our SharedPrefs
+            saver.saveToken(token);
+            print("Saved Token: ${await saver.getToken()}");
+          }
         }
       }
     } catch (error) {

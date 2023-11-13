@@ -99,7 +99,7 @@ class _PostScreenState extends State<PostScreen> {
                           IconButton(
                               onPressed: () {},
                               icon: const Icon(
-                                Icons.star,
+                                Icons.camera_alt,
                                 color: Colors.grey,
                                 size: 24,
                               ))
