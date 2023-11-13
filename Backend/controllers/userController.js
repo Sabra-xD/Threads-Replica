@@ -88,13 +88,18 @@ const login = async (req,res) =>{
         }
         console.log("Generated a Token");
         console.log("User logged in sucessfully");
-        generateTokenAndSetCookie(user._id,res);
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+       let  token = generateTokenAndSetCookie(user._id,res);
+       console.log("Token: ",token);
 
         res.status(200).json({
             _id:user._id,
             name: user.name,
             email: user.email,
             username: user.username,
+            token: token
+
         })
 
     }catch(err){
@@ -170,6 +175,7 @@ const followunfollowUser = async (req,res) => {
 }
 
 const forgotPassword = async(req,res) => {
+    console.log("Request was received");
     const {username,email,oldPassword,newPassword} = req.body;
     try{
           if(email==null || oldPassword==null || newPassword==null || username==null){
