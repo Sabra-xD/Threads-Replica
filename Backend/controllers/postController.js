@@ -1,24 +1,46 @@
 import Post from "../models/postModel.js";
+import mongoose from "mongoose";
 import User from "../models/userModel.js";
+import jwt from "jsonwebtoken";
 
+
+//So, our current problem is that the cookieis not beign saved, and we check it when sending back to the backend with each protectedrequest.
 
 const createPost = async (req,res) => {
 
+    console.log("Create POST WAS CALLED");
+
     try {
         const {postedBy, text, img} = req.body;
+        console.log("Inside the createPost function");
+        console.log("Posted BY: ",postedBy);
 
         if(!postedBy || !text) return res.status(400).json({message: "Must fill the PostedBy & text fields"});
 
-        const user = await User.findById(postedBy);
+   
+        
+        // // const user = await User.findOne({_id: postedBy});
+        // const userId = new mongoose.Types.ObjectId(postedBy);
+        // const user = await User.findById(userId);
+
+        const decodedToken =  jwt.verify(postedBy, process.env.JWT_SECRET);
+    const userId = decodedToken.userId;
+
+    // Convert the user ID to a valid ObjectId
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+
+    const user = await User.findById(userObjectId);
         console.log(user)
         //Finding the user 
         if(!user) return res.status(404).json({message: "User not found"});
         
-        console.log(user._id.toString());
-        console.log(req.user._id.toString()) //We are not getting this, why?
-        if(user._id.toString() !== req.user._id.toString()){
-          return res.status(401).json({message: "Unauthorized action"});
-        }
+        // console.log(user._id.toString());
+        // /// We need to uncomment this in order to work correct.
+        // // req.user._id is the fucking cookie being read.
+        // // console.log(req.user._id.toString()) //We are not getting this, why?
+        // if(user._id.toString() !== req.user._id.toString()){
+        //   return res.status(401).json({message: "Unauthorized action"});
+        // }
 
         const maxLength = 500;
         if(text.length > maxLength){
@@ -27,7 +49,7 @@ const createPost = async (req,res) => {
         }
 
         const newPost = new Post({
-            postedBy,
+            postedBy: userObjectId,
             text,
             img
         });

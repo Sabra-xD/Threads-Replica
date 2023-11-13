@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 
 const protectRoute = async (req,res,next) =>{
 try {
+    console.log("Entered the Protected Route!")
     const token = req.cookies.jwt; //Getting the cookie from the request body.
 
     if(!token) {
@@ -22,6 +23,7 @@ try {
 
     // Inside the request object we just received we add the user in it so we can work on him.
     req.user = user;
+    console.log("Leaving the ProtectRoute");
     next();
 }
 catch(error){

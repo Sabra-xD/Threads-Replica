@@ -52,13 +52,14 @@ const signUpuser = async (req,res) => {
       await newUser.save();
       if(newUser){
         //Returning the cookie and token
-        generateTokenAndSetCookie(newUser._id,res);
+       let token =  generateTokenAndSetCookie(newUser._id,res);
         console.log("Generated Token, moving forward.")
         res.status(201).json({
             _id:newUser._id,
             name: newUser.name,
             email: newUser.email,
             username: newUser.username,
+            token: token
         }
             );
 
@@ -74,6 +75,7 @@ const signUpuser = async (req,res) => {
 }
 
 const login = async (req,res) =>{
+    console.log("Login Request received");
     try{
         const {username,password} = req.body;
         const user = await User.findOne({username});

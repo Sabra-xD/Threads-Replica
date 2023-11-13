@@ -15,14 +15,21 @@ connectDB();
 const PORT = process.env.PORT || 5000;
 //Allows us to parse JSON data from the body.
 app.use(express.json());
-app.use(cors());
 // To Parse data in req.body as well
 //But it is nested inside so the single object can be
 // Text : {
     // stuff: {}
 // }
 app.use(express.urlencoded({extended:true}));
+app.use(cors(
+));
 
+// app.options('*',cors());
+
+// app.enableCors({
+//     credentials:true,
+//     allowedHeaders:true,
+// });
 //Get the cookie from the request and resend cookie in response.
 app.use(cookieParser());
 //Routes
