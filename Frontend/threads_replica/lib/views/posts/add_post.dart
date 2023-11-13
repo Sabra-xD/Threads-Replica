@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:threads_replica/controller/createPostController.dart';
 import 'package:threads_replica/utils/colors.dart';
 
 class PostScreen extends StatefulWidget {
@@ -7,9 +9,12 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreenState extends State<PostScreen> {
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _postController = TextEditingController();
-  TextEditingController _tagsController = TextEditingController();
+  final createPostController createPost = Get.put(createPostController());
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  // TextEditingController _titleController = TextEditingController();
+  // TextEditingController _postController = TextEditingController();
+  // TextEditingController _tagsController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +47,16 @@ class _PostScreenState extends State<PostScreen> {
           ElevatedButton(
             onPressed: () {
               // Handle thread creation here
-              String title = _titleController.text;
-              String postContent = _postController.text;
-              String tags = _tagsController.text;
+              // String title = _titleController.text;
+              // String postContent = _postController.text;
+              // String tags = _tagsController.text;
               // You can do something with the thread details, e.g., send them to a server
-              print('Thread Created: $title, $postContent, $tags');
+              // print('Thread Created: $title, $postContent, $tags');
+
+              print("Pressed on the POST button");
+              if (_formKey.currentState!.validate()) {
+                createPost.createPost();
+              }
             },
             child: const Text(
               'Post',
@@ -81,17 +91,26 @@ class _PostScreenState extends State<PostScreen> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, color: primaryColor),
                       ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: 'Start a thread...',
-                          hintStyle:
-                              TextStyle(fontSize: 14, color: Colors.grey),
-                          border: InputBorder.none,
+                      Form(
+                        key: _formKey,
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter the required text";
+                            }
+                          },
+                          controller: createPost.threadText,
+                          decoration: const InputDecoration(
+                            hintText: 'Start a thread...',
+                            hintStyle:
+                                TextStyle(fontSize: 14, color: Colors.grey),
+                            border: InputBorder.none,
+                          ),
+                          maxLines: null,
+                          style: const TextStyle(
+                              fontSize: 14, color: primaryColor),
+                          cursorColor: primaryColor,
                         ),
-                        maxLines: null,
-                        style:
-                            const TextStyle(fontSize: 14, color: primaryColor),
-                        cursorColor: primaryColor,
                       ),
                       Row(
                         children: [

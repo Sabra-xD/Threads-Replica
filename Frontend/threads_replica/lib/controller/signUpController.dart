@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:threads_replica/controller/token_saver.dart';
 
 class SignUpController extends GetxController {
   final usernameController = TextEditingController();
@@ -11,6 +12,8 @@ class SignUpController extends GetxController {
   final nameController = TextEditingController();
   final bioController = TextEditingController();
   final imageController = TextEditingController();
+  late AuthToken saver = AuthToken();
+  String token = "";
   RxInt statusCode = RxInt(0);
 
   Future<void> signup() async {
@@ -40,6 +43,13 @@ class SignUpController extends GetxController {
 
         if (response.statusCode == 200) {
           print("Response Data:${response.body}");
+          final Map<String, dynamic> receivedData = json.decode(response.body);
+          token = receivedData['token'];
+          if (token != "") {
+            print("OMW TO SAVE TOKEN: ${token}");
+            saver.saveToken(token);
+            print("Saved Token: ${await saver.getToken()}");
+          }
         } else {
           print("Error: ${response.body}");
         }
