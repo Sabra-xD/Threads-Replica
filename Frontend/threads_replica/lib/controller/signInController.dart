@@ -4,16 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:threads_replica/controller/token_saver.dart';
+import 'package:threads_replica/controller/userInfo.dart';
 
 class SignInController extends GetxController {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  UserInfo _userInfo = UserInfo();
   AuthToken saver = AuthToken();
   String token = "";
 
   RxInt statusCode = RxInt(0);
 
   Future<void> confirmSignIn() async {
+    print("Old Auth Token: ${await saver.getToken()}");
     print("We are inside the confirmSignIn Function");
     const String url = "http://10.0.2.2:3000/api/users/login";
 
@@ -40,14 +43,16 @@ class SignInController extends GetxController {
         print("Headers: ${response.headers}");
         if (response.statusCode == 200) {
           final Map<String, dynamic> receivedData = json.decode(response.body);
+          _userInfo.saveUserInfo(receivedData['username'],
+              receivedData['email'], receivedData['img']);
+          print("Saving the user information");
+          print(receivedData['username']);
           String? setCookieHeader = response.headers['set-cookie'];
           print('Set-Cookie header: $setCookieHeader');
 
           // If you want to parse the cookie, you can use the http package's Cookie.fromSetCookieValue method
           Cookie cookie = Cookie.fromSetCookieValue(setCookieHeader!);
-          print(cookie);
-          token = receivedData['token'];
-          if (cookie != null) {
+          if (cookie.name == "jwt") {
             print("Cookie NAME: ${cookie.name}");
             print("OMW TO SAVE TOKEN: ${cookie.value}");
 

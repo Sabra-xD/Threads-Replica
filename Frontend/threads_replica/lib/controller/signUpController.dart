@@ -19,6 +19,7 @@ class SignUpController extends GetxController {
 
   Future<void> signup() async {
     print("Inside the Sign UP Function");
+    print("Old saved Token: ${await saver.getToken()}");
     const String url = "http://10.0.2.2:3000/api/users/signup";
 
     final Map<String, String> headers = {
@@ -42,9 +43,11 @@ class SignUpController extends GetxController {
 
         statusCode.value = response.statusCode;
 
-        if (response.statusCode == 200) {
+        if (response.statusCode == 201) {
           print("Response Data:${response.body}");
           final Map<String, dynamic> receivedData = json.decode(response.body);
+          //We should be doing something with that, huh?
+
           String? setCookieHeader = response.headers['set-cookie'];
           Cookie cookie = Cookie.fromSetCookieValue(setCookieHeader!);
           print("Cookie name: ${cookie.name}");

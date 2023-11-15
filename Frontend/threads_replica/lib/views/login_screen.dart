@@ -88,8 +88,8 @@ class SignInScreen extends StatelessWidget {
 
                   InkWell(
                     onTap: () async {
-                      Focus.of(context)
-                          .unfocus(); //Remove keyboard when button is pressed
+                      // Focus.of(context)
+                      //     .unfocus(); //Remove keyboard when button is pressed
                       if (_formKey.currentState!.validate()) {
                         signInController.confirmSignIn();
                         if (signInController.statusCode.value == 200) {

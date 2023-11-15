@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:threads_replica/views/forgot_password.dart';
 import 'package:threads_replica/views/login_screen.dart';
 import 'package:threads_replica/views/posts/add_post.dart';
+import 'package:threads_replica/views/posts/test.dart';
 import 'package:threads_replica/views/signup_screen.dart';
 
 void main() {
