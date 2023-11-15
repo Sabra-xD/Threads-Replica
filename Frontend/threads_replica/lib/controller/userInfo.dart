@@ -2,6 +2,11 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserInfo extends GetxController {
+  RxString userName = ''.obs;
+  RxString email = ''.obs;
+  RxString img = ''.obs;
+  RxBool isLoading = true.obs;
+
   Future<void> saveUserInfo(String userName, String email, String? img) async {
     print("Saving the user: ${userName}");
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -10,6 +15,17 @@ class UserInfo extends GetxController {
     if (img != null) {
       await prefs.setString('username', userName);
     }
+  }
+
+  Future<void> fetchData() async {
+    isLoading.value = true;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userName.value = prefs.getString('username') ?? "Username";
+    email.value = prefs.getString('email') ?? "email";
+    img.value = prefs.getString('img') ??
+        "https://c8.alamy.com/comp/2E915TB/glitch-error-404-computer-page-anaglyph-glitch-404-banner-error-layout-effect-screen-2E915TB.jpg";
+
+    isLoading.value = false;
   }
 
   Future getUserName() async {
