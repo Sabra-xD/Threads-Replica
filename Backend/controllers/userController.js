@@ -94,7 +94,7 @@ const login = async (req,res) =>{
 
        let  token = generateTokenAndSetCookie(user._id,res);
        console.log("Token: ",token);
-
+    console.log(user._id);
         res.status(200).json({
             _id:user._id,
             name: user.name,
@@ -229,15 +229,16 @@ const forgotPassword = async(req,res) => {
 const updateUser = async(req,res) => {
     const {name,email,username,password,profilePic,bio} = req.body; //Getting the rest info from the body.
     const userId = req.user._id; //Getting the user ID from the cookie I assume.
-    const {id} = req.params;
+    const {id} = req.params; //Where do I get the user ID from though? From the cookie?
+    console.log("Request Body: ",req.body);
     try{
       
         let user = await User.findById(userId);
         if(!user) return res.status(400).json({message: "User was not found"});
         
-        //  if(id !== userId.toString){
-        //     return res.status(400).json({message: "You can not update other profiles"});
-        //  }
+         if(id !== userId.toString){
+            return res.status(400).json({message: "You can not update other profiles"});
+         }
 
         if(password){
             if(password.length<6) return res.status(400).json({message: "Password must be longer than 6 characters"});
@@ -247,9 +248,6 @@ const updateUser = async(req,res) => {
             //Updating Password.
         }
 
-        if(id !== userId.toString()){
-            return res.status(400).json({message: "You can not update other user's profile"});
-        }
 
         if(username||email){
             const foundUser = await User.findOne({$or: [{email},{username}]});
