@@ -18,6 +18,7 @@ class UserInfo extends GetxController {
   }
 
   Future<void> fetchData() async {
+    print("Fetching Data");
     isLoading.value = true;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userName.value = prefs.getString('username') ?? "Username";

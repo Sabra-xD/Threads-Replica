@@ -25,12 +25,6 @@ class _PostScreenState extends State<PostScreen> {
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -86,6 +80,7 @@ class _PostScreenState extends State<PostScreen> {
           init: _userInfo,
           builder: (controller) {
             if (controller.isLoading.value) {
+              controller.fetchData();
               return const Center(
                   child: CircularProgressIndicator(
                 color: Colors.lightBlue,
