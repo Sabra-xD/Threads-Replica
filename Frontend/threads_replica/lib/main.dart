@@ -3,6 +3,7 @@ import 'package:threads_replica/views/forgot_password.dart';
 import 'package:threads_replica/views/login_screen.dart';
 import 'package:threads_replica/views/posts/add_post.dart';
 import 'package:threads_replica/views/posts/test.dart';
+import 'package:threads_replica/views/profile/edit_profile.dart';
 import 'package:threads_replica/views/profile_screen.dart';
 import 'package:threads_replica/views/signup_screen.dart';
 
@@ -39,6 +40,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     //Disable the debug banner here.
-    return ProfileScreen();
+    return EditProfileScreen();
   }
 }
