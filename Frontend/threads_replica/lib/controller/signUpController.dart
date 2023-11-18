@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:threads_replica/controller/token_saver.dart';
 
+import 'userInfo.dart';
+
 class SignUpController extends GetxController {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -15,6 +17,8 @@ class SignUpController extends GetxController {
   final imageController = TextEditingController();
   AuthToken saver = AuthToken();
   String token = "";
+  UserInfo _userInfo = UserInfo();
+
   RxInt statusCode = RxInt(0);
 
   Future<void> signup() async {
@@ -46,6 +50,8 @@ class SignUpController extends GetxController {
         if (response.statusCode == 201) {
           print("Response Data:${response.body}");
           final Map<String, dynamic> receivedData = json.decode(response.body);
+          _userInfo.saveUserInfo(receivedData['username'],
+              receivedData['email'], receivedData['img'], receivedData['_id']);
           //We should be doing something with that, huh?
 
           String? setCookieHeader = response.headers['set-cookie'];

@@ -43,21 +43,17 @@ class SignInController extends GetxController {
         print("Headers: ${response.headers}");
         if (response.statusCode == 200) {
           final Map<String, dynamic> receivedData = json.decode(response.body);
+          print("Received Data: ${receivedData}");
           _userInfo.saveUserInfo(receivedData['username'],
-              receivedData['email'], receivedData['img']);
-          print("Saving the user information");
-          print(receivedData['username']);
+              receivedData['email'], receivedData['img'], receivedData['_id']);
+          print("Received ID: ${receivedData['_id']}");
+
           String? setCookieHeader = response.headers['set-cookie'];
-          print('Set-Cookie header: $setCookieHeader');
 
           // If you want to parse the cookie, you can use the http package's Cookie.fromSetCookieValue method
           Cookie cookie = Cookie.fromSetCookieValue(setCookieHeader!);
           if (cookie.name == "jwt") {
-            print("Cookie NAME: ${cookie.name}");
-            print("OMW TO SAVE TOKEN: ${cookie.value}");
-
             saver.saveToken(cookie.value);
-            print("Saved Token: ${await saver.getToken()}");
           }
         }
       }

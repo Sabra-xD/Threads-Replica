@@ -1,17 +1,18 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:threads_replica/controller/updateUserProfile.dart';
 import 'package:threads_replica/controller/userInfo.dart';
 import 'package:threads_replica/styles/TextStyles.dart';
 import 'package:threads_replica/utils/colors.dart';
 
 class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    // ignore: no_leading_underscores_for_local_identifiers
     UserInfo _userInfo = Get.put(UserInfo());
+    updateUserProfileController _updateUser = updateUserProfileController();
+
     return Scaffold(
       backgroundColor: mobileBackgroundColor,
       appBar: AppBar(
@@ -20,7 +21,9 @@ class EditProfileScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.close),
           color: primaryColor,
-          onPressed: () {},
+          onPressed: () {
+            //Close the current page and route to the most recent page.
+          },
         ),
         title: Text(
           'Edit Profile',
@@ -28,7 +31,10 @@ class EditProfileScreen extends StatelessWidget {
         ),
         actions: [
           TextButton(
-              onPressed: () {},
+              onPressed: () {
+                //Post?
+                _updateUser.updateProfile();
+              },
               child: Text(
                 "Done",
                 style: defaultTextStyle(),
@@ -81,6 +87,7 @@ class EditProfileScreen extends StatelessWidget {
                                     InkWell(
                                       onTap: () {
                                         // Implement the change username functionality here.
+                                        //We need to route to the need page first though.
                                       },
                                       child: Column(
                                         children: [
@@ -136,7 +143,19 @@ class EditProfileScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ],
-                              )
+                              ),
+                              const Divider(
+                                thickness: 0.5,
+                                color: primaryColor,
+                              ),
+                              Row(children: [
+                                InkWell(
+                                  onTap: () {
+//Send request to change the password.
+                                  },
+                                  child: const Text("Update your password"),
+                                )
+                              ]),
                             ],
                           ),
                         ),

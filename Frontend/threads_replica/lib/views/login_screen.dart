@@ -7,11 +7,14 @@ import 'package:threads_replica/widgets/text_input_field.dart';
 import '../controller/token_saver.dart';
 import '../widgets/building_response_widget_auth.dart';
 
+// ignore: must_be_immutable
 class SignInScreen extends StatelessWidget {
   final SignInController signInController = Get.put(SignInController());
   AuthToken cookie = AuthToken();
 
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  SignInScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

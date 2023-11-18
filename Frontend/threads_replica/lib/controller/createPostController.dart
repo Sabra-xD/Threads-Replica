@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/token_saver.dart';
 
+// ignore: camel_case_types
 class createPostController extends GetxController {
   final threadText = TextEditingController();
   final threadImage = TextEditingController();
