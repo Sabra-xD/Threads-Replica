@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:threads_replica/controller/updateUserProfile.dart';
 import 'package:threads_replica/views/forgot_password.dart';
 import 'package:threads_replica/views/login_screen.dart';
 import 'package:threads_replica/views/posts/add_post.dart';
@@ -40,7 +42,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    //Disable the debug banner here.
-    return EditBioScreen();
+    return EditProfileScreen();
   }
 }

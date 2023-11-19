@@ -4,14 +4,22 @@ import 'package:threads_replica/controller/updateUserProfile.dart';
 import 'package:threads_replica/controller/userInfo.dart';
 import 'package:threads_replica/styles/TextStyles.dart';
 import 'package:threads_replica/utils/colors.dart';
+import 'package:threads_replica/views/profile/edit_password.dart';
+
+import 'edit_bio.dart';
 
 class EditProfileScreen extends StatelessWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+  final String? bio;
+  const EditProfileScreen({Key? key, this.bio}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
     UserInfo _userInfo = Get.put(UserInfo());
-    updateUserProfileController _updateUser = updateUserProfileController();
+    updateUserProfileController _updateUser =
+        Get.put(updateUserProfileController());
+
+    //Basically we created the instance in the main scree. Then we moved on to other screens and "found" that instance to use it.
+    //So any change in values is saved in it.
 
     return Scaffold(
       backgroundColor: mobileBackgroundColor,
@@ -33,7 +41,12 @@ class EditProfileScreen extends StatelessWidget {
           TextButton(
               onPressed: () {
                 //Post?
+                print(
+                    "BioController value that was set @ the fucking EditBioScreen: ${_updateUser.bioController.text}");
                 _updateUser.updateProfile();
+                if (_updateUser.statusCode.value == 200) {
+                  _updateUser.onClose();
+                }
               },
               child: Text(
                 "Done",
@@ -126,7 +139,13 @@ class EditProfileScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditBioScreen()));
+                                    },
                                     child: Column(
                                       children: [
                                         Text(
@@ -151,9 +170,16 @@ class EditProfileScreen extends StatelessWidget {
                               Row(children: [
                                 InkWell(
                                   onTap: () {
-//Send request to change the password.
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                EditPasswordScreen()));
                                   },
-                                  child: const Text("Update your password"),
+                                  child: Text(
+                                    "Update your password",
+                                    style: defaultTextStyle(),
+                                  ),
                                 )
                               ]),
                             ],

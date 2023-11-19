@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/updateUserProfile.dart';
@@ -9,12 +11,14 @@ import 'package:threads_replica/widgets/text_input_field.dart';
 import '../../styles/TextStyles.dart';
 
 class EditBioScreen extends StatelessWidget {
-  EditBioScreen({super.key});
+  const EditBioScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    updateUserProfileController _updateBio =
-        Get.put(updateUserProfileController());
+    // updateUserProfileController _updateUserProfileController =
+    //     Get.put(updateUserProfileController());
+    final updateUser = Get.find<updateUserProfileController>();
+
     return Scaffold(
         appBar: AppBar(
           elevation: 2,
@@ -26,7 +30,8 @@ class EditBioScreen extends StatelessWidget {
               //Close the current page and route to the most recent page.
 
               //Dispose of the _updateBioController.
-              _updateBio.dispose();
+              // _updateUserProfileController.dispose();
+              updateUser.dispose();
             },
           ),
           title: Text(
@@ -36,12 +41,9 @@ class EditBioScreen extends StatelessWidget {
           actions: [
             IconButton(
                 onPressed: () {
-                  //Save the current Bio from the TextEditing Controller
-                  //It is already saved. We just need to route back pretty much.
+                  print(
+                      "The bioController that is related to the globla class: ${updateUser.bioController.text}");
 
-                  // Navigator.push(context);
-                  print("Should be navigating");
-                  print(_updateBio.bioController.text);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -58,7 +60,7 @@ class EditBioScreen extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(12.5),
             child: TextFormField(
-              controller: _updateBio.bioController,
+              controller: updateUser.bioController,
               maxLines: null, // Allows the TextFormField to expand vertically
               style: const TextStyle(
                   color: primaryColor), // Sets text color to white

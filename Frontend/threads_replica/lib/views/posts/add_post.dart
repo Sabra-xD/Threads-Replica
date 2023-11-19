@@ -62,8 +62,6 @@ class _PostScreenState extends State<PostScreen> {
                 // Focus.of(context).unfocus();
                 //Get the cookie, send it along with the postID of the user.
                 createPost.createPost();
-
-                print("Pressed on the POST button");
                 if (_formKey.currentState!.validate()) {
                   createPost.createPost();
                 }
