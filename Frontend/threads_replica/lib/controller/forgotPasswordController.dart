@@ -15,7 +15,7 @@ class ForgotPasswordController extends GetxController {
 
   Future<void> forgotPassword() async {
     print("This shit function was called");
-    const String url = "http://localhost:3000/api/users/forgotPassword";
+    const String url = "http://10.0.2.2:3000/api/users/forgotPassword";
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
     };

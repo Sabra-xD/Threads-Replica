@@ -13,7 +13,10 @@ class HomePage extends StatelessWidget {
         child: SafeArea(
             child: Padding(
           padding: const EdgeInsets.all(12.5),
-          child: PostTemplate(),
+          //We should wrap up the Post Template in a Future Builder that has a List View Child.
+          //Future Builder basically fetches the information from the BE and sends it it to the ListView and them ListView displays multiple instances of the PostTemplate.
+          //So, we start off by creating the API call.
+          // child: PostTemplate(),
         )),
       ),
     );

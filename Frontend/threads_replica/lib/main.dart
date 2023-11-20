@@ -5,6 +5,7 @@ import 'package:threads_replica/views/forgot_password.dart';
 import 'package:threads_replica/views/home_screen.dart';
 import 'package:threads_replica/views/login_screen.dart';
 import 'package:threads_replica/views/posts/add_post.dart';
+import 'package:threads_replica/views/posts/single_post_screen.dart';
 import 'package:threads_replica/views/posts/test.dart';
 import 'package:threads_replica/views/profile/edit_bio.dart';
 import 'package:threads_replica/views/profile/edit_profile.dart';
@@ -43,6 +44,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return HomePage();
+    return SinglePostScreen();
   }
 }
