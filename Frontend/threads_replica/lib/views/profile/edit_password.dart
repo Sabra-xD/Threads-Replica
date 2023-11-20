@@ -21,6 +21,7 @@ class EditPasswordScreen extends StatelessWidget {
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
     return Scaffold(
+      backgroundColor: mobileBackgroundColor,
       appBar: AppBar(
         elevation: 2,
         backgroundColor: mobileBackgroundColor,
@@ -75,16 +76,19 @@ class EditPasswordScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
           child: SafeArea(
-              child: Container(
+              child: Padding(
+        padding: const EdgeInsets.all(12.5),
         child: Form(
             key: _formKey,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextFieldInput(
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Please fill the required field";
                       }
+                      return null;
                     },
                     textEditingController: _passwordChange,
                     hintText: "Enter your new password",
@@ -97,6 +101,7 @@ class EditPasswordScreen extends StatelessWidget {
                     if (value!.isEmpty) {
                       return "Please fill the required field";
                     }
+                    return null;
                   },
                   textEditingController: _confirmPassword,
                   hintText: "Confirm your password",

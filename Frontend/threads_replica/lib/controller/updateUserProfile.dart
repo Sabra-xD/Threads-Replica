@@ -13,12 +13,6 @@ class updateUserProfileController extends GetxController {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController newImageController = TextEditingController();
 
-  //The issue is that we create and instance of the RxString.
-  //I assumed that it saves that value...
-  //But apperantely it does not.
-
-  //It does not have the value. We must set it. Either when routing to the screen we send the value or we set it in an RxString.
-
   AuthToken userCookie = AuthToken();
   RxInt statusCode = RxInt(0);
   final UserInfo _userInfo = Get.put(UserInfo());
@@ -44,14 +38,12 @@ class updateUserProfileController extends GetxController {
     }
     //Basically we need to post these.
     try {
-      print("Bio Controller from inside the func:: ${bioController.text}");
       final response = await http.post(Uri.parse(url),
           headers: headers, body: json.encode(data));
 
       print("Status Code: ${response.statusCode}");
       statusCode.value = response.statusCode;
       if (response.statusCode == 200) {
-        print("Response Body: ${response.body}");
         final Map<String, dynamic> receivedData = json.decode(response.body);
       }
     } catch (error) {

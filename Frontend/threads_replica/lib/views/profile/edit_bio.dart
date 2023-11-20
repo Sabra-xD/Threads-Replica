@@ -6,7 +6,6 @@ import 'package:threads_replica/controller/updateUserProfile.dart';
 import 'package:threads_replica/utils/colors.dart';
 import 'package:threads_replica/views/posts/add_post.dart';
 import 'package:threads_replica/views/profile/edit_profile.dart';
-import 'package:threads_replica/widgets/text_input_field.dart';
 
 import '../../styles/TextStyles.dart';
 
