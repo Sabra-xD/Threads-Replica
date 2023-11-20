@@ -22,6 +22,23 @@ const getUserProfile = async (req,res) => {
     
 }
 
+const getUserByID = async(req,res) => {
+   try{
+     const {userID} = req.body;
+     const user = await User.findById(userID).select("-password").select("-updateAt");
+     if(user){
+        return res.status(200).json(user);
+     }else{
+        return res.status(404).json({message: "User was not found"});
+     }
+   }catch(error){
+    console.log("Error in the getUserByID: ",error.message);
+   return res.status(500).json({message: error.message});
+   }
+
+
+}
+
 
 const signUpuser = async (req,res) => {
     console.log(req.body);
@@ -100,8 +117,6 @@ const login = async (req,res) =>{
             name: user.name,
             email: user.email,
             username: user.username,
-            token: token
-
         })
 
     }catch(err){
@@ -234,11 +249,13 @@ const updateUser = async(req,res) => {
     try{
       
         let user = await User.findById(userId);
+
         if(!user) return res.status(400).json({message: "User was not found"});
-        
-         if(id !== userId.toString){
+    
+         if(id !== userId.toString()){
             return res.status(400).json({message: "You can not update other profiles"});
          }
+
 
         if(password){
             if(password.length<6) return res.status(400).json({message: "Password must be longer than 6 characters"});
@@ -247,7 +264,6 @@ const updateUser = async(req,res) => {
             user.password = hashedPassword;
             //Updating Password.
         }
-
 
         if(username||email){
             const foundUser = await User.findOne({$or: [{email},{username}]});
@@ -258,11 +274,14 @@ const updateUser = async(req,res) => {
                 return res.status(400).json({message: "Username or Email is already in use"});
             }
         }
-
+       
     user.name = name || user.name;
     user.profilePic = profilePic || user.profilePic;
     user.bio = bio || user.bio;
 
+ 
+
+    console.log("It should bre returning status Code 200 here");
        user = await user.save();
 
        res.status(200).json({message: "Profile was updated successfully"});
@@ -278,4 +297,4 @@ const updateUser = async(req,res) => {
 
 
 
-export {signUpuser,login,logout, followunfollowUser , updateUser, getUserProfile, forgotPassword};
+export {signUpuser,login,logout, followunfollowUser , updateUser, getUserProfile, forgotPassword,getUserByID};

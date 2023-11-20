@@ -17,7 +17,7 @@ const createPost = async (req,res) => {
 
         if(!postedBy || !text) return res.status(400).json({message: "Must fill the PostedBy & text fields"});
 
-   
+         
         
         // // const user = await User.findOne({_id: postedBy});
         // const userId = new mongoose.Types.ObjectId(postedBy);
@@ -233,7 +233,7 @@ try{
 
 const getFeedPost = async(req,res) => {
     try{
-        const userId = req.user._id;
+        const userId = req.user._id; //We get that from the cookie.
         const user = await User.findById(userId);
 
         if(!user) return res.status(404).json({message: "User was not found"});
@@ -241,6 +241,7 @@ const getFeedPost = async(req,res) => {
         const following = user.following;
         //Basically what he did there was that he looked into all posts that had the following of the user in them and sorted them and sent them back to the user.
         const feedPosts = await Post.find({postedBy:{$in: following}}).sort({createdAt: -1});
+        //Getting the posts made by the following.
 
 
         res.status(200).json(feedPosts);
