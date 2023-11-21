@@ -86,7 +86,7 @@ class PostTemplate extends StatelessWidget {
                 ),
 
                 Text(
-                  "     ${likesCount} likes",
+                  "  ${repliesCount} replies . ${likesCount} likes",
                   style: defaultTextStyle(
                       fontWeight: FontWeight.w200, fontSize: 12),
                 ),

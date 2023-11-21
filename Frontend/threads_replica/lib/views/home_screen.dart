@@ -72,6 +72,7 @@ class HomePage extends StatelessWidget {
                                       img: profilePicture,
                                       username: username,
                                       likesCount: likesCount,
+                                      repliesCount: repliesCount,
                                       // postPic: feedItem[''],
                                     ),
                                   );
