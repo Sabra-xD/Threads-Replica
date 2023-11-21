@@ -7,10 +7,12 @@ import 'package:threads_replica/views/posts/post_template.dart';
 import 'package:threads_replica/widgets/threads_logo.dart';
 
 class HomePage extends StatelessWidget {
+  // ignore: use_key_in_widget_constructors
   const HomePage({Key? key});
 
   @override
   Widget build(BuildContext context) {
+    // ignore: no_leading_underscores_for_local_identifiers
     final feedController _feedController = Get.put(feedController());
 
     return Scaffold(
@@ -50,13 +52,28 @@ class HomePage extends StatelessWidget {
                                 itemBuilder: (BuildContext context, int index) {
                                   final feedItem =
                                       _feedController.receivedData[index];
+                                  final repliesCount = _feedController
+                                      .receivedData[index]['replies'].length;
+
+                                  final likesCount = _feedController
+                                      .receivedData[index]['likes'].length;
+
                                   final username =
                                       _feedController.usernames[index];
+                                  final profilePicture =
+                                      _feedController.profilePictures[index];
+                                  // final postPic =
+                                  //     _feedController.postPics[index];
 
-                                  return PostTemplate(
-                                    text: feedItem['text'],
-                                    img: feedItem['img'],
-                                    username: username,
+                                  return InkWell(
+                                    onTap: () {},
+                                    child: PostTemplate(
+                                      text: feedItem['text'],
+                                      img: profilePicture,
+                                      username: username,
+                                      likesCount: likesCount,
+                                      // postPic: feedItem[''],
+                                    ),
                                   );
                                 },
                               );

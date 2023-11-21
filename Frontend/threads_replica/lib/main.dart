@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:threads_replica/views/home_screen.dart';
-import 'package:threads_replica/views/login_screen.dart';
-
-import 'package:threads_replica/views/posts/single_post_screen.dart';
 
 void main() {
   runApp(const MyApp());

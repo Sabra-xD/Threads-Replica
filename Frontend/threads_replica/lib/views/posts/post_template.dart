@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../styles/TextStyles.dart';
 import '../../utils/colors.dart';
-
-import '../../widgets/threads_logo.dart';
 
 // ignore: must_be_immutable
 class PostTemplate extends StatelessWidget {
   String? text;
   String? username;
   String? img;
-  PostTemplate({super.key, this.text, this.username, this.img});
+  int? likesCount;
+  int? repliesCount;
+  // String? postPic;
+  PostTemplate(
+      {super.key,
+      this.text,
+      this.username,
+      this.img,
+      this.repliesCount,
+      this.likesCount});
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +59,19 @@ class PostTemplate extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  text ?? "...",
-                  style: defaultTextStyle(
-                      fontWeight: FontWeight.w300, fontSize: 15),
+                Row(
+                  children: [
+                    const SizedBox(
+                      width: 55,
+                    ),
+                    Text(
+                      text ?? "...",
+                      style: defaultTextStyle(
+                          fontWeight: FontWeight.w300, fontSize: 15),
+                    ),
+                  ],
                 ),
+                // Center(child: displayImage(postPic)),
                 Row(
                   children: [
                     IconButton(
@@ -67,7 +83,13 @@ class PostTemplate extends StatelessWidget {
                         icon: const Icon(Icons.comment_bank_outlined)),
                     IconButton(onPressed: () {}, icon: const Icon(Icons.reply)),
                   ],
-                )
+                ),
+
+                Text(
+                  "     ${likesCount} likes",
+                  style: defaultTextStyle(
+                      fontWeight: FontWeight.w200, fontSize: 12),
+                ),
               ],
             )
           ],
@@ -81,5 +103,20 @@ class PostTemplate extends StatelessWidget {
         )
       ],
     );
+  }
+
+  Widget displayImage(postPic) {
+    if (postPic != '') {
+      return SizedBox(
+        width: 100,
+        height: 100,
+        child: Image.network(postPic),
+      );
+    } else {
+      return const SizedBox(
+        height: 0,
+        width: 0,
+      );
+    }
   }
 }
