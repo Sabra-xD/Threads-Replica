@@ -1,12 +1,26 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import 'token_saver.dart';
 
+// ignore: camel_case_types
 class feedController extends GetxController {
   AuthToken userCookie = AuthToken();
+  int itemCount = 0;
   RxInt statusCode = RxInt(0);
-  String url = "http://localhost:3000/api/posts/feed";
+  String _id = '';
+  late String postedBy;
+  String text = '';
+  List likes = [];
+  List replies = [];
+  String creationTime = '';
+  String img = '';
+  String username = '';
+  String url = "http://10.0.2.2:3000/api/posts/feed";
+  List<dynamic> receivedData = [];
+  List<String> usernames = [];
 
   Future<void> getFeed() async {
     String authToken = await userCookie.getToken();
@@ -23,14 +37,21 @@ class feedController extends GetxController {
       );
 
       statusCode.value = response.statusCode;
-      //Here the response body itself will contain multiple values.
-      //We need to fetch them and Input them in an array of objects and display them one at a time.
-      //But first, lets "Display" our post.
-      //We have getPost.
-      //Will it be a FutureBuilder or a GetBuilder?
 
       if (response.statusCode == 200) {
-        print("The Response Body: ${response.body}");
+        //Adjust this accordingly
+        receivedData = json.decode(response.body);
+        itemCount = receivedData.length;
+
+        String getUserUrl = "http://10.0.2.2:3000/api/users/userbyid";
+        usernames = [];
+        for (var post in receivedData) {
+          final Map<String, String> data = {'userID': post['postedBy']};
+          final secondresponse = await http.post(Uri.parse(getUserUrl),
+              headers: headers, body: json.encode(data));
+          final receivedData2 = json.decode(secondresponse.body);
+          usernames.add(receivedData2['username']);
+        }
       } else {
         print("The Status Code is: ${response.statusCode}");
       }

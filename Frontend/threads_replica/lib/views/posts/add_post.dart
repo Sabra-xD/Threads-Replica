@@ -126,6 +126,7 @@ class _PostScreenState extends State<PostScreen> {
                                   if (value!.isEmpty) {
                                     return "Please enter the required text";
                                   }
+                                  return null;
                                 },
                                 controller: createPost.threadText,
                                 decoration: const InputDecoration(

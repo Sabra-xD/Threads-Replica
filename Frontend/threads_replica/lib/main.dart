@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:threads_replica/controller/updateUserProfile.dart';
-import 'package:threads_replica/views/forgot_password.dart';
 import 'package:threads_replica/views/home_screen.dart';
 import 'package:threads_replica/views/login_screen.dart';
-import 'package:threads_replica/views/posts/add_post.dart';
+
 import 'package:threads_replica/views/posts/single_post_screen.dart';
-import 'package:threads_replica/views/posts/test.dart';
-import 'package:threads_replica/views/profile/edit_bio.dart';
-import 'package:threads_replica/views/profile/edit_profile.dart';
-import 'package:threads_replica/views/profile_screen.dart';
-import 'package:threads_replica/views/signup_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -44,6 +36,39 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return SinglePostScreen();
+    return HomePage();
   }
 }
+
+// [
+//     {
+//         "_id": "655ae8af5badd658d0532070",
+//         "postedBy": "655ae7065badd658d0532052",
+//         "text": "This is Mohamed's third Post",
+//         "likes": [],
+//         "replies": [],
+//         "createdAt": "2023-11-20T05:03:43.643Z",
+//         "updatedAt": "2023-11-20T05:03:43.643Z",
+//         "__v": 0
+//     },
+//     {
+//         "_id": "655ae8a85badd658d053206c",
+//         "postedBy": "655ae7065badd658d0532052",
+//         "text": "This is Mohamed's second Post",
+//         "likes": [],
+//         "replies": [],
+//         "createdAt": "2023-11-20T05:03:36.842Z",
+//         "updatedAt": "2023-11-20T05:03:36.842Z",
+//         "__v": 0
+//     },
+//     {
+//         "_id": "655ae86f5badd658d0532063",
+//         "postedBy": "655ae7065badd658d0532052",
+//         "text": "This is Mohamed's Post",
+//         "likes": [],
+//         "replies": [],
+//         "createdAt": "2023-11-20T05:02:39.865Z",
+//         "updatedAt": "2023-11-20T05:02:39.865Z",
+//         "__v": 0
+//     }
+// ]

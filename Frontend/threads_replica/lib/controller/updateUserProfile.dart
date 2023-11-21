@@ -44,7 +44,7 @@ class updateUserProfileController extends GetxController {
       print("Status Code: ${response.statusCode}");
       statusCode.value = response.statusCode;
       if (response.statusCode == 200) {
-        final Map<String, dynamic> receivedData = json.decode(response.body);
+        // final Map<String, dynamic> receivedData = json.decode(response.body);
       }
     } catch (error) {
       print("Error in the updateUserProfile : ${error}");

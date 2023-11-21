@@ -5,8 +5,9 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:http/http.dart' as http;
 
 class getSinglePostController extends GetxController {
+  //Change this ID according to which Post are we clicking on.
   String url = "http://10.0.2.2:3000/api/posts/655ae86f5badd658d0532063";
-  RxInt StatusCode = RxInt(0);
+  RxInt statusCode = RxInt(0);
   String _id = '';
   late String postedBy;
   String text = '';
@@ -23,7 +24,7 @@ class getSinglePostController extends GetxController {
       };
       final response = await http.get(Uri.parse(url));
       print("This is the response of the getSinglePostController");
-      StatusCode.value = response.statusCode;
+      statusCode.value = response.statusCode;
       if (response.statusCode == 200) {
         Map<String, dynamic> receivedData = json.decode(response.body);
 

@@ -6,16 +6,17 @@ import '../../utils/colors.dart';
 import '../../widgets/threads_logo.dart';
 
 // ignore: must_be_immutable
-class PostTemplate extends StatelessWidget {
+class POST extends StatelessWidget {
   String? text;
   String? username;
   String? img;
-  PostTemplate({super.key, this.text, this.username, this.img});
+  POST({super.key, this.text, this.username, this.img});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        const ThreadsLogo(),
         const SizedBox(
           height: 12.5,
         ),
@@ -76,9 +77,6 @@ class PostTemplate extends StatelessWidget {
           thickness: 0.5,
           color: primaryColor,
         ),
-        const SizedBox(
-          height: 12.5,
-        )
       ],
     );
   }

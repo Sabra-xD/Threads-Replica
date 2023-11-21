@@ -1,10 +1,8 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/updateUserProfile.dart';
 import 'package:threads_replica/utils/colors.dart';
-import 'package:threads_replica/views/posts/add_post.dart';
+
 import 'package:threads_replica/views/profile/edit_profile.dart';
 
 import '../../styles/TextStyles.dart';
@@ -46,7 +44,7 @@ class EditBioScreen extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => EditProfileScreen()));
+                          builder: (context) => const EditProfileScreen()));
                 },
                 icon: const Icon(
                   Icons.check_sharp,
