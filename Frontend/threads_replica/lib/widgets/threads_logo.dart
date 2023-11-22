@@ -17,10 +17,6 @@ class ThreadsLogo extends StatelessWidget {
       height: 50,
       // ignore: deprecated_member_use
       color: primaryColor,
-      placeholderBuilder: (BuildContext context) =>
-          const CircularProgressIndicator(
-        color: Colors.blue,
-      ),
     ));
   }
 }

@@ -36,36 +36,3 @@ class _MyHomePageState extends State<MyHomePage> {
     return HomePage();
   }
 }
-
-// [
-//     {
-//         "_id": "655ae8af5badd658d0532070",
-//         "postedBy": "655ae7065badd658d0532052",
-//         "text": "This is Mohamed's third Post",
-//         "likes": [],
-//         "replies": [],
-//         "createdAt": "2023-11-20T05:03:43.643Z",
-//         "updatedAt": "2023-11-20T05:03:43.643Z",
-//         "__v": 0
-//     },
-//     {
-//         "_id": "655ae8a85badd658d053206c",
-//         "postedBy": "655ae7065badd658d0532052",
-//         "text": "This is Mohamed's second Post",
-//         "likes": [],
-//         "replies": [],
-//         "createdAt": "2023-11-20T05:03:36.842Z",
-//         "updatedAt": "2023-11-20T05:03:36.842Z",
-//         "__v": 0
-//     },
-//     {
-//         "_id": "655ae86f5badd658d0532063",
-//         "postedBy": "655ae7065badd658d0532052",
-//         "text": "This is Mohamed's Post",
-//         "likes": [],
-//         "replies": [],
-//         "createdAt": "2023-11-20T05:02:39.865Z",
-//         "updatedAt": "2023-11-20T05:02:39.865Z",
-//         "__v": 0
-//     }
-// ]

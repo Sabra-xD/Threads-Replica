@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../../styles/TextStyles.dart';
 import '../../utils/colors.dart';
@@ -11,14 +10,15 @@ class PostTemplate extends StatelessWidget {
   String? img;
   int? likesCount;
   int? repliesCount;
-  // String? postPic;
+  String? postPic;
   PostTemplate(
       {super.key,
       this.text,
       this.username,
       this.img,
       this.repliesCount,
-      this.likesCount});
+      this.likesCount,
+      this.postPic});
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +33,8 @@ class PostTemplate extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(
-                  foregroundImage: NetworkImage(
-                      //Here we need to fetch every user's profile picture from the DB.
-                      img ??
-                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"),
+                  foregroundImage: NetworkImage(img ??
+                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"),
                   radius: 20,
                 ),
                 const SizedBox(
@@ -71,7 +69,7 @@ class PostTemplate extends StatelessWidget {
                     ),
                   ],
                 ),
-                // Center(child: displayImage(postPic)),
+                Center(child: displayImage(postPic)),
                 Row(
                   children: [
                     IconButton(
@@ -84,9 +82,8 @@ class PostTemplate extends StatelessWidget {
                     IconButton(onPressed: () {}, icon: const Icon(Icons.reply)),
                   ],
                 ),
-
                 Text(
-                  "  ${repliesCount} replies . ${likesCount} likes",
+                  "  $repliesCount replies . $likesCount likes",
                   style: defaultTextStyle(
                       fontWeight: FontWeight.w200, fontSize: 12),
                 ),
@@ -106,11 +103,12 @@ class PostTemplate extends StatelessWidget {
   }
 
   Widget displayImage(postPic) {
-    if (postPic != '') {
-      return SizedBox(
-        width: 100,
-        height: 100,
-        child: Image.network(postPic),
+    if (postPic != null) {
+      return Image.network(
+        postPic,
+        height: 200,
+        width: 200,
+        fit: BoxFit.contain,
       );
     } else {
       return const SizedBox(

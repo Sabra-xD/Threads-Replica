@@ -51,29 +51,18 @@ class HomePage extends StatelessWidget {
                                 itemCount: _feedController.receivedData.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   final feedItem =
-                                      _feedController.receivedData[index];
-                                  final repliesCount = _feedController
-                                      .receivedData[index]['replies'].length;
-
-                                  final likesCount = _feedController
-                                      .receivedData[index]['likes'].length;
-
-                                  final username =
-                                      _feedController.usernames[index];
-                                  final profilePicture =
-                                      _feedController.profilePictures[index];
-                                  // final postPic =
-                                  //     _feedController.postPics[index];
+                                      _feedController.combinedData[index];
 
                                   return InkWell(
                                     onTap: () {},
                                     child: PostTemplate(
-                                      text: feedItem['text'],
-                                      img: profilePicture,
-                                      username: username,
-                                      likesCount: likesCount,
-                                      repliesCount: repliesCount,
-                                      // postPic: feedItem[''],
+                                      text: feedItem[0]['text'],
+                                      img: feedItem[1]['profilePic'],
+                                      username: feedItem[1]['username'],
+                                      likesCount: feedItem[0]['likes'].length,
+                                      repliesCount:
+                                          feedItem[0]['replies'].length,
+                                      postPic: feedItem[0]['img'],
                                     ),
                                   );
                                 },
