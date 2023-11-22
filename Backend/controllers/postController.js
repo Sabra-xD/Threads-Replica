@@ -1,5 +1,5 @@
 import Post from "../models/postModel.js";
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 
@@ -29,18 +29,16 @@ const createPost = async (req,res) => {
     // Convert the user ID to a valid ObjectId
     const userObjectId = new mongoose.Types.ObjectId(userId);
 
+
+
     const user = await User.findById(userObjectId);
         console.log(user)
         //Finding the user 
+
         if(!user) return res.status(404).json({message: "User not found"});
+
+        console.log("Username: ", user['username']);
         
-        // console.log(user._id.toString());
-        // /// We need to uncomment this in order to work correct.
-        // // req.user._id is the fucking cookie being read.
-        // // console.log(req.user._id.toString()) //We are not getting this, why?
-        // if(user._id.toString() !== req.user._id.toString()){
-        //   return res.status(401).json({message: "Unauthorized action"});
-        // }
 
         const maxLength = 500;
         if(text.length > maxLength){
@@ -50,6 +48,7 @@ const createPost = async (req,res) => {
 
         const newPost = new Post({
             postedBy: userObjectId,
+            username: user['username'],
             text,
             img
         });
@@ -75,6 +74,7 @@ const createPost = async (req,res) => {
 const getPost = async (req,res) => {
     try{
         const {id} = req.params;//Why though?
+        
         const post = await Post.findById(id);
 
         if(!post) return res.status(404).json({message: "Post was not found"});
@@ -243,7 +243,8 @@ const getFeedPost = async(req,res) => {
         const feedPosts = await Post.find({postedBy:{$in: following}}).sort({createdAt: -1});
         //Getting the posts made by the following.
 
-
+       console.log(feedPosts);
+       
         res.status(200).json(feedPosts);
 
 

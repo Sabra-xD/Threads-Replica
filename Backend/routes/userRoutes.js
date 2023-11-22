@@ -4,14 +4,13 @@ import protectRoute from "../middleware/protectRoute.js";
 
 const router = express.Router();
 
-router.get("/profile/:username",getUserProfile)
+router.get("/profile/:query",getUserProfile)
 router.post("/signup", signUpuser);
 router.post("/login", login);
 router.post("/logout",logout);
 router.post("/follow/:id",protectRoute,followunfollowUser);
 router.post("/updateUser/:id",protectRoute,updateUser)
 router.post("/forgotPassword",forgotPassword);
-router.post("/userbyid", getUserByID);
 
 
 

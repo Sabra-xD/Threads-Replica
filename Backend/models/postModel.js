@@ -4,7 +4,11 @@ import mongoose from "mongoose";
 const postSchema = mongoose.Schema({
     postedBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // This sets up a reference to the 'User' model
+        ref: 'User', // This sets up a reference to the 'User' model why does this only sends back userID?
+        required: true,
+    },
+    username: {
+        type: String,
         required: true,
     },
     text: {

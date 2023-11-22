@@ -2,42 +2,35 @@ import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import generateTokenAndSetCookie from "../utils/helpers/generateTokenAndSetCookie.js";
+import mongoose, { mongo } from "mongoose";
 
 
-const getUserProfile = async (req,res) => {
-    const {username} = req.params;
-    try{
+const getUserProfile = async (req, res) => {
+	// We will fetch user profile either with username or userId
+	// query is either username or userId
+	const { query } = req.params;
 
-        let user = await User.findOne({username}).select("-password").select("-updatedAt");
-        //We had an error because we did not wait from the response.
-        // And we were already using it and it was nto assigned anything yet.
-        if(!user){
-            res.status(400).json({message: "User was not found"});
-        }
-        res.status(200).json(user);
-    }catch(error){
-        res.status(500).json({message: error.message});
-        console.log("Error in the getUserProfiler: ",error.message);
-    }
-    
-}
+	try {
+		let user;
 
-const getUserByID = async(req,res) => {
-   try{
-     const {userID} = req.body;
-     const user = await User.findById(userID).select("-password").select("-updateAt");
-     if(user){
-        return res.status(200).json(user);
-     }else{
-        return res.status(404).json({message: "User was not found"});
-     }
-   }catch(error){
-    console.log("Error in the getUserByID: ",error.message);
-   return res.status(500).json({message: error.message});
-   }
+		// query is userId
+		if (mongoose.Types.ObjectId.isValid(query)) {
+			user = await User.findOne({ _id: query }).select("-password").select("-updatedAt");
+		} else {
+			// query is username
+			user = await User.findOne({ username: query }).select("-password").select("-updatedAt");
+		}
+
+		if (!user) return res.status(404).json({ error: "User not found" });
+
+		res.status(200).json(user);
+	} catch (err) {
+		res.status(500).json({ error: err.message });
+		console.log("Error in getUserProfile: ", err.message);
+	}
+};
 
 
-}
 
 
 const signUpuser = async (req,res) => {
@@ -117,6 +110,7 @@ const login = async (req,res) =>{
             name: user.name,
             email: user.email,
             username: user.username,
+            profilePic: user.profilePic
         })
 
     }catch(err){
@@ -297,4 +291,4 @@ const updateUser = async(req,res) => {
 
 
 
-export {signUpuser,login,logout, followunfollowUser , updateUser, getUserProfile, forgotPassword,getUserByID};
+export {signUpuser,login,logout, followunfollowUser , updateUser, getUserProfile, forgotPassword};
