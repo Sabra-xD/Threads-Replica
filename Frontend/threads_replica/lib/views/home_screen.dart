@@ -53,9 +53,13 @@ class HomePage extends StatelessWidget {
                                   final feedItem =
                                       _feedController.combinedData[index];
 
+                                  print(
+                                      "Index: ${index} the likes count: ${feedItem[0]['likes'].length}");
+
                                   return InkWell(
                                     onTap: () {},
                                     child: PostTemplate(
+                                      postID: feedItem[0]['_id'],
                                       text: feedItem[0]['text'],
                                       img: feedItem[1]['profilePic'],
                                       username: feedItem[1]['username'],

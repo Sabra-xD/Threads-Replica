@@ -34,6 +34,7 @@ class SinglePostScreen extends StatelessWidget {
                         return Padding(
                           padding: const EdgeInsets.all(12.5),
                           child: PostTemplate(
+                              postID: "0",
                               text: _singlePostController.text,
                               username: _singlePostController.username,
                               img: _singlePostController.img),

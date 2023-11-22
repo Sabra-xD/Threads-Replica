@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../../controller/likeunlikeController.dart';
 import '../../styles/TextStyles.dart';
 import '../../utils/colors.dart';
 
@@ -9,6 +11,7 @@ class PostTemplate extends StatelessWidget {
   String? username;
   String? img;
   int? likesCount;
+  String postID;
   int? repliesCount;
   String? postPic;
   PostTemplate(
@@ -18,10 +21,19 @@ class PostTemplate extends StatelessWidget {
       this.img,
       this.repliesCount,
       this.likesCount,
-      this.postPic});
+      this.postPic,
+      required this.postID});
 
   @override
   Widget build(BuildContext context) {
+    final likeunlikeController _likeController =
+        Get.put(likeunlikeController());
+
+    RxInt varLikesCount = RxInt(likesCount!);
+    RxInt varRepliesCount = RxInt(repliesCount!);
+
+    _likeController.numberofLikes.value = likesCount!;
+
     return Column(
       children: [
         const SizedBox(
@@ -73,7 +85,16 @@ class PostTemplate extends StatelessWidget {
                 Row(
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        await _likeController.likeunlike(postID);
+//Remove this if somehow we made the likesCount update from the BE.
+                        if (_likeController.statusCode.value == 200) {
+                          varLikesCount.value = varLikesCount.value + 1;
+                        }
+                        if (_likeController.statusCode.value == 204) {
+                          varLikesCount.value = varLikesCount.value - 1;
+                        }
+                      },
                       icon: const Icon(Icons.favorite_outline),
                     ),
                     IconButton(
@@ -82,11 +103,13 @@ class PostTemplate extends StatelessWidget {
                     IconButton(onPressed: () {}, icon: const Icon(Icons.reply)),
                   ],
                 ),
-                Text(
-                  "  $repliesCount replies . $likesCount likes",
-                  style: defaultTextStyle(
-                      fontWeight: FontWeight.w200, fontSize: 12),
-                ),
+                Obx(() {
+                  return Text(
+                    "  ${varRepliesCount.value} replies . ${varLikesCount.value} likes",
+                    style: defaultTextStyle(
+                        fontWeight: FontWeight.w200, fontSize: 12),
+                  );
+                })
               ],
             )
           ],
