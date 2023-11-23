@@ -4,6 +4,7 @@ import 'package:threads_replica/controller/feedController.dart';
 import 'package:threads_replica/styles/TextStyles.dart';
 import 'package:threads_replica/utils/colors.dart';
 import 'package:threads_replica/views/posts/post_template.dart';
+import 'package:threads_replica/views/posts/reply_template.dart';
 import 'package:threads_replica/widgets/threads_logo.dart';
 
 class HomePage extends StatelessWidget {
@@ -54,20 +55,29 @@ class HomePage extends StatelessWidget {
                                       _feedController.combinedData[index];
                                   final liked =
                                       _feedController.userInLikes[index];
-                                  return InkWell(
-                                    onTap: () {},
-                                    child: PostTemplate(
-                                      likedColor:
-                                          liked, //We have to check, does it contain our user?
-                                      postID: feedItem[0]['_id'],
-                                      text: feedItem[0]['text'],
-                                      img: feedItem[1]['profilePic'],
-                                      username: feedItem[1]['username'],
-                                      likesCount: feedItem[0]['likes'].length,
-                                      repliesCount:
-                                          feedItem[0]['replies'].length,
-                                      postPic: feedItem[0]['img'],
-                                    ),
+                                  return Column(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {},
+                                        child: PostTemplate(
+                                          likedColor:
+                                              liked, //We have to check, does it contain our user?
+                                          postID: feedItem[0]['_id'],
+                                          text: feedItem[0]['text'],
+                                          img: feedItem[1]['profilePic'],
+                                          username: feedItem[1]['username'],
+                                          likesCount:
+                                              feedItem[0]['likes'].length,
+                                          repliesCount:
+                                              feedItem[0]['replies'].length,
+                                          postPic: feedItem[0]['img'],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      _buildReplyTemp(feedItem),
+                                    ],
                                   );
                                 },
                               );
@@ -81,5 +91,25 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildReplyTemp(List<dynamic> feedItem) {
+    if (feedItem[0]['replies'].length > 0) {
+      print("The length is: ${feedItem[0]['replies'].length}");
+      return Column(
+        children: List.generate(feedItem[0]['replies'].length, (index) {
+          final replyInfo = feedItem[0]['replies'][index];
+          return ReplyTemplate(
+            userID: replyInfo['userId'],
+            replyText: replyInfo['text'],
+          );
+        }),
+      );
+    } else {
+      return const SizedBox(
+        height: 0,
+        width: 0,
+      );
+    }
   }
 }

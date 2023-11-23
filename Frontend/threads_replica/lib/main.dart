@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:threads_replica/controller/signUpController.dart';
 import 'package:threads_replica/views/forgot_password.dart';
 import 'package:threads_replica/views/home_screen.dart';
 import 'package:threads_replica/views/login_screen.dart';

@@ -114,6 +114,9 @@ class PostTemplate extends StatelessWidget {
                         onPressed: () {},
                         icon: const Icon(Icons.comment_bank_outlined)),
                     IconButton(onPressed: () {}, icon: const Icon(Icons.reply)),
+                    const SizedBox(
+                      height: 12,
+                    ),
                   ],
                 ),
                 Obx(() {
