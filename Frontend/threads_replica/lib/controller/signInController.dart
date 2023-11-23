@@ -9,15 +9,13 @@ import 'package:threads_replica/controller/userInfo.dart';
 class SignInController extends GetxController {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
-  UserInfo _userInfo = UserInfo();
+  final UserInfo _userInfo = UserInfo();
   AuthToken saver = AuthToken();
   String token = "";
 
   RxInt statusCode = RxInt(0);
 
   Future<void> confirmSignIn() async {
-    print("Old Auth Token: ${await saver.getToken()}");
-    print("We are inside the confirmSignIn Function");
     const String url = "http://10.0.2.2:3000/api/users/login";
 
     final Map<String, String> headers = {
@@ -32,7 +30,6 @@ class SignInController extends GetxController {
     try {
       if (usernameController.text.isNotEmpty &&
           passwordController.text.isNotEmpty) {
-        print("Right before the response");
         final response = await http.post(
           Uri.parse(url),
           headers: headers,
@@ -40,17 +37,11 @@ class SignInController extends GetxController {
         );
 
         statusCode.value = response.statusCode;
-        print("Headers: ${response.headers}");
         if (response.statusCode == 200) {
           final Map<String, dynamic> receivedData = json.decode(response.body);
-          print("Received Data: ${receivedData}");
           _userInfo.saveUserInfo(receivedData['username'],
               receivedData['email'], receivedData['img'], receivedData['_id']);
-          print("Received ID: ${receivedData['_id']}");
-
           String? setCookieHeader = response.headers['set-cookie'];
-
-          // If you want to parse the cookie, you can use the http package's Cookie.fromSetCookieValue method
           Cookie cookie = Cookie.fromSetCookieValue(setCookieHeader!);
           if (cookie.name == "jwt") {
             saver.saveToken(cookie.value);

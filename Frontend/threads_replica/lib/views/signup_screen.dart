@@ -143,11 +143,10 @@ class SignUpScreen extends StatelessWidget {
                     FocusScope.of(context).unfocus();
 
                     if (formKey.currentState!.validate()) {
-                      print("Pressing on the Sign UP Button");
                       signUpController.signup();
-                      if (signUpController.statusCode.value == 200) {
-                        //Route to the homePage
+                      if (signUpController.statusCode.value == 201) {
                         signUpController.dispose();
+                        Get.toNamed("/HomePage");
                       }
                     }
                   },
@@ -167,16 +166,21 @@ class SignUpScreen extends StatelessWidget {
                 const SizedBox(
                   height: 24,
                 ),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       "Already got an account? ",
                       style: TextStyle(color: primaryColor),
                     ),
-                    Text("Sign In",
-                        style: TextStyle(
-                            color: primaryColor, fontWeight: FontWeight.bold))
+                    TextButton(
+                        onPressed: () {
+                          Get.toNamed("/SignInScreen");
+                        },
+                        child: const Text("Sign In",
+                            style: TextStyle(
+                                color: primaryColor,
+                                fontWeight: FontWeight.bold))),
                   ],
                 )
               ],

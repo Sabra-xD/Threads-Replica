@@ -1,42 +1,43 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-
 import 'token_saver.dart';
 
-class likeunlikeController extends GetxController {
-  AuthToken userCookie = AuthToken();
-  RxInt numberofLikes = RxInt(0);
-  RxInt statusCode = RxInt(0);
+class LikeUnlikeController extends GetxController {
+  final userCookie = AuthToken();
+  final numberofLikes = RxInt(0);
+  final statusCode = RxInt(0);
+  final liked = RxBool(false);
 
-  Future<void> likeunlike(String postID) async {
-    //We get the Post ID and post to it.
+  Future<void> likeUnlike(String postID) async {
     String url = "http://10.0.2.2:3000/api/posts/like/$postID";
-
-    String authToken = await userCookie.getToken();
-
-    final Map<String, String> headers = {
-      'Content-Type': 'application/json',
-      'cookie': 'jwt=$authToken',
-    };
+    String postUrl = "http://10.0.2.2:3000/api/posts/$postID";
 
     try {
+      final authToken = await userCookie.getToken();
+      final headers = {
+        'Content-Type': 'application/json',
+        'cookie': 'jwt=$authToken',
+      };
+
       final response = await http.post(
         Uri.parse(url),
         headers: headers,
       );
       statusCode.value = response.statusCode;
 
-      if (response.statusCode == 200 || response.statusCode == 204) {
-        final receivedData = json.decode(response.body);
-        print("Like or unliked? : ${receivedData['message']}");
+      if (response.statusCode == 200) {
+        final postResponse = await http.get(Uri.parse(postUrl));
+        print("The response body: ${postResponse.body}");
+        statusCode.value = postResponse.statusCode;
+        if (postResponse.statusCode == 200) {
+          print("likeUnlike operation is successful");
+        }
       } else {
         print(
-            "Error in the like unlike function with statusCode: ${response.statusCode}");
+            "Error in the likeUnlike function with statusCode: ${response.statusCode}");
       }
     } catch (error) {
-      print("Error in the like unlike function: $error");
+      print("Error in the likeUnlike function: $error");
     }
   }
 }

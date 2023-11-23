@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:threads_replica/controller/signInController.dart';
 import 'package:get/get.dart';
@@ -5,7 +6,6 @@ import 'package:threads_replica/utils/colors.dart';
 import 'package:threads_replica/widgets/text_input_field.dart';
 
 import '../controller/token_saver.dart';
-import '../widgets/building_response_widget_auth.dart';
 
 // ignore: must_be_immutable
 class SignInScreen extends StatelessWidget {
@@ -78,28 +78,46 @@ class SignInScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  //Must Return Something
-                  Obx(() {
-                    return AnimatedOpacity(
-                      opacity:
-                          signInController.statusCode.value > 0 ? 1.0 : 0.0,
-                      duration: const Duration(
-                          seconds: 1), // Adjust the duration as needed
-                      child: buildLoginResponseHandling(signInController),
-                    );
-                  }),
-
                   InkWell(
                     onTap: () async {
-                      // Focus.of(context)
-                      //     .unfocus(); //Remove keyboard when button is pressed
                       if (_formKey.currentState!.validate()) {
-                        signInController.confirmSignIn();
+                        await signInController.confirmSignIn();
                         if (signInController.statusCode.value == 200) {
-                          // Rotue * Clean
-                          print(
-                              "Printing from inside the Login button: ${await cookie.getToken()}");
                           signInController.dispose();
+                          // ignore: use_build_context_synchronously
+                          Flushbar(
+                            backgroundColor: Colors.transparent,
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadows: const [
+                              BoxShadow(
+                                color: Colors.black54,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                            padding: const EdgeInsets.all(15),
+                            messageText: const Text(
+                              "Login sucessfull. Routing to the Homepage",
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.lightBlue),
+                            ),
+                            duration: const Duration(seconds: 2),
+                          ).show(context).then((_) => Get.toNamed("/HomePage"));
+                        } else {
+                          // ignore: use_build_context_synchronously
+                          Flushbar(
+                            backgroundColor: Colors.transparent,
+                            message: "Issue with the login",
+                            padding: const EdgeInsets.all(12),
+                            messageText: Text(
+                              signInController.statusCode.value == 500
+                                  ? "Issue with the login. Please try again later ${signInController.statusCode}"
+                                  : "Invalid username or password",
+                              style: const TextStyle(
+                                  color: Colors.redAccent, fontSize: 16),
+                            ),
+                            duration: const Duration(seconds: 3),
+                          ).show(context);
                         }
                       }
                     },
@@ -116,7 +134,6 @@ class SignInScreen extends StatelessWidget {
                       child: const Text("Log in"),
                     ),
                   ),
-
                   const SizedBox(
                     height: 12,
                   ),
@@ -139,7 +156,9 @@ class SignInScreen extends StatelessWidget {
                           vertical: 8,
                         ),
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Get.toNamed("/SignUpScreen");
+                          },
                           child: const Text(
                             "Sign Up",
                             style: TextStyle(

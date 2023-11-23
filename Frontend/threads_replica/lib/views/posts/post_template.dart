@@ -14,6 +14,7 @@ class PostTemplate extends StatelessWidget {
   String postID;
   int? repliesCount;
   String? postPic;
+  bool? likedColor;
   PostTemplate(
       {super.key,
       this.text,
@@ -22,13 +23,15 @@ class PostTemplate extends StatelessWidget {
       this.repliesCount,
       this.likesCount,
       this.postPic,
-      required this.postID});
+      required this.postID,
+      this.likedColor});
 
   @override
   Widget build(BuildContext context) {
-    final likeunlikeController _likeController =
-        Get.put(likeunlikeController());
+    final LikeUnlikeController _likeController =
+        Get.put(LikeUnlikeController());
 
+    RxBool liked = RxBool(likedColor!);
     RxInt varLikesCount = RxInt(likesCount!);
     RxInt varRepliesCount = RxInt(repliesCount!);
 
@@ -84,19 +87,29 @@ class PostTemplate extends StatelessWidget {
                 Center(child: displayImage(postPic)),
                 Row(
                   children: [
-                    IconButton(
-                      onPressed: () async {
-                        await _likeController.likeunlike(postID);
-//Remove this if somehow we made the likesCount update from the BE.
-                        if (_likeController.statusCode.value == 200) {
-                          varLikesCount.value = varLikesCount.value + 1;
-                        }
-                        if (_likeController.statusCode.value == 204) {
-                          varLikesCount.value = varLikesCount.value - 1;
-                        }
-                      },
-                      icon: const Icon(Icons.favorite_outline),
-                    ),
+                    Obx(() {
+                      return IconButton(
+                        color: liked.value
+                            ? const Color.fromRGBO(255, 82, 82, 1)
+                            : null, //Setting its color.
+                        onPressed: () async {
+                          //Basically we have a list that contains all the liked posts.
+                          //We color them accordingly.
+                          //Then we control the count through that as well.
+
+                          await _likeController.likeUnlike(postID);
+                          if (_likeController.statusCode.value == 200) {
+                            if (liked.value) {
+                              varLikesCount.value = varLikesCount.value - 1;
+                            } else {
+                              varLikesCount.value = varLikesCount.value + 1;
+                            }
+                            liked.value = !liked.value;
+                          }
+                        },
+                        icon: const Icon(Icons.favorite_outline),
+                      );
+                    }),
                     IconButton(
                         onPressed: () {},
                         icon: const Icon(Icons.comment_bank_outlined)),

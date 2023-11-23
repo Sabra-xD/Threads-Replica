@@ -41,6 +41,7 @@ dependencies:
   get: ^4.6.6
   cookie_jar: ^4.0.8
   shared_preferences: ^2.2.2
+  another_flushbar: ^1.12.30
 
 dev_dependencies:
   flutter_test:

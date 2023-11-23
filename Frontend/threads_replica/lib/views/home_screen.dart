@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
     final feedController _feedController = Get.put(feedController());
-
+    //The problem here is we need to await for the _userInfo to read the data we've saved in sharedPrferences.
     return Scaffold(
       backgroundColor: mobileBackgroundColor,
       body: SafeArea(
@@ -52,13 +52,13 @@ class HomePage extends StatelessWidget {
                                 itemBuilder: (BuildContext context, int index) {
                                   final feedItem =
                                       _feedController.combinedData[index];
-
-                                  print(
-                                      "Index: ${index} the likes count: ${feedItem[0]['likes'].length}");
-
+                                  final liked =
+                                      _feedController.userInLikes[index];
                                   return InkWell(
                                     onTap: () {},
                                     child: PostTemplate(
+                                      likedColor:
+                                          liked, //We have to check, does it contain our user?
                                       postID: feedItem[0]['_id'],
                                       text: feedItem[0]['text'],
                                       img: feedItem[1]['profilePic'],
