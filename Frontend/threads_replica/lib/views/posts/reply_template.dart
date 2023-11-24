@@ -31,14 +31,16 @@ class ReplyTemplate extends StatelessWidget {
                 ));
               } else {
                 return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
                         // //avatar
                         CircleAvatar(
-                          foregroundImage: NetworkImage(_replyController
-                                  .userImg ??
-                              "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"),
+                          foregroundImage: _replyController.userImg == ""
+                              ? const NetworkImage(
+                                  "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png")
+                              : NetworkImage(_replyController.userImg),
                           radius: 20,
                         ),
                         const SizedBox(
@@ -48,18 +50,22 @@ class ReplyTemplate extends StatelessWidget {
                           _replyController.repliedUser,
                           style: defaultTextStyle(),
                         ),
-
-                        //Username
                       ],
-                      //Text
                     ),
                     const SizedBox(
                       height: 5,
                     ),
-                    Text(
-                      replyText,
-                      style: defaultTextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w400),
+                    Row(
+                      children: [
+                        const SizedBox(
+                          width: 50,
+                        ),
+                        Text(
+                          replyText,
+                          style: defaultTextStyle(
+                              fontSize: 15, fontWeight: FontWeight.w400),
+                        ),
+                      ],
                     ),
                   ],
                 );

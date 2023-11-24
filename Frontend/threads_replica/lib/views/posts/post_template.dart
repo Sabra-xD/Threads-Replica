@@ -28,6 +28,7 @@ class PostTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: no_leading_underscores_for_local_identifiers
     final LikeUnlikeController _likeController =
         Get.put(LikeUnlikeController());
 
