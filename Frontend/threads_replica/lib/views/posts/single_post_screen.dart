@@ -22,6 +22,16 @@ class SinglePostScreen extends StatelessWidget {
     TextEditingController reply = TextEditingController();
     return Scaffold(
       backgroundColor: mobileBackgroundColor,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+            color: Colors.white,
+            onPressed: () {
+              Navigator.pop(context);
+              _replyController.dispose();
+            },
+            icon: const Icon(Icons.arrow_back)),
+      ),
       body: Column(
         children: [
           Expanded(

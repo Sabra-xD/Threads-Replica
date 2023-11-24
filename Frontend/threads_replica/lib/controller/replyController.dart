@@ -51,4 +51,10 @@ class ReplyController extends GetxController {
       userImg = userInfo['profilePic'];
     }
   }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+  }
 }

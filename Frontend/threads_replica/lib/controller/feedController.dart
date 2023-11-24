@@ -19,7 +19,7 @@ class feedController extends GetxController {
 
   Future<void> getFeed() async {
     UserInfo _userInfo = UserInfo();
-    await _userInfo.fetchData(); //We fetch the curr user's data here.
+    await _userInfo.fetchData();
     combinedData = [];
     receivedData = [];
     userInLikes = [];
@@ -61,18 +61,18 @@ class feedController extends GetxController {
           if (receivedData[i]['likes'].contains(_userInfo.userId.value)) {
             userInLikes.add(true);
           } else {
-            print('Received Likes: ${receivedData[i]['likes']}');
-            print("User ID: ${_userInfo.userId}");
             userInLikes.add(false);
           }
         }
 
-        print("Displaying the userInLikes array ${userInLikes}");
-        print("Combined Data Sized: ${combinedData.length}");
+        _userInfo.dispose();
       } else {
+        _userInfo.dispose();
         print("The Status Code is: ${response.statusCode}");
       }
     } catch (error) {
+      _userInfo.dispose();
+
       print("Error in the feedController function: $error");
     }
   }

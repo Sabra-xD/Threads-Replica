@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:threads_replica/controller/bottomNavigationBarController.dart';
 import 'package:threads_replica/controller/feedController.dart';
 import 'package:threads_replica/styles/TextStyles.dart';
 import 'package:threads_replica/utils/colors.dart';
 import 'package:threads_replica/views/posts/post_template.dart';
 import 'package:threads_replica/views/posts/single_post_screen.dart';
+import 'package:threads_replica/widgets/bottom_navigation_bar.dart';
 import 'package:threads_replica/widgets/threads_logo.dart';
 
 class HomePage extends StatelessWidget {
@@ -15,9 +17,12 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
     final feedController _feedController = Get.put(feedController());
+    final BottomNavigationBarController _barController =
+        Get.put(BottomNavigationBarController());
     //The problem here is we need to await for the _userInfo to read the data we've saved in sharedPrferences.
     return Scaffold(
       backgroundColor: mobileBackgroundColor,
+      bottomNavigationBar: bottomNavBar(barController: _barController),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(12.5),
@@ -55,6 +60,8 @@ class HomePage extends StatelessWidget {
                                       _feedController.combinedData[index];
                                   final liked =
                                       _feedController.userInLikes[index];
+
+                                  print("Feed Item: ${feedItem}");
                                   return Column(
                                     children: [
                                       InkWell(
@@ -66,6 +73,8 @@ class HomePage extends StatelessWidget {
                                                       SinglePostScreen(
                                                           feedItem: feedItem,
                                                           liked: liked)));
+
+                                          _feedController.dispose();
                                         },
                                         child: PostTemplate(
                                           likedColor:
