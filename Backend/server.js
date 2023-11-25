@@ -4,6 +4,8 @@ import connectDB from "./Database/dbconnect.js";
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userRoutes.js"
 import postRotues from "./routes/postRoutes.js"
+import messageRotues from "./routes/messageRoutes.js"
+
 import cors from "cors";
 dotenv.config();
 const app = express();
@@ -35,5 +37,7 @@ app.use(cookieParser());
 //Routes
 app.use("/api/users",userRoutes);
 app.use("/api/posts",postRotues);
+app.use("/api/messages", messageRotues);
+
 
 app.listen( PORT ,() => console.log(`Server Started At Local Host Listening on Port ${PORT}`));
