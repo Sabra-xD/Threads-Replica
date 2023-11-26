@@ -41,7 +41,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key, required this.title});
 
@@ -49,15 +48,20 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserInfo _userInfo = Get.put(UserInfo());
     return FutureBuilder(
-      future: Get.put<UserInfo>(UserInfo()).fetchData(), // Initialize and call fetchData
+      future: _userInfo.fetchData(), // Initialize and call fetchData
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return const Center(child: Text('Error fetching data'));
         } else {
-          return SignInScreen();
+          if (_userInfo.userId.value != "") {
+            return const HomePage();
+          } else {
+            return SignInScreen();
+          }
         }
       },
     );

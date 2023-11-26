@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/followUnfollowController.dart';
-import 'package:threads_replica/controller/getUserProfileController.dart';
 import 'package:threads_replica/styles/TextStyles.dart';
 import 'package:threads_replica/utils/colors.dart';
 
@@ -14,7 +13,6 @@ class UsersProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GetUserProfile profileController = Get.put(GetUserProfile());
     FolloweController followeController = Get.put(FolloweController());
     UserInfo userInfo = Get.find<UserInfo>();
     RxBool isFollowing =
