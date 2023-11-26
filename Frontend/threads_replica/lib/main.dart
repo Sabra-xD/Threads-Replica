@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:threads_replica/controller/userInfo.dart';
 import 'package:threads_replica/views/forgot_password.dart';
 import 'package:threads_replica/views/home_screen.dart';
 import 'package:threads_replica/views/login_screen.dart';
@@ -8,6 +9,7 @@ import 'package:threads_replica/views/profile_screen.dart';
 import 'package:threads_replica/views/signup_screen.dart';
 
 void main() {
+  // Dart client
   runApp(const MyApp());
 }
 
@@ -39,18 +41,25 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({Key? key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
   Widget build(BuildContext context) {
-    return SignInScreen();
+    return FutureBuilder(
+      future: Get.put<UserInfo>(UserInfo()).fetchData(), // Initialize and call fetchData
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return const Center(child: Text('Error fetching data'));
+        } else {
+          return SignInScreen();
+        }
+      },
+    );
   }
 }

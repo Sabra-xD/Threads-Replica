@@ -77,6 +77,7 @@ class HomePage extends StatelessWidget {
                                           _feedController.dispose();
                                         },
                                         child: PostTemplate(
+                                          fullUserInfo: feedItem[1],
                                           likedColor:
                                               liked, //We have to check, does it contain our user?
                                           postID: feedItem[0]['_id'],

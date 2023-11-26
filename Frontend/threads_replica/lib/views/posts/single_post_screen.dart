@@ -42,6 +42,7 @@ class SinglePostScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(12.5),
                       child: PostTemplate(
+                        fullUserInfo: feedItem[1],
                         likedColor: liked,
                         postID: feedItem[0]['_id'],
                         text: feedItem[0]['text'],

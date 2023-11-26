@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:threads_replica/views/users_profile_screen.dart';
 
 import '../../controller/likeunlikeController.dart';
 import '../../styles/TextStyles.dart';
@@ -15,16 +16,23 @@ class PostTemplate extends StatelessWidget {
   int? repliesCount;
   String? postPic;
   bool? likedColor;
-  PostTemplate(
-      {super.key,
-      this.text,
-      this.username,
-      this.img,
-      this.repliesCount,
-      this.likesCount,
-      this.postPic,
-      required this.postID,
-      this.likedColor});
+  Map<String, dynamic> fullUserInfo;
+  //We might need a dynamic variable here to have full user info so we can pass it to the
+  //It includes all the information that we need though.
+  //The issue here is, do we know what is the type? Yes Map<dynamic,String>
+
+  PostTemplate({
+    super.key,
+    this.text,
+    this.username,
+    this.img,
+    this.repliesCount,
+    this.likesCount,
+    this.postPic,
+    required this.postID,
+    this.likedColor,
+    required this.fullUserInfo,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +64,21 @@ class PostTemplate extends StatelessWidget {
                 const SizedBox(
                   width: 8,
                 ),
-                Text(
-                  username ?? "Username",
-                  style: defaultTextStyle(fontWeight: FontWeight.w600),
+                InkWell(
+                  onTap: () {
+                    //Get to the User Page.
+                    //Didn't we already get that user's info before?
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UsersProfileScreen(
+                                  fullUserInfo: fullUserInfo,
+                                )));
+                  },
+                  child: Text(
+                    username ?? "Username",
+                    style: defaultTextStyle(fontWeight: FontWeight.w600),
+                  ),
                 ),
                 const Spacer(),
                 Text(
