@@ -1,17 +1,19 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:threads_replica/controller/createPostController.dart';
 import 'package:threads_replica/controller/userInfo.dart';
 import 'package:threads_replica/utils/colors.dart';
+import 'package:another_flushbar/flushbar.dart';
 
 import '../../controller/bottomNavigationBarController.dart';
 
 class PostScreen extends StatefulWidget {
+  // ignore: use_key_in_widget_constructors
   const PostScreen({Key? key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _PostScreenState createState() => _PostScreenState();
 }
 
@@ -31,9 +33,7 @@ class _PostScreenState extends State<PostScreen> {
     final BottomNavigationBarController _barController =
         Get.put(BottomNavigationBarController());
     return GestureDetector(
-      onTap: () {
-        // Focus.of(context).unfocus();
-      },
+      onTap: () {},
       child: Scaffold(
         backgroundColor: mobileBackgroundColor,
         appBar: AppBar(
@@ -69,14 +69,12 @@ class _PostScreenState extends State<PostScreen> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
-                  // Focus.of(context).unfocus();
-                  //Get the cookie, send it along with the postID of the user.
-                  createPost.createPost();
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    createPost.createPost();
+                    await createPost.createPost();
                     if (createPost.statusCode.value == 200) {
-                      Flushbar(
+                      // ignore: use_build_context_synchronously
+                      await Flushbar(
                         backgroundColor: Colors.transparent,
                         borderRadius: BorderRadius.circular(8),
                         boxShadows: const [
@@ -88,13 +86,17 @@ class _PostScreenState extends State<PostScreen> {
                         ],
                         padding: const EdgeInsets.all(15),
                         messageText: const Text(
-                          "Post was created sucessfully",
+                          "Post was created successfully",
                           style:
                               TextStyle(fontSize: 12, color: Colors.lightBlue),
                         ),
                         duration: const Duration(seconds: 2),
                       ).show(context);
+                      createPost.threadText.clear();
+                      Get.toNamed("/HomePage");
+                      _barController.updateIndex(0);
                     } else {
+                      // ignore: use_build_context_synchronously
                       Flushbar(
                         backgroundColor: Colors.transparent,
                         borderRadius: BorderRadius.circular(8),
@@ -150,7 +152,7 @@ class _PostScreenState extends State<PostScreen> {
                         CircleAvatar(
                           foregroundImage: NetworkImage(
                             _userInfo.img.value,
-                          ), // Add a default image URL
+                          ),
                           radius: 25,
                         ),
                         const SizedBox(

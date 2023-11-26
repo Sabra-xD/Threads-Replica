@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:get/get.dart';
 
 class BottomNavigationBarController extends GetxController {

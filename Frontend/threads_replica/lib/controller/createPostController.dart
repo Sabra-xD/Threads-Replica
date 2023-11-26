@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -17,8 +18,6 @@ class createPostController extends GetxController {
 
     String authToken = await userCookie.getToken();
 
-    print("Printing from inside create Post: ${authToken}");
-
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
       'cookie': 'jwt=$authToken',
@@ -28,8 +27,6 @@ class createPostController extends GetxController {
       'postedBy': authToken,
       'text': threadText.text,
     };
-    print("Header: ${headers}");
-    print(data);
 
     try {
       print("Printing from inside create Post: ${await userCookie.getToken()}");
@@ -43,12 +40,9 @@ class createPostController extends GetxController {
         print("Response body: ${response.body}");
 
         statusCode.value = response.statusCode;
-        if (response.statusCode == 200) {
-          print("Post was sucessful");
-        }
+        if (response.statusCode == 200) {}
       }
-    } catch (error) {
-      print("Erro in the create post controller ${error.toString()}");
-    }
+      // ignore: empty_catches
+    } catch (error) {}
   }
 }

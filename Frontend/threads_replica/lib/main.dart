@@ -42,12 +42,14 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
+  // ignore: use_key_in_widget_constructors
   const MyHomePage({Key? key, required this.title});
 
   final String title;
 
   @override
   Widget build(BuildContext context) {
+    // ignore: no_leading_underscores_for_local_identifiers
     UserInfo _userInfo = Get.put(UserInfo());
     return FutureBuilder(
       future: _userInfo.fetchData(), // Initialize and call fetchData

@@ -1,28 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/followUnfollowController.dart';
+import 'package:threads_replica/controller/singleUserPostsController.dart';
 import 'package:threads_replica/styles/TextStyles.dart';
 import 'package:threads_replica/utils/colors.dart';
+import 'package:threads_replica/views/posts/post_template.dart';
 
+import '../controller/bottomNavigationBarController.dart';
 import '../controller/userInfo.dart';
 
 // ignore: must_be_immutable
 class UsersProfileScreen extends StatelessWidget {
   Map<String, dynamic> fullUserInfo;
-  UsersProfileScreen({super.key, required this.fullUserInfo});
+  String? userId;
+  UsersProfileScreen({super.key, required this.fullUserInfo, this.userId});
 
   @override
   Widget build(BuildContext context) {
     FolloweController followeController = Get.put(FolloweController());
+
+    BottomNavigationBarController _barController =
+        Get.find<BottomNavigationBarController>();
+
+    findUserPosts _findUserPosts = Get.put(findUserPosts());
     UserInfo userInfo = Get.find<UserInfo>();
     RxBool isFollowing =
         RxBool(fullUserInfo['followers'].contains(userInfo.userId.value));
     print("Is the user following? ${isFollowing.value}");
     return Scaffold(
+      appBar: AppBar(
+        elevation: 2,
+        backgroundColor: mobileBackgroundColor,
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          color: primaryColor,
+          onPressed: () {
+            Get.toNamed("/HomePage");
+            _barController.updateIndex(0);
+          },
+        ),
+      ),
       backgroundColor: mobileBackgroundColor,
-      body: SingleChildScrollView(
-        child: SafeArea(
-            child: Container(
+      body: SafeArea(
+          child: SingleChildScrollView(
+        child: Container(
           padding: const EdgeInsets.all(12.5),
           child: Column(
             children: [
@@ -55,7 +76,7 @@ class UsersProfileScreen extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-//The Text will be wrapepd in an OBX.
+                  //The Text will be wrapepd in an OBX.
 
                   ElevatedButton(onPressed: () async {
                     await followeController.FollowOrUnFollow(
@@ -64,7 +85,6 @@ class UsersProfileScreen extends StatelessWidget {
                       isFollowing.value = !isFollowing.value;
                     }
                   }, child: Obx(() {
-                    print("Initial isFollowing Value: ${isFollowing}");
                     return Text(
                       isFollowing.value ? "Unfollow" : "Follow",
                       style: defaultTextStyle(textColor: Colors.black),
@@ -75,86 +95,80 @@ class UsersProfileScreen extends StatelessWidget {
                     height: 10,
                   ),
 
-                  Text(
-                    "Threads: ",
-                    style: defaultTextStyle(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Threads: ",
+                        style: defaultTextStyle(),
+                      ),
+                    ],
                   ),
 
-                  //Display the Threads here inside another OBX.
+                  finderUserThreads(
+                      findUserPosts: _findUserPosts, fullUserInfo: fullUserInfo)
                 ],
               ),
-//               FutureBuilder(
-//                   future: profileController.getUserProfile("query"),
-//                   builder: (context, snapshot) {
-//                     if (snapshot.connectionState == ConnectionState.waiting) {
-//                       return const Center(
-//                         child: CircularProgressIndicator(color: Colors.blue),
-//                       );
-//                     } else {
-//                       if (snapshot.hasError) {
-//                         return Center(
-//                           child: Text(
-//                             "Error: ${snapshot.error}",
-//                             style: defaultTextStyle(),
-//                           ),
-//                         );
-//                       } else {
-//                         return Column(
-//                           children: [
-//                             Row(
-//                               mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                               children: [
-//                                 Text(
-//                                   "User name",
-//                                   style: defaultTextStyle(),
-//                                 ),
-//                                 CircleAvatar(
-//                                   foregroundImage: NetworkImage("Image"),
-//                                   radius: 25,
-//                                 ),
-//                               ],
-//                             ),
-//                             const SizedBox(
-//                               height: 10,
-//                             ),
-
-//                             //Number of Followers:
-//                             Text(
-//                               "10k followers ",
-//                               style: defaultTextStyle(textColor: Colors.grey),
-//                             ),
-
-//                             const SizedBox(
-//                               height: 10,
-//                             ),
-// //The Text will be wrapepd in an OBX.
-//                             ElevatedButton(
-//                                 onPressed: () {},
-//                                 child: Text(
-//                                   "Follow/Unfollow Button",
-//                                   style:
-//                                       defaultTextStyle(textColor: Colors.black),
-//                                 )),
-
-//                             const SizedBox(
-//                               height: 10,
-//                             ),
-
-//                             Text(
-//                               "Threads: ",
-//                               style: defaultTextStyle(),
-//                             ),
-
-//                             //Display the Threads here inside another OBX.
-//                           ],
-//                         );
-//                       }
-//                     }
-//                   })
             ],
           ),
-        )),
-      ),
+        ),
+      )),
     );
+  }
+}
+
+class finderUserThreads extends StatelessWidget {
+  const finderUserThreads({
+    super.key,
+    required findUserPosts findUserPosts,
+    required this.fullUserInfo,
+  }) : _findUserPosts = findUserPosts;
+
+  final findUserPosts _findUserPosts;
+  final Map<String, dynamic> fullUserInfo;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: _findUserPosts.findPosts(fullUserInfo['_id']),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(color: Colors.blue),
+            );
+          } else {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                  "Error: ${snapshot.error}",
+                  style: defaultTextStyle(),
+                ),
+              );
+            } else {
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                itemCount: _findUserPosts.posts.length,
+                itemBuilder: (context, int index) {
+                  final feedItem = _findUserPosts.posts[index];
+                  print("FeedItem: ${feedItem['_id']}");
+                  return PostTemplate(
+                    fullUserInfo: fullUserInfo,
+                    likedColor:
+                        false, //We have to check, does it contain our user?
+                    postID: feedItem['_id'],
+                    text: feedItem['text'],
+                    img: feedItem['profilePic'],
+                    username: feedItem['username'],
+                    likesCount: feedItem['likes'].length,
+                    repliesCount: feedItem['replies'].length,
+                    postPic: feedItem['img'],
+                  );
+                },
+              );
+            }
+          }
+        });
   }
 }
