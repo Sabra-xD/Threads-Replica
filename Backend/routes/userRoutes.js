@@ -1,5 +1,5 @@
 import express from "express";
-import {signUpuser , login, logout , followunfollowUser, updateUser, getUserProfile, forgotPassword, findUser} from "../controllers/userController.js";
+import {signUpuser , login, logout , followunfollowUser, updateUser, getUserProfile, forgotPassword, findUser, getUserPosts} from "../controllers/userController.js";
 import protectRoute from "../middleware/protectRoute.js";
 
 const router = express.Router();
@@ -12,6 +12,8 @@ router.post("/follow/:id",protectRoute,followunfollowUser);
 router.post("/updateUser/:id",protectRoute,updateUser)
 router.post("/forgotPassword",forgotPassword);
 router.post('/finduser',findUser);
+router.get("/finduserposts/:userId",getUserPosts);
+
 
 
 export default router;

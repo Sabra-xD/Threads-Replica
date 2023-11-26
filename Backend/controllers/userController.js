@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import generateTokenAndSetCookie from "../utils/helpers/generateTokenAndSetCookie.js";
 import mongoose, { mongo } from "mongoose";
+import Post from "../models/postModel.js";
 
 
 const getUserProfile = async (req, res) => {
@@ -309,8 +310,26 @@ const updateUser = async(req,res) => {
 
 }
 
+const getUserPosts =  async(req,res)=>{
+
+    try{
+        const {userId} = req.params;
+        const posts = await Post.find({postedBy: userId}).sort({createdAt: -1});
+        if(posts){
+            console.log(posts);
+            res.status(200).json(posts);
+        }else{
+
+            res.status(404).json({message: "User has not posts"});
+        }
+    }catch(error){
+        res.status(500).json({message: error.message});
+        console.log("error in the getUserPosts  ",error.message);
+    }
+
+}
 
 
 
 
-export {signUpuser,login,logout, followunfollowUser , updateUser, getUserProfile, forgotPassword, findUser};
+export {signUpuser,login,logout, followunfollowUser , updateUser, getUserProfile, forgotPassword, findUser,getUserPosts};
