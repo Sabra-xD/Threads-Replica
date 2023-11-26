@@ -5,10 +5,11 @@ import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userRoutes.js"
 import postRotues from "./routes/postRoutes.js"
 import messageRotues from "./routes/messageRoutes.js"
+import { app, server } from "./socket/socket.js";
+
 
 import cors from "cors";
 dotenv.config();
-const app = express();
 
 
 connectDB();
@@ -40,4 +41,4 @@ app.use("/api/posts",postRotues);
 app.use("/api/messages", messageRotues);
 
 
-app.listen( PORT ,() => console.log(`Server Started At Local Host Listening on Port ${PORT}`));
+server.listen( PORT ,() => console.log(`Server Started At Local Host Listening on Port ${PORT}`));

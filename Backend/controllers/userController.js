@@ -144,6 +144,26 @@ const logout = (req,res) => {
 //Read from the UserModel wehther that user is already followed or not and handle accordingly.
 //Pull user, by ID, from the followers list to delete and push to add.
 
+const findUser = async(req,res) => {
+    try{
+        const {username} = req.body;
+        const regex =  new RegExp(username,'i');
+       //Supposdly here it returns all users that have matching substring
+        const users = await User.find({username: {$regex: regex}});
+
+        if(users){
+            console.log("Users found: ",users);
+            res.status(200).json(users);
+        }else{
+            return res.status(404).json({message: "User not found"});
+        }
+
+    }catch(error){
+        console.log("Error in the find user Function: ",error.message);
+        return res.status(500).json({message: error.message,});
+    }
+}
+
 const followunfollowUser = async (req,res) => {
     try {
         const { id } =  req.params; //To read the ID from the url.
@@ -154,7 +174,7 @@ const followunfollowUser = async (req,res) => {
         const currentuser = await User.findById(req.user._id);
         
         if (id == req.user._id.toString()) return res.status(400).json({message: "You can not follow yourself."});
-        if(!userToModify || !currentuser) return res.status(400).json({message: "User not found"});
+        if(!userToModify || !currentuser) return res.status(404).json({message: "User not found"});
         console.log(id)
         const isFollowing = currentuser.following.includes(id); //Following is an array in the DB
         //We check if the target id is included in it.
@@ -165,14 +185,16 @@ const followunfollowUser = async (req,res) => {
          //Pull deltes from that object in the DB.
          await User.findByIdAndUpdate(req.user._id, {$pull: {following: id}});
          await User.findByIdAndUpdate(id,{$pull: {followers: req.user._id}});
-         res.status(200).json({message: "User unfollowed sucessfully"});
+         console.log("User unfollowed")
+         return res.status(200).json({message: "User unfollowed sucessfully"});
         }else{
             //Follow
             //By addinging the IDs to both users.
             //Push adds to it in the DB
             await User.findByIdAndUpdate(req.user._id, {$push: {following: id}});
          await User.findByIdAndUpdate(id,{$push: {followers: req.user._id}});
-         res.status(200).json({message: "User followed sucessfully"});
+         console.log("User followed");
+        return  res.status(200).json({message: "User followed sucessfully"});
 
         }
 
@@ -291,4 +313,4 @@ const updateUser = async(req,res) => {
 
 
 
-export {signUpuser,login,logout, followunfollowUser , updateUser, getUserProfile, forgotPassword};
+export {signUpuser,login,logout, followunfollowUser , updateUser, getUserProfile, forgotPassword, findUser};
