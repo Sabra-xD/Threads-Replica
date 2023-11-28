@@ -16,7 +16,8 @@ class bottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => BottomNavigationBar(
-        elevation: 10,
+        // elevation: 0,
+        type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.transparent,
         currentIndex: _barController.selectedIndex.value,
         selectedItemColor: Colors.white,
@@ -26,10 +27,15 @@ class bottomNavBar extends StatelessWidget {
           if (index == 0) {
             Get.toNamed("/HomePage");
           }
+
           if (index == 1) {
+            Get.toNamed("/SearchScreen");
+          }
+
+          if (index == 2) {
             Get.toNamed("/CreatePostScreen");
           }
-          if (index == 2) {
+          if (index == 3) {
             Get.toNamed("/ProfileScreen");
           }
         },
@@ -39,6 +45,11 @@ class bottomNavBar extends StatelessWidget {
                 Icons.home,
               ),
               label: "Home"),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.search,
+              ),
+              label: "Search"),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.post_add,

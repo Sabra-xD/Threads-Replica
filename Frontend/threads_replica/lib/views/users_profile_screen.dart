@@ -19,9 +19,11 @@ class UsersProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     FolloweController followeController = Get.put(FolloweController());
 
+    // ignore: no_leading_underscores_for_local_identifiers
     BottomNavigationBarController _barController =
         Get.find<BottomNavigationBarController>();
 
+    // ignore: no_leading_underscores_for_local_identifiers
     findUserPosts _findUserPosts = Get.put(findUserPosts());
     UserInfo userInfo = Get.find<UserInfo>();
     RxBool isFollowing =
@@ -104,7 +106,9 @@ class UsersProfileScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-
+                  const SizedBox(
+                    height: 12.5,
+                  ),
                   finderUserThreads(
                       findUserPosts: _findUserPosts, fullUserInfo: fullUserInfo)
                 ],
@@ -117,6 +121,7 @@ class UsersProfileScreen extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types
 class finderUserThreads extends StatelessWidget {
   const finderUserThreads({
     super.key,
@@ -145,28 +150,38 @@ class finderUserThreads extends StatelessWidget {
                 ),
               );
             } else {
-              return ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                itemCount: _findUserPosts.posts.length,
-                itemBuilder: (context, int index) {
-                  final feedItem = _findUserPosts.posts[index];
-                  print("FeedItem: ${feedItem['_id']}");
-                  return PostTemplate(
-                    fullUserInfo: fullUserInfo,
-                    likedColor:
-                        false, //We have to check, does it contain our user?
-                    postID: feedItem['_id'],
-                    text: feedItem['text'],
-                    img: feedItem['profilePic'],
-                    username: feedItem['username'],
-                    likesCount: feedItem['likes'].length,
-                    repliesCount: feedItem['replies'].length,
-                    postPic: feedItem['img'],
-                  );
-                },
-              );
+              if (_findUserPosts.posts.isEmpty) {
+                return Center(
+                  child: Text(
+                    "No threads to show...",
+                    style: defaultTextStyle(
+                        fontSize: 17, fontWeight: FontWeight.w600),
+                  ),
+                );
+              } else {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  itemCount: _findUserPosts.posts.length,
+                  itemBuilder: (context, int index) {
+                    final feedItem = _findUserPosts.posts[index];
+                    print("FeedItem: ${feedItem['_id']}");
+                    return PostTemplate(
+                      fullUserInfo: fullUserInfo,
+                      likedColor:
+                          false, //We have to check, does it contain our user?
+                      postID: feedItem['_id'],
+                      text: feedItem['text'],
+                      img: feedItem['profilePic'],
+                      username: feedItem['username'],
+                      likesCount: feedItem['likes'].length,
+                      repliesCount: feedItem['replies'].length,
+                      postPic: feedItem['img'],
+                    );
+                  },
+                );
+              }
             }
           }
         });
