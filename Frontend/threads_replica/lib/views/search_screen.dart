@@ -7,6 +7,7 @@ import 'package:threads_replica/utils/colors.dart';
 import '../controller/bottomNavigationBarController.dart';
 import "../controller/searchController.dart";
 
+import '../controller/userInfo.dart';
 import '../widgets/text_input_field.dart';
 import 'users_profile_screen.dart';
 
@@ -14,6 +15,8 @@ class SearchScreen extends StatelessWidget {
   SearchScreen({super.key});
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   static final TextEditingController _search = TextEditingController();
+  UserInfo userInfo = Get.find<UserInfo>();
+
   final searchController _searchController = Get.put(searchController());
   final BottomNavigationBarController _barController =
       Get.find<BottomNavigationBarController>();
@@ -122,22 +125,65 @@ class SearchScreen extends StatelessWidget {
                                           .matchingUsers[index];
 
                                       return InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      UsersProfileScreen(
-                                                          fullUserInfo:
-                                                              feedItem)));
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        UsersProfileScreen(
+                                                            fullUserInfo:
+                                                                feedItem)));
 
-                                          _search.clear();
-                                        },
-                                        child: Text(
-                                          "Userfound: ${feedItem['username']}",
-                                          style: defaultTextStyle(),
-                                        ),
-                                      );
+                                            _search.clear();
+                                          },
+                                          child: Row(
+                                            children: [
+                                              //User image:
+                                              CircleAvatar(
+                                                foregroundImage: NetworkImage(
+                                                  feedItem['profilePic'] ??
+                                                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+                                                ),
+                                                radius: 27,
+                                              ),
+
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Column(
+                                                children: [
+                                                  Text(
+                                                    "${feedItem["username"]}",
+                                                    style: defaultTextStyle(
+                                                        fontSize: 17),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Text(
+                                                    "${feedItem['bio']}",
+                                                    style: defaultTextStyle(
+                                                        fontSize: 10,
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  ),
+                                                ],
+                                              ),
+
+                                              ElevatedButton(
+                                                  onPressed: () {},
+                                                  child: Text(
+                                                    feedItem['followers']
+                                                            .contains(userInfo
+                                                                .userId.value)
+                                                        ? "UnFollow"
+                                                        : "Follow",
+                                                    style: defaultTextStyle(
+                                                        textColor:
+                                                            Colors.black),
+                                                  )),
+                                            ],
+                                          ));
                                     });
                               }
                             }
