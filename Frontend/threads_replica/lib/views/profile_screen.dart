@@ -4,7 +4,6 @@ import 'package:threads_replica/controller/userInfo.dart';
 import 'package:threads_replica/styles/TextStyles.dart';
 import 'package:threads_replica/utils/colors.dart';
 import 'package:threads_replica/widgets/bottom_navigation_bar.dart';
-
 import '../controller/bottomNavigationBarController.dart';
 import '../controller/singleUserPostsController.dart';
 import 'posts/post_template.dart';
@@ -16,7 +15,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
-    UserInfo _userInfo = Get.put(UserInfo());
+    UserInfo _userInfo = Get.find<UserInfo>();
     // ignore: no_leading_underscores_for_local_identifiers
     findUserPosts _findUserPosts = Get.put(findUserPosts());
 
@@ -52,196 +51,214 @@ class ProfileScreen extends StatelessWidget {
       backgroundColor: mobileBackgroundColor,
       body: SingleChildScrollView(
         child: SafeArea(
-          child: FutureBuilder(
-            future: _userInfo.fetchData(), // Initiate data fetching
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.lightBlue,
-                  ),
-                );
-              } else {
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text(
-                      'Error: ${snapshot.error}',
-                      // Handle error case
+          child: Padding(
+            padding: const EdgeInsets.all(12.5),
+            child: FutureBuilder(
+              future: _userInfo.fetchData(), // Initiate data fetching
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.lightBlue,
                     ),
                   );
                 } else {
-                  return GetBuilder<UserInfo>(
-                    init: _userInfo,
-                    builder: (controller) {
-                      return SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(12.5),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Text(
-                                        controller.userName.value,
-                                        style: defaultTextStyle(),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      const Text(
-                                        "0 followers",
-                                        style: TextStyle(
-                                          color:
-                                              Color.fromARGB(255, 69, 69, 69),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  CircleAvatar(
-                                    foregroundImage: controller.img.value != ""
-                                        ? NetworkImage(controller.img.value)
-                                        : const NetworkImage(
-                                            "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-                                          ), // Add a default image URL
-                                    radius: 25,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(12.5),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  InkWell(
-                                    onTap: () {},
-                                    child: Container(
-                                      height: 35,
-                                      width: 170,
-                                      decoration: BoxDecoration(
-                                        color: mobileBackgroundColor,
-                                        borderRadius: BorderRadius.circular(15),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color:
-                                                primaryColor.withOpacity(0.5),
-                                            // Outer edge color
-                                            spreadRadius: 1,
-                                            blurRadius: 1,
-                                          ),
-                                        ],
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "Edit Profile",
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        'Error: ${snapshot.error}',
+                        // Handle error case
+                      ),
+                    );
+                  } else {
+                    return GetBuilder<UserInfo>(
+                      init: _userInfo,
+                      builder: (controller) {
+                        return SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(12.5),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text(
+                                          controller.userName.value,
                                           style: defaultTextStyle(),
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {},
-                                    child: Container(
-                                      height: 35,
-                                      width: 170,
-                                      decoration: BoxDecoration(
-                                        color: mobileBackgroundColor,
-                                        borderRadius: BorderRadius.circular(15),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color:
-                                                primaryColor.withOpacity(0.5),
-                                            // Outer edge color
-                                            spreadRadius: 1,
-                                            blurRadius: 1,
-                                          ),
-                                        ],
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "Share Profile",
-                                          style: defaultTextStyle(),
+                                        const SizedBox(
+                                          height: 10,
                                         ),
-                                      ),
+                                        Text(
+                                          controller.bio.value,
+                                          style: defaultTextStyle(
+                                              fontSize: 12.5,
+                                              fontWeight: FontWeight.w300),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        const Text(
+                                          "0 followers",
+                                          style: TextStyle(
+                                            color:
+                                                Color.fromARGB(255, 69, 69, 69),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            // Add more UI elements as needed based on controller values
-                            //...
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Threads",
-                                  style: defaultTextStyle(),
+                                    CircleAvatar(
+                                      foregroundImage: controller.img.value !=
+                                              ""
+                                          ? NetworkImage(controller.img.value)
+                                          : const NetworkImage(
+                                              "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+                                            ), // Add a default image URL
+                                      radius: 25,
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-
-                            FutureBuilder(
-                                future: _findUserPosts
-                                    .findPosts(_userInfo.userId.value),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(
-                                          color: Colors.blue),
-                                    );
-                                  } else {
-                                    if (snapshot.hasError) {
-                                      return Center(
-                                        child: Text(
-                                          "Error: ${snapshot.error}",
-                                          style: defaultTextStyle(),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(12.5),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Get.toNamed("/EditProfileScreen");
+                                      },
+                                      child: Container(
+                                        height: 35,
+                                        width: 170,
+                                        decoration: BoxDecoration(
+                                          color: mobileBackgroundColor,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  primaryColor.withOpacity(0.5),
+                                              // Outer edge color
+                                              spreadRadius: 1,
+                                              blurRadius: 1,
+                                            ),
+                                          ],
                                         ),
+                                        child: Center(
+                                          child: Text(
+                                            "Edit Profile",
+                                            style: defaultTextStyle(),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () {},
+                                      child: Container(
+                                        height: 35,
+                                        width: 170,
+                                        decoration: BoxDecoration(
+                                          color: mobileBackgroundColor,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  primaryColor.withOpacity(0.5),
+                                              // Outer edge color
+                                              spreadRadius: 1,
+                                              blurRadius: 1,
+                                            ),
+                                          ],
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            "Share Profile",
+                                            style: defaultTextStyle(),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // Add more UI elements as needed based on controller values
+                              //...
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Threads",
+                                    style: defaultTextStyle(),
+                                  ),
+                                ],
+                              ),
+
+                              FutureBuilder(
+                                  future: _findUserPosts
+                                      .findPosts(_userInfo.userId.value),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const Center(
+                                        child: CircularProgressIndicator(
+                                            color: Colors.blue),
                                       );
                                     } else {
-                                      return ListView.builder(
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemCount: _findUserPosts.posts.length,
-                                        itemBuilder: (context, int index) {
-                                          // Map<String, dynamic> l = {};
-                                          final feedItem =
-                                              _findUserPosts.posts[index];
-                                          return PostTemplate(
-                                            likedColor:
-                                                false, //We have to check, does it contain our user?
-                                            postID: feedItem['_id'],
-                                            text: feedItem['text'],
-                                            img: feedItem['profilePic'],
-                                            username: feedItem['username'],
-                                            likesCount:
-                                                feedItem['likes'].length,
-                                            repliesCount:
-                                                feedItem['replies'].length,
-                                            postPic: feedItem['img'],
-                                            fullUserInfo: {},
-                                          );
-                                        },
-                                      );
+                                      if (snapshot.hasError) {
+                                        return Center(
+                                          child: Text(
+                                            "Error: ${snapshot.error}",
+                                            style: defaultTextStyle(),
+                                          ),
+                                        );
+                                      } else {
+                                        return ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount:
+                                              _findUserPosts.posts.length,
+                                          itemBuilder: (context, int index) {
+                                            // Map<String, dynamic> l = {};
+                                            final feedItem =
+                                                _findUserPosts.posts[index];
+                                            return PostTemplate(
+                                              likedColor:
+                                                  false, //We have to check, does it contain our user?
+                                              postID: feedItem['_id'],
+                                              text: feedItem['text'],
+                                              img: feedItem['profilePic'],
+                                              username: feedItem['username'],
+                                              likesCount:
+                                                  feedItem['likes'].length,
+                                              repliesCount:
+                                                  feedItem['replies'].length,
+                                              postPic: feedItem['img'],
+                                              fullUserInfo: {},
+                                            );
+                                          },
+                                        );
+                                      }
                                     }
-                                  }
-                                })
-                          ],
-                        ),
-                      );
-                    },
-                  );
+                                  })
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  }
                 }
-              }
-            },
+              },
+            ),
           ),
         ),
       ),

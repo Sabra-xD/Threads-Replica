@@ -6,7 +6,6 @@ import 'package:threads_replica/styles/TextStyles.dart';
 import 'package:threads_replica/utils/colors.dart';
 import '../controller/bottomNavigationBarController.dart';
 import "../controller/searchController.dart";
-
 import '../controller/userInfo.dart';
 import '../widgets/text_input_field.dart';
 import 'users_profile_screen.dart';
@@ -103,8 +102,6 @@ class SearchScreen extends StatelessWidget {
                                 ),
                               );
                             } else {
-                              print(
-                                  "Result: ${_searchController.matchingUsers}");
                               if (_searchController.matchingUsers.isEmpty) {
                                 return Center(
                                   child: Text(
@@ -169,19 +166,6 @@ class SearchScreen extends StatelessWidget {
                                                   ),
                                                 ],
                                               ),
-
-                                              ElevatedButton(
-                                                  onPressed: () {},
-                                                  child: Text(
-                                                    feedItem['followers']
-                                                            .contains(userInfo
-                                                                .userId.value)
-                                                        ? "UnFollow"
-                                                        : "Follow",
-                                                    style: defaultTextStyle(
-                                                        textColor:
-                                                            Colors.black),
-                                                  )),
                                             ],
                                           ));
                                     });

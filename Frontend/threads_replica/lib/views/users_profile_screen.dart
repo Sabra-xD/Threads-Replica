@@ -23,6 +23,8 @@ class UsersProfileScreen extends StatelessWidget {
     BottomNavigationBarController _barController =
         Get.find<BottomNavigationBarController>();
 
+    RxInt numberOfFollowers = RxInt(fullUserInfo['followers']?.length);
+
     // ignore: no_leading_underscores_for_local_identifiers
     findUserPosts _findUserPosts = Get.put(findUserPosts());
     UserInfo userInfo = Get.find<UserInfo>();
@@ -70,10 +72,12 @@ class UsersProfileScreen extends StatelessWidget {
                     height: 10,
                   ),
 
-                  Text(
-                    "${fullUserInfo['followers']?.length ?? "Not read"}  followers",
-                    style: defaultTextStyle(textColor: Colors.grey),
-                  ),
+                  Obx(() {
+                    return Text(
+                      "${numberOfFollowers.value}  followers",
+                      style: defaultTextStyle(textColor: Colors.grey),
+                    );
+                  }),
 
                   const SizedBox(
                     height: 10,
@@ -84,6 +88,11 @@ class UsersProfileScreen extends StatelessWidget {
                     await followeController.FollowOrUnFollow(
                         fullUserInfo['_id']);
                     if (followeController.statusCode.value == 200) {
+                      if (isFollowing.value) {
+                        numberOfFollowers.value = numberOfFollowers.value - 1;
+                      } else {
+                        numberOfFollowers.value = numberOfFollowers.value + 1;
+                      }
                       isFollowing.value = !isFollowing.value;
                     }
                   }, child: Obx(() {
@@ -173,7 +182,7 @@ class finderUserThreads extends StatelessWidget {
                           false, //We have to check, does it contain our user?
                       postID: feedItem['_id'],
                       text: feedItem['text'],
-                      img: feedItem['profilePic'],
+                      img: fullUserInfo['profilePic'],
                       username: feedItem['username'],
                       likesCount: feedItem['likes'].length,
                       repliesCount: feedItem['replies'].length,

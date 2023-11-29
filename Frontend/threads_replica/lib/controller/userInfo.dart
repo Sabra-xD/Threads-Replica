@@ -5,6 +5,7 @@ class UserInfo extends GetxController {
   RxString userId = ''.obs;
   RxString userName = ''.obs;
   RxString email = ''.obs;
+  RxString bio = ''.obs;
   RxString img = ''.obs;
   RxBool isLoading = true.obs;
 
@@ -19,12 +20,18 @@ class UserInfo extends GetxController {
     }
   }
 
+  Future<void> saveBio(String bio) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('bio', bio);
+  }
+
   Future<void> fetchData() async {
     print("Fetch Data has been called");
 
     isLoading.value = false;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userName.value = prefs.getString('username') ?? "Username";
+    bio.value = prefs.getString("bio") ?? "";
     userId.value = prefs.getString('id') ?? "";
     email.value = prefs.getString('email') ?? "email";
     img.value = prefs.getString('img') ??

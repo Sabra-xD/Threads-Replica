@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/updateUserProfile.dart';
@@ -9,8 +11,7 @@ import 'package:threads_replica/views/profile/edit_password.dart';
 import 'edit_bio.dart';
 
 class EditProfileScreen extends StatelessWidget {
-  final String? bio;
-  const EditProfileScreen({Key? key, this.bio}) : super(key: key);
+  const EditProfileScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
@@ -31,6 +32,7 @@ class EditProfileScreen extends StatelessWidget {
           color: primaryColor,
           onPressed: () {
             //Close the current page and route to the most recent page.
+            Get.toNamed("/ProfileScreen");
           },
         ),
         title: Text(
@@ -39,13 +41,17 @@ class EditProfileScreen extends StatelessWidget {
         ),
         actions: [
           TextButton(
-              onPressed: () {
+              onPressed: () async {
                 //Post?
                 print(
                     "BioController value that was set @ the fucking EditBioScreen: ${_updateUser.bioController.text}");
-                _updateUser.updateProfile();
+                await _updateUser.updateProfile();
                 if (_updateUser.statusCode.value == 200) {
-                  _updateUser.onClose();
+                  //Saving the new Bio in the local storage..
+                  _userInfo.saveBio(_updateUser.bioController.text);
+                  // _updateUser.onClose();
+                  //Route to the profile screen.
+                  Get.toNamed("/ProfileScreen");
                 }
               },
               child: Text(
