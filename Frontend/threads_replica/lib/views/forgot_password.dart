@@ -12,6 +12,7 @@ class ForgotPasswordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final ForgotPasswordController forgotPasswordController =
         Get.put(ForgotPasswordController());
+    // ignore: no_leading_underscores_for_local_identifiers
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     return GestureDetector(
       onTap: () {
@@ -45,8 +46,9 @@ class ForgotPasswordScreen extends StatelessWidget {
                       ),
                       TextFieldInput(
                           validator: (value) {
-                            if (value!.isEmpty)
+                            if (value!.isEmpty) {
                               return "Please enter your email";
+                            }
                             return null;
                           },
                           textEditingController:

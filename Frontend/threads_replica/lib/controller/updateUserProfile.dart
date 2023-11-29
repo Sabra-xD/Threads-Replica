@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:threads_replica/controller/userInfo.dart';
 import 'package:http/http.dart' as http;
 
+import '../utils/baseUrl.dart';
 import 'token_saver.dart';
 
 // ignore: camel_case_types
@@ -18,8 +19,7 @@ class updateUserProfileController extends GetxController {
   final UserInfo _userInfo = Get.put(UserInfo());
 
   Future<void> updateProfile() async {
-    String url =
-        "http://10.0.2.2:3000/api/users/updateUser/${_userInfo.userId.value}";
+    String url = "${baseURL()}/api/users/updateUser/${_userInfo.userId.value}";
     String authToken = await userCookie.getToken();
 
     final Map<String, String> headers = {
@@ -54,7 +54,6 @@ class updateUserProfileController extends GetxController {
   @override
   void onClose() {
     bioController.dispose();
-    newImageController.dispose();
     newImageController.dispose();
   }
 }

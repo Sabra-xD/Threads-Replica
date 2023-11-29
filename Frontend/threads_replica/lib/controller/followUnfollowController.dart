@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:threads_replica/utils/baseUrl.dart';
 
 import 'token_saver.dart';
 import 'package:http/http.dart' as http;
@@ -10,7 +11,7 @@ class FolloweController extends GetxController {
   RxInt statusCode = 0.obs;
   Future<void> FollowOrUnFollow(String userId) async {
 //We need to have the user id and post it..
-    String url = "http://10.0.2.2:3000/api/users/follow/$userId";
+    String url = "${baseURL()}/api/users/follow/$userId";
 
     try {
       AuthToken userCookie = AuthToken();

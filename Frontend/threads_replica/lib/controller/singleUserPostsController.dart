@@ -4,13 +4,15 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+import '../utils/baseUrl.dart';
+
 // ignore: camel_case_types
 class findUserPosts extends GetxController {
   List<dynamic> posts = [];
   Future<void> findPosts(String userId) async {
     posts = [];
     try {
-      String url = "http://10.0.2.2:3000/api/users/finduserposts/${userId}";
+      String url = "${baseURL()}/api/users/finduserposts/${userId}";
       final response = await http.get(Uri.parse(url));
       print("We are inside the findPosts");
       if (response.statusCode == 200) {

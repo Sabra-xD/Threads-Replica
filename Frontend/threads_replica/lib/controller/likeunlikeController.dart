@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import '../utils/baseUrl.dart';
 import 'token_saver.dart';
 
 class LikeUnlikeController extends GetxController {
@@ -9,8 +10,8 @@ class LikeUnlikeController extends GetxController {
   final liked = RxBool(false);
 
   Future<void> likeUnlike(String postID) async {
-    String url = "http://10.0.2.2:3000/api/posts/like/$postID";
-    String postUrl = "http://10.0.2.2:3000/api/posts/$postID";
+    String url = "${baseURL()}/api/posts/like/$postID";
+    String postUrl = "${baseURL()}/api/posts/$postID";
 
     try {
       final authToken = await userCookie.getToken();

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:threads_replica/controller/userInfo.dart';
+import 'package:threads_replica/utils/baseUrl.dart';
 
 import 'token_saver.dart';
 
@@ -12,7 +13,7 @@ class feedController extends GetxController {
   RxInt statusCode = RxInt(0);
   // RxBool userInLikes = RxBool(false);
   List<bool> userInLikes = [];
-  String url = "http://10.0.2.2:3000/api/posts/feed";
+  String url = "${baseURL()}/api/posts/feed";
   List<List<dynamic>> combinedData = [];
   List<dynamic> receivedData = [];
   List<dynamic> receivedUserData = [];
@@ -45,7 +46,7 @@ class feedController extends GetxController {
         //Fetching the userInfo from getUserProfile API using PostedBy ID.
         for (var post in receivedData) {
           String getUserProfile =
-              "http://10.0.2.2:3000/api/users/profile/${post['postedBy']}";
+              "${baseURL()}/api/users/profile/${post['postedBy']}";
           final userResponse = await http.get(Uri.parse(getUserProfile));
           final userInfo = json.decode(userResponse.body);
           receivedUserData.add(userInfo);

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/token_saver.dart';
+import 'package:threads_replica/utils/baseUrl.dart';
 
 // ignore: camel_case_types
 class createPostController extends GetxController {
@@ -14,7 +15,7 @@ class createPostController extends GetxController {
   RxInt statusCode = RxInt(0);
 
   Future<void> createPost() async {
-    String url = "http://10.0.2.2:3000/api/posts/create";
+    String url = "${baseURL()}/api/posts/create";
 
     String authToken = await userCookie.getToken();
 

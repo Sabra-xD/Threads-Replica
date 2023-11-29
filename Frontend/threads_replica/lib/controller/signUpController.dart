@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:threads_replica/controller/token_saver.dart';
 
+import '../utils/baseUrl.dart';
 import 'userInfo.dart';
 
 class SignUpController extends GetxController {
@@ -24,7 +25,7 @@ class SignUpController extends GetxController {
   Future<void> signup() async {
     print("Inside the Sign UP Function");
     print("Old saved Token: ${await saver.getToken()}");
-    const String url = "http://10.0.2.2:3000/api/users/signup";
+    String url = "${baseURL()}/api/users/signup";
 
     final Map<String, String> headers = {
       'Content-Type': 'application/json',

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:threads_replica/utils/baseUrl.dart';
 
 class ForgotPasswordController extends GetxController {
   final TextEditingController usernameController = TextEditingController();
@@ -15,7 +16,7 @@ class ForgotPasswordController extends GetxController {
 
   Future<void> forgotPassword() async {
     print("This shit function was called");
-    const String url = "http://10.0.2.2:3000/api/users/forgotPassword";
+    String url = "${baseURL()}/api/users/forgotPassword";
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
     };

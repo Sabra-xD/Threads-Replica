@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:threads_replica/controller/token_saver.dart';
 import 'package:threads_replica/controller/userInfo.dart';
 
+import '../utils/baseUrl.dart';
+
 class SignInController extends GetxController {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -16,7 +18,7 @@ class SignInController extends GetxController {
   RxInt statusCode = RxInt(0);
 
   Future<void> confirmSignIn() async {
-    const String url = "http://10.0.2.2:3000/api/users/login";
+    String url = "${baseURL()}/api/users/login";
 
     final Map<String, String> headers = {
       'Content-Type': 'application/json',

@@ -56,6 +56,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
     UserInfo _userInfo = Get.put(UserInfo());
+
     return FutureBuilder(
       future: _userInfo.fetchData(), // Initialize and call fetchData
       builder: (context, snapshot) {

@@ -3,13 +3,15 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+import '../utils/baseUrl.dart';
+
 class GetUserProfile extends GetxController {
   RxInt statusCode = RxInt(0);
   final Rx<Map<String, dynamic>> responseData = Rx<Map<String, dynamic>>({});
 
   Future<void> getUserProfile(String query) async {
     try {
-      String url = "http://10.0.2.2:3000/api/users/profile/${query}";
+      String url = "${baseURL()}/api/users/profile/${query}";
       final Map<String, String> headers = {
         'Content-Type': 'application/json',
       };

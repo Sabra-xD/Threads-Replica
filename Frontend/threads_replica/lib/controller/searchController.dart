@@ -1,8 +1,11 @@
+// ignore_for_file: avoid_print, camel_case_types, file_names
+
 import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/token_saver.dart';
 import 'package:http/http.dart' as http;
+import 'package:threads_replica/utils/baseUrl.dart';
 
 class searchController extends GetxController {
   RxInt statusCode = RxInt(0);
@@ -10,7 +13,7 @@ class searchController extends GetxController {
   Future<void> search(String username) async {
     matchingUsers = [];
     try {
-      String url = "http://10.0.2.2:3000/api/users/finduser";
+      String url = "${baseURL()}/api/users/finduser";
       AuthToken userCookie = AuthToken();
       String authToken = await userCookie.getToken();
 
@@ -38,7 +41,7 @@ class searchController extends GetxController {
             "Error in the searchController function with statusCode: ${response.statusCode}");
       }
     } catch (error) {
-      print("Error in the SearchController : ${error}");
+      print("Error in the SearchController : $error");
     }
   }
 }

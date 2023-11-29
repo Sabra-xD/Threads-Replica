@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:http/http.dart' as http;
+import 'package:threads_replica/utils/baseUrl.dart';
 
 class getSinglePostController extends GetxController {
   //Change this ID according to which Post are we clicking on.
-  String url = "http://10.0.2.2:3000/api/posts/655ae86f5badd658d0532063";
+  String url = "${baseURL()}/api/posts/655ae86f5badd658d0532063";
   RxInt statusCode = RxInt(0);
   String _id = '';
   late String postedBy;
@@ -37,7 +38,7 @@ class getSinglePostController extends GetxController {
         print("ID: ${_id} postedBy: ${postedBy} text: ${text}");
         final Map<String, String> data = {'userID': postedBy};
 
-        String getUserUrl = "http://10.0.2.2:3000/api/users/userbyid";
+        String getUserUrl = "${baseURL()}:3000/api/users/userbyid";
         final secondresponse = await http.post(Uri.parse(getUserUrl),
             headers: headers, body: json.encode(data));
         receivedData = json.decode(secondresponse.body);
