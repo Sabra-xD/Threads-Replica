@@ -1,8 +1,8 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:threads_replica/controller/signInController.dart';
 import 'package:get/get.dart';
 import 'package:threads_replica/utils/colors.dart';
+import 'package:threads_replica/widgets/flush_bar.dart';
 import 'package:threads_replica/widgets/text_input_field.dart';
 
 import '../controller/token_saver.dart';
@@ -86,43 +86,22 @@ class SignInScreen extends StatelessWidget {
                         await signInController.confirmSignIn();
                         if (signInController.statusCode.value == 200) {
                           // ignore: use_build_context_synchronously
-                          Flushbar(
-                            backgroundColor: Colors.transparent,
-                            borderRadius: BorderRadius.circular(8),
-                            boxShadows: const [
-                              BoxShadow(
-                                color: Colors.black54,
-                                blurRadius: 4,
-                                offset: Offset(0, 2),
-                              ),
-                            ],
-                            padding: const EdgeInsets.all(15),
-                            messageText: const Text(
-                              "Login sucessfull. Routing to the Homepage",
-                              style: TextStyle(
-                                  fontSize: 12, color: Colors.lightBlue),
-                            ),
-                            duration: const Duration(seconds: 2),
-                          ).show(context).then((_) {
+                          flushBar("Login Sucessfully.. Routing to HomePage",
+                                  Colors.lightBlue)
+                              .show(context)
+                              .then((_) {
                             signInController.onClose();
                             signInController.dispose();
                             Get.offAllNamed("/HomePage");
                           });
                         } else {
                           // ignore: use_build_context_synchronously
-                          Flushbar(
-                            backgroundColor: Colors.transparent,
-                            message: "Issue with the login",
-                            padding: const EdgeInsets.all(12),
-                            messageText: Text(
-                              signInController.statusCode.value == 500
-                                  ? "Issue with the login. Please try again later ${signInController.statusCode}"
-                                  : "Invalid username or password",
-                              style: const TextStyle(
-                                  color: Colors.redAccent, fontSize: 16),
-                            ),
-                            duration: const Duration(seconds: 3),
-                          ).show(context);
+                          flushBar(
+                                  signInController.statusCode.value == 500
+                                      ? "Issue with the login. Please try again later ${signInController.statusCode}"
+                                      : "Invalid username or password",
+                                  Colors.redAccent)
+                              .show(context);
                         }
                       }
                     },

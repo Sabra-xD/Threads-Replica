@@ -1,7 +1,8 @@
-import 'package:another_flushbar/flushbar.dart';
+// ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/replyController.dart';
+import 'package:threads_replica/widgets/flush_bar.dart';
 
 import '../styles/TextStyles.dart';
 
@@ -35,47 +36,14 @@ Widget buildTextFormField(TextEditingController reply, BuildContext context,
                   await replyController.postReply(postID, reply.text);
                   if (replyController.statusCode.value == 200) {
                     reply.clear();
-                    // ignore: use_build_context_synchronously
-                    Flushbar(
-                      backgroundColor: Colors.transparent,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadows: const [
-                        BoxShadow(
-                          color: Colors.black54,
-                          blurRadius: 4,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                      padding: const EdgeInsets.all(15),
-                      messageText: const Text(
-                        "Reply was posted sucessfully",
-                        style: TextStyle(fontSize: 12, color: Colors.lightBlue),
-                      ),
-                      duration: const Duration(seconds: 2),
-                    ).show(context);
+                    flushBar("Reply created sucessfully", Colors.lightBlue)
+                        .show(context);
                   } else {
-                    // ignore: use_build_context_synchronously
-                    print(
-                        "Reply Controller StatusCode: ${replyController.statusCode.value}");
-                    // ignore: use_build_context_synchronously
-                    Flushbar(
-                      backgroundColor: Colors.transparent,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadows: const [
-                        BoxShadow(
-                          color: Colors.black54,
-                          blurRadius: 4,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                      padding: const EdgeInsets.all(15),
-                      messageText: const Text(
-                        "Error in posting the reply",
-                        style: TextStyle(fontSize: 12, color: Colors.redAccent),
-                      ),
-                      duration: const Duration(seconds: 2),
-                    ).show(context);
+                    flushBar("Something went wrong...", Colors.redAccent)
+                        .show(context);
                   }
+                  await Future.delayed(const Duration(milliseconds: 3000));
+                  FocusScope.of(context).unfocus();
                 }
               },
             );
