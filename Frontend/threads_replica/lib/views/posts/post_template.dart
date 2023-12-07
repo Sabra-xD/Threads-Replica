@@ -1,9 +1,12 @@
+// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names, no_leading_underscores_for_local_identifiers
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/deletePostController.dart';
 import 'package:threads_replica/controller/userInfo.dart';
 import 'package:threads_replica/views/users_profile_screen.dart';
 import 'package:threads_replica/widgets/drop_down_delete.dart';
+import 'package:threads_replica/widgets/flush_bar.dart';
 
 import '../../controller/likeunlikeController.dart';
 import '../../styles/TextStyles.dart';
@@ -41,10 +44,8 @@ class PostTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: no_leading_underscores_for_local_identifiers
     final LikeUnlikeController _likeController =
         Get.put(LikeUnlikeController());
-
     RxBool liked = RxBool(likedColor!);
     RxInt varLikesCount = RxInt(likesCount!);
     RxInt varRepliesCount = RxInt(repliesCount!);
@@ -98,10 +99,18 @@ class PostTemplate extends StatelessWidget {
                     ? DropDownMenu(
                         postID: postID,
                         replyID: "",
-                        menuOptions: ["Delete"],
+                        menuOptions: const ["Delete"],
                         onSelected: (String value) async {
                           //Delete Post here
                           await _postController.deletePost(postID);
+                          if (_postController.deleteStatusCode.value == 200) {
+                            flushBar("Post Deleted Sucessfully",
+                                    Colors.lightBlue)
+                                .show(context);
+                          } else {
+                            flushBar("Something went wrong..", Colors.redAccent)
+                                .show(context);
+                          }
                         },
                       )
                     : const SizedBox(

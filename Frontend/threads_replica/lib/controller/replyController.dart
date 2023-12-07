@@ -11,6 +11,7 @@ class ReplyController extends GetxController {
   String repliedUser = "";
   String userImg = "";
   RxInt statusCode = RxInt(0);
+  RxInt deleteReplyStatusCode = RxInt(0);
   Map<String, dynamic> userInfo = {};
   Future<void> postReply(String postID, String text) async {
     statusCode.value = 0;
@@ -44,10 +45,6 @@ class ReplyController extends GetxController {
   }
 
   Future<void> deleteReply(postID, replyID) async {
-    //We need user id from token.
-    //     const userId = req.user._id;
-    // const postId = req.params.id;
-    // const replyId = req.params.replyId;
     String url = "${baseURL()}/api/posts/reply/$postID/$replyID";
 
     try {
@@ -58,6 +55,7 @@ class ReplyController extends GetxController {
         'cookie': 'jwt=$authToken',
       };
       final response = await http.delete(Uri.parse(url), headers: headers);
+      deleteReplyStatusCode.value = response.statusCode;
       if (response.statusCode == 200) {
         print("Delete was made sucessfully");
       } else {

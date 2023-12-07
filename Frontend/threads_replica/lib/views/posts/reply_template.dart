@@ -1,10 +1,11 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
+// ignore_for_file: no_leading_underscores_for_local_identifiers, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/replyController.dart';
 import 'package:threads_replica/controller/userInfo.dart';
 import 'package:threads_replica/styles/TextStyles.dart';
+import 'package:threads_replica/widgets/flush_bar.dart';
 import '../../widgets/drop_down_delete.dart';
 
 // ignore: must_be_immutable
@@ -71,12 +72,19 @@ class ReplyTemplate extends StatelessWidget {
                                 replyID: replyID,
                                 menuOptions: menuOptions,
                                 onSelected: (String value) async {
-                                  print("Removing reply");
                                   await _replyController.deleteReply(
                                       postID, replyID);
-                                  print("Reply removed with postiD :${postID}");
-
-                                  print("Selected ${value}");
+                                  if (_replyController
+                                          .deleteReplyStatusCode.value ==
+                                      200) {
+                                    flushBar("Reply Deleted Sucessfully",
+                                            Colors.lightBlue)
+                                        .show(context);
+                                  } else {
+                                    flushBar("Something went wrong...",
+                                            Colors.redAccent)
+                                        .show(context);
+                                  }
                                 },
                               )
                             : const SizedBox(

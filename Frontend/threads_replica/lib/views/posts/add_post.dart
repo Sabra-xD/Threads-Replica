@@ -93,10 +93,11 @@ class _PostScreenState extends State<PostScreen> {
                         ),
                         duration: const Duration(seconds: 2),
                       ).show(context);
+
+                      Get.offAllNamed("/HomePage");
                       createPost.threadText.clear();
                       createPost.onClose();
                       createPost.dispose();
-                      Get.offAllNamed("/HomePage");
                       _barController.updateIndex(0);
                     } else {
                       // ignore: use_build_context_synchronously

@@ -31,6 +31,7 @@ class SinglePostScreen extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
               _replyController.dispose();
+              reply.dispose();
             },
             icon: const Icon(Icons.arrow_back)),
       ),

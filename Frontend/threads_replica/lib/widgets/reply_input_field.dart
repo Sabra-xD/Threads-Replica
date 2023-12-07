@@ -34,7 +34,7 @@ Widget buildTextFormField(TextEditingController reply, BuildContext context,
                   //Post the reply
                   await replyController.postReply(postID, reply.text);
                   if (replyController.statusCode.value == 200) {
-                    print("Posting the reply was sucessful");
+                    reply.clear();
                     // ignore: use_build_context_synchronously
                     Flushbar(
                       backgroundColor: Colors.transparent,
