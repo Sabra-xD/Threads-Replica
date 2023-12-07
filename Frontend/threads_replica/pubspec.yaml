@@ -43,6 +43,7 @@ dependencies:
   shared_preferences: ^2.2.2
   another_flushbar: ^1.12.30
   socket_io_client: ^2.0.3
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

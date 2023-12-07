@@ -46,4 +46,11 @@ class createPostController extends GetxController {
       // ignore: empty_catches
     } catch (error) {}
   }
+
+  @override
+  void onClose() {
+    threadImage.dispose();
+    threadText.dispose();
+    super.onClose();
+  }
 }

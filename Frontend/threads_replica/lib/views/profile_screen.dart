@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/userInfo.dart';
@@ -14,11 +16,8 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: no_leading_underscores_for_local_identifiers
     UserInfo _userInfo = Get.find<UserInfo>();
-    // ignore: no_leading_underscores_for_local_identifiers
     findUserPosts _findUserPosts = Get.put(findUserPosts());
-
     final BottomNavigationBarController _barController =
         Get.put(BottomNavigationBarController());
     return Scaffold(
@@ -102,7 +101,16 @@ class ProfileScreen extends StatelessWidget {
                                           height: 10,
                                         ),
                                         const Text(
+                                          //Need to adjust this and make it pressable
                                           "0 followers",
+                                          style: TextStyle(
+                                            color:
+                                                Color.fromARGB(255, 69, 69, 69),
+                                          ),
+                                        ),
+                                        const Text(
+                                          //Need to adjust this and make it pressable
+                                          "0 following",
                                           style: TextStyle(
                                             color:
                                                 Color.fromARGB(255, 69, 69, 69),
@@ -134,7 +142,9 @@ class ProfileScreen extends StatelessWidget {
                                       },
                                       child: Container(
                                         height: 35,
-                                        width: 170,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.42,
                                         decoration: BoxDecoration(
                                           color: mobileBackgroundColor,
                                           borderRadius:
@@ -161,7 +171,9 @@ class ProfileScreen extends StatelessWidget {
                                       onTap: () {},
                                       child: Container(
                                         height: 35,
-                                        width: 170,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.42,
                                         decoration: BoxDecoration(
                                           color: mobileBackgroundColor,
                                           borderRadius:
@@ -232,6 +244,7 @@ class ProfileScreen extends StatelessWidget {
                                             final feedItem =
                                                 _findUserPosts.posts[index];
                                             return PostTemplate(
+                                              postedBy: feedItem['postedBy'],
                                               likedColor:
                                                   false, //We have to check, does it contain our user?
                                               postID: feedItem['_id'],

@@ -175,9 +175,9 @@ class finderUserThreads extends StatelessWidget {
                   itemCount: _findUserPosts.posts.length,
                   itemBuilder: (context, int index) {
                     final feedItem = _findUserPosts.posts[index];
-                    print("FeedItem: ${feedItem['_id']}");
                     return PostTemplate(
                       fullUserInfo: fullUserInfo,
+                      postedBy: feedItem['postedBy'],
                       likedColor:
                           false, //We have to check, does it contain our user?
                       postID: feedItem['_id'],

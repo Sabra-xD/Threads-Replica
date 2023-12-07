@@ -38,6 +38,7 @@ class SignUpScreen extends StatelessWidget {
                         ),
                         //Username
                         TextFieldInput(
+                            labelText: "Username",
                             textEditingController:
                                 signUpController.usernameController,
                             hintText: "Enter your username",
@@ -53,6 +54,7 @@ class SignUpScreen extends StatelessWidget {
                         ),
                         //Email
                         TextFieldInput(
+                            labelText: "Email",
                             textEditingController:
                                 signUpController.emailController,
                             hintText: "Enter your Email",
@@ -68,6 +70,7 @@ class SignUpScreen extends StatelessWidget {
                         ),
                         //name
                         TextFieldInput(
+                            labelText: "Name",
                             textEditingController:
                                 signUpController.nameController,
                             hintText: "Enter your name",
@@ -83,6 +86,7 @@ class SignUpScreen extends StatelessWidget {
                         ),
                         //Password
                         TextFieldInput(
+                            labelText: "Password",
                             textEditingController:
                                 signUpController.passwordController,
                             hintText: "Enter your Password",
@@ -98,6 +102,7 @@ class SignUpScreen extends StatelessWidget {
                         ),
                         //Bio
                         TextFieldInput(
+                          labelText: "Bio (Optional)",
                           textEditingController: signUpController.bioController,
                           hintText: "Enter your Bio",
                           textInputType: TextInputType.text,
@@ -107,6 +112,7 @@ class SignUpScreen extends StatelessWidget {
                         ),
                         //Image
                         TextFieldInput(
+                          labelText: "Image link (Optinal)",
                           textEditingController:
                               signUpController.imageController,
                           hintText: "Enter your image",
@@ -146,7 +152,7 @@ class SignUpScreen extends StatelessWidget {
                       signUpController.signup();
                       if (signUpController.statusCode.value == 201) {
                         signUpController.dispose();
-                        Get.toNamed("/HomePage");
+                        Get.offAllNamed("/HomePage");
                       }
                     }
                   },
@@ -175,7 +181,7 @@ class SignUpScreen extends StatelessWidget {
                     ),
                     TextButton(
                         onPressed: () {
-                          Get.toNamed("/SignInScreen");
+                          Get.offAllNamed("/SignInScreen");
                         },
                         child: const Text("Sign In",
                             style: TextStyle(

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:threads_replica/controller/deletePostController.dart';
+import 'package:threads_replica/controller/userInfo.dart';
 import 'package:threads_replica/views/users_profile_screen.dart';
+import 'package:threads_replica/widgets/drop_down_delete.dart';
 
 import '../../controller/likeunlikeController.dart';
 import '../../styles/TextStyles.dart';
@@ -10,6 +13,7 @@ import '../../utils/colors.dart';
 class PostTemplate extends StatelessWidget {
   String? text;
   String? username;
+  String postedBy;
   String? img;
   int? likesCount;
   String postID;
@@ -29,6 +33,7 @@ class PostTemplate extends StatelessWidget {
     this.repliesCount,
     this.likesCount,
     this.postPic,
+    required this.postedBy,
     required this.postID,
     this.likedColor,
     required this.fullUserInfo,
@@ -43,7 +48,8 @@ class PostTemplate extends StatelessWidget {
     RxBool liked = RxBool(likedColor!);
     RxInt varLikesCount = RxInt(likesCount!);
     RxInt varRepliesCount = RxInt(repliesCount!);
-
+    UserInfo _userInfo = Get.find<UserInfo>();
+    PostController _postController = Get.put(PostController());
     _likeController.numberofLikes.value = likesCount!;
 
     return Column(
@@ -57,8 +63,10 @@ class PostTemplate extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(
-                  foregroundImage: NetworkImage(img ??
-                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"),
+                  foregroundImage: img != null && img != ""
+                      ? NetworkImage(img!)
+                      : const NetworkImage(
+                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"),
                   radius: 20,
                 ),
                 const SizedBox(
@@ -77,6 +85,7 @@ class PostTemplate extends StatelessWidget {
                   },
                   child: Text(
                     username ?? "Username",
+                    overflow: TextOverflow.fade,
                     style: defaultTextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -85,6 +94,20 @@ class PostTemplate extends StatelessWidget {
                   "5m",
                   style: defaultTextStyle(fontWeight: FontWeight.w600),
                 ),
+                _userInfo.userId.value == postedBy
+                    ? DropDownMenu(
+                        postID: postID,
+                        replyID: "",
+                        menuOptions: ["Delete"],
+                        onSelected: (String value) async {
+                          //Delete Post here
+                          await _postController.deletePost(postID);
+                        },
+                      )
+                    : const SizedBox(
+                        height: 0,
+                        width: 0,
+                      )
               ],
             ),
             const SizedBox(
@@ -98,10 +121,19 @@ class PostTemplate extends StatelessWidget {
                     const SizedBox(
                       width: 55,
                     ),
-                    Text(
-                      text ?? "...",
-                      style: defaultTextStyle(
-                          fontWeight: FontWeight.w300, fontSize: 15),
+                    SizedBox(
+                      width: 200,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          text ?? "...",
+                          softWrap: true,
+                          maxLines: 5,
+                          textAlign: TextAlign.center,
+                          style: defaultTextStyle(
+                              fontWeight: FontWeight.w300, fontSize: 15),
+                        ),
+                      ),
                     ),
                   ],
                 ),

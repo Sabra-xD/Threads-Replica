@@ -43,6 +43,32 @@ class ReplyController extends GetxController {
     }
   }
 
+  Future<void> deleteReply(postID, replyID) async {
+    //We need user id from token.
+    //     const userId = req.user._id;
+    // const postId = req.params.id;
+    // const replyId = req.params.replyId;
+    String url = "${baseURL()}/api/posts/reply/$postID/$replyID";
+
+    try {
+      AuthToken userCookie = AuthToken();
+      String authToken = await userCookie.getToken();
+      final Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'cookie': 'jwt=$authToken',
+      };
+      final response = await http.delete(Uri.parse(url), headers: headers);
+      if (response.statusCode == 200) {
+        print("Delete was made sucessfully");
+      } else {
+        print(
+            "Something went wrong with StatusCode of: ${response.statusCode}");
+      }
+    } catch (error) {
+      print("Error in the deleteReply: $error");
+    }
+  }
+
   Future<void> getUser(String userID) async {
     repliedUser = "";
     String getUserProfile = "${baseURL()}/api/users/profile/$userID";

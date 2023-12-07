@@ -26,8 +26,6 @@ class UserInfo extends GetxController {
   }
 
   Future<void> fetchData() async {
-    print("Fetch Data has been called");
-
     isLoading.value = false;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userName.value = prefs.getString('username') ?? "Username";
@@ -35,8 +33,6 @@ class UserInfo extends GetxController {
     userId.value = prefs.getString('id') ?? "";
     email.value = prefs.getString('email') ?? "email";
     img.value = prefs.getString('img') ??
-        "https://c8.alamy.com/comp/2E915TB/glitch-error-404-computer-page-anaglyph-glitch-404-banner-error-layout-effect-screen-2E915TB.jpg";
-
-    // isLoading.value = false;
+        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
   }
 }

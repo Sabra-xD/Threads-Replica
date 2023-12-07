@@ -9,10 +9,12 @@ class TextFieldInput extends StatelessWidget {
   final String hintText;
   final TextInputType textInputType;
   final bool? showObsecure;
+  String? labelText;
   RxBool obsecurePassword = RxBool(true);
   final String? Function(String?)? validator;
   TextFieldInput(
       {super.key,
+      this.labelText,
       required this.textEditingController,
       this.isPass = false,
       required this.hintText,
@@ -33,6 +35,8 @@ class TextFieldInput extends StatelessWidget {
       obscureText: isPass,
       keyboardType: textInputType,
       decoration: InputDecoration(
+        labelText: labelText,
+        labelStyle: const TextStyle(color: primaryColor, fontSize: 12.5),
         suffixIcon: showObsecure == true
             ? GestureDetector(
                 onTap: () {

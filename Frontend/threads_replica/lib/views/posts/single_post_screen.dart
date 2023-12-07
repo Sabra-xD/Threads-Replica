@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/replyController.dart';
@@ -46,6 +48,7 @@ class SinglePostScreen extends StatelessWidget {
                         likedColor: liked,
                         postID: feedItem[0]['_id'],
                         text: feedItem[0]['text'],
+                        postedBy: feedItem[0]['postedBy'],
                         img: feedItem[1]['profilePic'],
                         username: feedItem[1]['username'],
                         likesCount: feedItem[0]['likes'].length,
@@ -72,6 +75,8 @@ class SinglePostScreen extends StatelessWidget {
         children: List.generate(feedItem[0]['replies'].length, (index) {
           final replyInfo = feedItem[0]['replies'][index];
           return ReplyTemplate(
+            postID: feedItem[0]['_id'],
+            replyID: replyInfo['_id'],
             userID: replyInfo['userId'],
             replyText: replyInfo['text'],
           );

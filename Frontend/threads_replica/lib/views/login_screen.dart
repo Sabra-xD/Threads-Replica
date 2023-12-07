@@ -43,6 +43,7 @@ class SignInScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           TextFieldInput(
+                            labelText: "Username",
                             textEditingController:
                                 signInController.usernameController,
                             hintText: "Enter your username",
@@ -58,6 +59,7 @@ class SignInScreen extends StatelessWidget {
                             height: 24,
                           ),
                           TextFieldInput(
+                            labelText: "Password",
                             textEditingController:
                                 signInController.passwordController,
                             showObsecure: true,
@@ -83,7 +85,6 @@ class SignInScreen extends StatelessWidget {
                       if (_formKey.currentState!.validate()) {
                         await signInController.confirmSignIn();
                         if (signInController.statusCode.value == 200) {
-                          signInController.dispose();
                           // ignore: use_build_context_synchronously
                           Flushbar(
                             backgroundColor: Colors.transparent,
@@ -102,7 +103,11 @@ class SignInScreen extends StatelessWidget {
                                   fontSize: 12, color: Colors.lightBlue),
                             ),
                             duration: const Duration(seconds: 2),
-                          ).show(context).then((_) => Get.toNamed("/HomePage"));
+                          ).show(context).then((_) {
+                            signInController.onClose();
+                            signInController.dispose();
+                            Get.offAllNamed("/HomePage");
+                          });
                         } else {
                           // ignore: use_build_context_synchronously
                           Flushbar(
@@ -157,7 +162,7 @@ class SignInScreen extends StatelessWidget {
                         ),
                         child: InkWell(
                           onTap: () {
-                            Get.toNamed("/SignUpScreen");
+                            Get.offAllNamed("/SignUpScreen");
                           },
                           child: const Text(
                             "Sign Up",

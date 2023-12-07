@@ -31,6 +31,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       TextFieldInput(
+                          labelText: "Username",
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Please enter your username";
@@ -45,6 +46,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                         height: 12,
                       ),
                       TextFieldInput(
+                          labelText: "Email",
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Please enter your email";
@@ -59,6 +61,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                         height: 12,
                       ),
                       TextFieldInput(
+                          labelText: "Old password",
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Please enter your old password";
@@ -73,6 +76,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                         height: 12,
                       ),
                       TextFieldInput(
+                          labelText: "New Password",
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Please enter your new password";

@@ -11,14 +11,11 @@ import 'package:threads_replica/views/search_screen.dart';
 import 'package:threads_replica/views/signup_screen.dart';
 
 void main() {
-  // Dart client
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -41,7 +38,7 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: "/EditProfileScreen", page: () => const EditProfileScreen()),
       ],
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Threads-Replica'),
     );
   }
 }
@@ -56,7 +53,6 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
     UserInfo _userInfo = Get.put(UserInfo());
-
     return FutureBuilder(
       future: _userInfo.fetchData(), // Initialize and call fetchData
       builder: (context, snapshot) {

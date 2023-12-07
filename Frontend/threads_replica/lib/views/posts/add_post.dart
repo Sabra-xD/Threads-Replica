@@ -19,7 +19,7 @@ class PostScreen extends StatefulWidget {
 
 class _PostScreenState extends State<PostScreen> {
   final createPostController createPost = Get.put(createPostController());
-  final UserInfo _userInfo = Get.put(UserInfo());
+  final UserInfo _userInfo = Get.find<UserInfo>();
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late Future<String> userName;
@@ -30,6 +30,7 @@ class _PostScreenState extends State<PostScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: no_leading_underscores_for_local_identifiers
     final BottomNavigationBarController _barController =
         Get.put(BottomNavigationBarController());
     return GestureDetector(
@@ -43,7 +44,7 @@ class _PostScreenState extends State<PostScreen> {
             icon: const Icon(Icons.close),
             color: primaryColor,
             onPressed: () {
-              Get.toNamed("/HomePage");
+              Get.offAllNamed("/HomePage");
               _barController.updateIndex(0);
             },
           ),
@@ -93,7 +94,9 @@ class _PostScreenState extends State<PostScreen> {
                         duration: const Duration(seconds: 2),
                       ).show(context);
                       createPost.threadText.clear();
-                      Get.toNamed("/HomePage");
+                      createPost.onClose();
+                      createPost.dispose();
+                      Get.offAllNamed("/HomePage");
                       _barController.updateIndex(0);
                     } else {
                       // ignore: use_build_context_synchronously
