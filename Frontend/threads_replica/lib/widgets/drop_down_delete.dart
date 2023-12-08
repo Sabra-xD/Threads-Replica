@@ -9,10 +9,12 @@ class DropDownMenu extends StatelessWidget {
     required this.replyID,
     required this.menuOptions,
     required this.onSelected,
+    this.icon,
   }) : super(key: key);
 
   final String postID;
   final String replyID;
+  final Icon? icon;
   final List<String> menuOptions;
   final void Function(String)? onSelected;
 
@@ -20,10 +22,11 @@ class DropDownMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
       color: mobileBackgroundColor,
-      icon: const Icon(
-        Icons.more_vert,
-        color: primaryColor,
-      ),
+      icon: icon ??
+          const Icon(
+            Icons.more_vert,
+            color: primaryColor,
+          ),
       onSelected: onSelected,
       itemBuilder: (BuildContext context) {
         return menuOptions.map((String option) {

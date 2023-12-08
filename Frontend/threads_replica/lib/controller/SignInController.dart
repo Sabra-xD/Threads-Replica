@@ -41,8 +41,15 @@ class SignInController extends GetxController {
         statusCode.value = response.statusCode;
         if (response.statusCode == 200) {
           final Map<String, dynamic> receivedData = json.decode(response.body);
-          _userInfo.saveUserInfo(receivedData['username'],
-              receivedData['email'], receivedData['img'], receivedData['_id']);
+          print("User profile picutre link: ${receivedData['profilePic']}");
+          print("User followrs: ${receivedData['followers']}");
+          _userInfo.saveUserInfo(
+              receivedData['username'],
+              receivedData['email'],
+              receivedData['profilePic'],
+              receivedData['_id'],
+              receivedData['followers'],
+              receivedData['following']);
           String? setCookieHeader = response.headers['set-cookie'];
           Cookie cookie = Cookie.fromSetCookieValue(setCookieHeader!);
           if (cookie.name == "jwt") {

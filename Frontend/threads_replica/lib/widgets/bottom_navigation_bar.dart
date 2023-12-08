@@ -1,8 +1,12 @@
-// ignore_for_file: camel_case_types
+// ignore_for_file: camel_case_types, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/bottomNavigationBarController.dart';
+
+import '../controller/getUserProfileController.dart';
+import '../controller/userInfo.dart';
+import '../views/users_profile_screen.dart';
 
 class bottomNavBar extends StatelessWidget {
   const bottomNavBar({
@@ -14,6 +18,8 @@ class bottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GetUserProfile _getUserProfile = Get.put(GetUserProfile());
+    UserInfo _userInfo = Get.find<UserInfo>();
     return Obx(
       () => BottomNavigationBar(
         // elevation: 0,
@@ -22,21 +28,30 @@ class bottomNavBar extends StatelessWidget {
         currentIndex: _barController.selectedIndex.value,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.grey,
-        onTap: (index) {
+        onTap: (index) async {
           _barController.updateIndex(index);
           if (index == 0) {
-            Get.toNamed("/HomePage");
+            Get.offAllNamed("/HomePage");
           }
 
           if (index == 1) {
-            Get.toNamed("/SearchScreen");
+            Get.offAllNamed("/SearchScreen");
           }
 
           if (index == 2) {
-            Get.toNamed("/CreatePostScreen");
+            Get.offAllNamed("/CreatePostScreen");
           }
           if (index == 3) {
-            Get.toNamed("/ProfileScreen");
+            await _getUserProfile.getUserProfile(_userInfo.userId.value);
+            Get.offAllNamed("/ProfileScreen");
+            print("The response data: ${_getUserProfile.responseData.value}");
+
+            //This is the actual solution.
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (context) => UsersProfileScreen(
+            //             fullUserInfo: _getUserProfile.responseData.value)));
           }
         },
         items: const [

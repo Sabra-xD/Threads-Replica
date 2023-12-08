@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:threads_replica/controller/createPostController.dart';
+import 'package:threads_replica/controller/PostController.dart';
 import 'package:threads_replica/controller/userInfo.dart';
 import 'package:threads_replica/utils/colors.dart';
 import 'package:another_flushbar/flushbar.dart';
@@ -18,7 +18,7 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreenState extends State<PostScreen> {
-  final createPostController createPost = Get.put(createPostController());
+  final PostController createPost = Get.put(PostController());
   final UserInfo _userInfo = Get.find<UserInfo>();
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -73,7 +73,7 @@ class _PostScreenState extends State<PostScreen> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     await createPost.createPost();
-                    if (createPost.statusCode.value == 200) {
+                    if (createPost.createPoststatusCode.value == 200) {
                       // ignore: use_build_context_synchronously
                       await Flushbar(
                         backgroundColor: Colors.transparent,
@@ -95,10 +95,10 @@ class _PostScreenState extends State<PostScreen> {
                       ).show(context);
 
                       Get.offAllNamed("/HomePage");
-                      createPost.threadText.clear();
-                      createPost.onClose();
-                      createPost.dispose();
                       _barController.updateIndex(0);
+
+                      createPost.threadText.clear();
+                      createPost.dispose();
                     } else {
                       // ignore: use_build_context_synchronously
                       Flushbar(

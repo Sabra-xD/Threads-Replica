@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:threads_replica/controller/deletePostController.dart';
+import 'package:threads_replica/controller/PostController.dart';
 import 'package:threads_replica/controller/userInfo.dart';
 import 'package:threads_replica/views/users_profile_screen.dart';
 import 'package:threads_replica/widgets/drop_down_delete.dart';

@@ -51,8 +51,13 @@ class SignUpController extends GetxController {
         if (response.statusCode == 201) {
           print("Response Data:${response.body}");
           final Map<String, dynamic> receivedData = json.decode(response.body);
-          _userInfo.saveUserInfo(receivedData['username'],
-              receivedData['email'], receivedData['img'], receivedData['_id']);
+          _userInfo.saveUserInfo(
+              receivedData['username'],
+              receivedData['email'],
+              receivedData['img'],
+              receivedData['_id'],
+              receivedData['followers'],
+              receivedData['following']);
           //We should be doing something with that, huh?
 
           String? setCookieHeader = response.headers['set-cookie'];

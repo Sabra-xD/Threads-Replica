@@ -1,4 +1,4 @@
-// ignore_for_file: use_super_parameters
+// ignore_for_file: use_super_parameters, no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,6 +7,7 @@ import 'package:threads_replica/controller/userInfo.dart';
 import 'package:threads_replica/styles/TextStyles.dart';
 import 'package:threads_replica/utils/colors.dart';
 import 'package:threads_replica/views/profile/edit_password.dart';
+import 'package:threads_replica/widgets/text_input_field.dart';
 
 import 'edit_bio.dart';
 
@@ -14,7 +15,6 @@ class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    // ignore: no_leading_underscores_for_local_identifiers
     UserInfo _userInfo = Get.put(UserInfo());
     updateUserProfileController _updateUser =
         Get.put(updateUserProfileController());
@@ -32,7 +32,8 @@ class EditProfileScreen extends StatelessWidget {
           color: primaryColor,
           onPressed: () {
             //Close the current page and route to the most recent page.
-            Get.toNamed("/ProfileScreen");
+
+            Navigator.pop(context);
           },
         ),
         title: Text(
@@ -45,13 +46,16 @@ class EditProfileScreen extends StatelessWidget {
                 //Post?
                 print(
                     "BioController value that was set @ the fucking EditBioScreen: ${_updateUser.bioController.text}");
+                print("New Image link: ${_updateUser.newImageController.text}");
                 await _updateUser.updateProfile();
                 if (_updateUser.statusCode.value == 200) {
                   //Saving the new Bio in the local storage..
                   _userInfo.saveBio(_updateUser.bioController.text);
-                  // _updateUser.onClose();
-                  //Route to the profile screen.
-                  Get.toNamed("/ProfileScreen");
+                  _userInfo.savedImage(_updateUser.newImageController.text);
+                  _updateUser.imageChanged.value = false;
+                  // Get.toNamed("/ProfileScreen");
+                  Navigator.pop(context);
+                  _updateUser.dispose();
                 }
               },
               child: Text(
@@ -126,6 +130,8 @@ class EditProfileScreen extends StatelessWidget {
                                     InkWell(
                                       onTap: () {
                                         // Implement the add image functionality here.
+                                        //We should have a TextField basically taking the link of the image.
+                                        _updateUser.imageChanged.value = true;
                                       },
                                       child: CircleAvatar(
                                         foregroundImage: NetworkImage(
@@ -137,6 +143,22 @@ class EditProfileScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
+                              Obx(() {
+                                print(
+                                    "Value of the RXBool ${_updateUser.imageChanged.value}");
+                                if (_updateUser.imageChanged.value) {
+                                  return TextFieldInput(
+                                      textEditingController:
+                                          _updateUser.newImageController,
+                                      hintText: "Enter the image's link",
+                                      textInputType: TextInputType.text);
+                                } else {
+                                  return const SizedBox(
+                                    height: 0,
+                                    width: 0,
+                                  );
+                                }
+                              }),
                               const Divider(
                                 thickness: 0.5,
                                 color: primaryColor,
@@ -150,7 +172,7 @@ class EditProfileScreen extends StatelessWidget {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  EditBioScreen()));
+                                                  const EditBioScreen()));
                                     },
                                     child: Column(
                                       children: [
@@ -180,7 +202,7 @@ class EditProfileScreen extends StatelessWidget {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                EditPasswordScreen()));
+                                                const EditPasswordScreen()));
                                   },
                                   child: Text(
                                     "Update your password",

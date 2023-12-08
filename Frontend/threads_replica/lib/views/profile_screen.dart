@@ -1,11 +1,13 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/userInfo.dart';
 import 'package:threads_replica/styles/TextStyles.dart';
 import 'package:threads_replica/utils/colors.dart';
 import 'package:threads_replica/widgets/bottom_navigation_bar.dart';
+import 'package:threads_replica/widgets/drop_down_delete.dart';
 import '../controller/bottomNavigationBarController.dart';
 import '../controller/singleUserPostsController.dart';
 import 'posts/post_template.dart';
@@ -38,13 +40,19 @@ class ProfileScreen extends StatelessWidget {
               color: primaryColor,
             ),
           ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.menu_open_outlined,
-              color: primaryColor,
-            ),
-          ),
+          DropDownMenu(
+              icon: const Icon(
+                Icons.menu_open_outlined,
+                color: primaryColor,
+              ),
+              postID: "",
+              replyID: "",
+              menuOptions: const ['Log out'],
+              onSelected: (String option) async {
+                //Clear the SharedPreferences.
+                _userInfo.cleareSharedPrefs();
+                SystemNavigator.pop();
+              }),
         ],
       ),
       backgroundColor: mobileBackgroundColor,
@@ -70,6 +78,8 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     );
                   } else {
+                    print(
+                        "The image link from userInfo ${_userInfo.img.value}");
                     return GetBuilder<UserInfo>(
                       init: _userInfo,
                       builder: (controller) {
@@ -100,18 +110,18 @@ class ProfileScreen extends StatelessWidget {
                                         const SizedBox(
                                           height: 10,
                                         ),
-                                        const Text(
+                                        Text(
                                           //Need to adjust this and make it pressable
-                                          "0 followers",
-                                          style: TextStyle(
+                                          "${_userInfo.followers.value} followers",
+                                          style: const TextStyle(
                                             color:
                                                 Color.fromARGB(255, 69, 69, 69),
                                           ),
                                         ),
-                                        const Text(
+                                        Text(
                                           //Need to adjust this and make it pressable
-                                          "0 following",
-                                          style: TextStyle(
+                                          "${_userInfo.following.value} following",
+                                          style: const TextStyle(
                                             color:
                                                 Color.fromARGB(255, 69, 69, 69),
                                           ),
@@ -208,7 +218,7 @@ class ProfileScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Threads",
+                                    "Threads..",
                                     style: defaultTextStyle(),
                                   ),
                                 ],
@@ -249,14 +259,14 @@ class ProfileScreen extends StatelessWidget {
                                                   false, //We have to check, does it contain our user?
                                               postID: feedItem['_id'],
                                               text: feedItem['text'],
-                                              img: feedItem['profilePic'],
+                                              img: _userInfo.img.value,
                                               username: feedItem['username'],
                                               likesCount:
                                                   feedItem['likes'].length,
                                               repliesCount:
                                                   feedItem['replies'].length,
                                               postPic: feedItem['img'],
-                                              fullUserInfo: {},
+                                              fullUserInfo: const {},
                                             );
                                           },
                                         );

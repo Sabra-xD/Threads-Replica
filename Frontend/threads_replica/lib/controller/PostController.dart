@@ -1,18 +1,19 @@
-// ignore: file_names
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
-import 'package:threads_replica/controller/token_saver.dart';
-import 'package:threads_replica/utils/baseUrl.dart';
+import 'package:http/http.dart' as http;
 
-// ignore: camel_case_types
-class createPostController extends GetxController {
+import 'package:threads_replica/controller/token_saver.dart';
+
+import '../utils/baseUrl.dart';
+
+class PostController extends GetxController {
+  RxInt deleteStatusCode = RxInt(0);
   final threadText = TextEditingController();
   final threadImage = TextEditingController();
   AuthToken userCookie = AuthToken();
-  RxInt statusCode = RxInt(0);
+  RxInt createPoststatusCode = RxInt(0);
 
   Future<void> createPost() async {
     String url = "${baseURL()}/api/posts/create";
@@ -40,17 +41,32 @@ class createPostController extends GetxController {
         );
         print("Response body: ${response.body}");
 
-        statusCode.value = response.statusCode;
+        createPoststatusCode.value = response.statusCode;
         if (response.statusCode == 200) {}
       }
       // ignore: empty_catches
     } catch (error) {}
   }
 
-  @override
-  void onClose() {
-    threadImage.dispose();
-    threadText.dispose();
-    super.onClose();
+  Future<void> deletePost(String postID) async {
+    String url = "${baseURL()}/api/posts/delete/$postID";
+    AuthToken userCookie = AuthToken();
+    String authToken = await userCookie.getToken();
+    try {
+      final Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'cookie': 'jwt=$authToken',
+      };
+
+      final response = await http.delete(Uri.parse(url), headers: headers);
+      deleteStatusCode.value = response.statusCode;
+      if (response.statusCode == 200) {
+        print("Post was deleted Sucessfully");
+      } else {
+        print("UnAuthoried");
+      }
+    } catch (error) {
+      print("Error in the deletePost ${error}");
+    }
   }
 }

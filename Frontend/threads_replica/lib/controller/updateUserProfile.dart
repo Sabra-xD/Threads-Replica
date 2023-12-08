@@ -12,6 +12,7 @@ import 'token_saver.dart';
 class updateUserProfileController extends GetxController {
   TextEditingController bioController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
+  RxBool imageChanged = RxBool(false);
   TextEditingController newImageController = TextEditingController();
 
   AuthToken userCookie = AuthToken();
@@ -34,7 +35,7 @@ class updateUserProfileController extends GetxController {
       data['password'] = newPasswordController.text;
     }
     if (newImageController.text.isNotEmpty) {
-      data['img'] = newImageController.text;
+      data['profilePic'] = newImageController.text;
     }
     //Basically we need to post these.
     try {

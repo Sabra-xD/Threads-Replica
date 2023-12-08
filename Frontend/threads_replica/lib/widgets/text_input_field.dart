@@ -36,7 +36,8 @@ class TextFieldInput extends StatelessWidget {
       keyboardType: textInputType,
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: const TextStyle(color: primaryColor, fontSize: 12.5),
+        hintStyle: const TextStyle(color: Colors.black, fontSize: 12.5),
+        labelStyle: const TextStyle(color: Colors.black, fontSize: 12.5),
         suffixIcon: showObsecure == true
             ? GestureDetector(
                 onTap: () {
