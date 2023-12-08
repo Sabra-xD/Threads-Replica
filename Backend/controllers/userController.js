@@ -13,7 +13,6 @@ const getUserProfile = async (req, res) => {
 
 	try {
 		let user;
-
 		// query is userId
 		if (mongoose.Types.ObjectId.isValid(query)) {
 			user = await User.findOne({ _id: query }).select("-password").select("-updatedAt");
@@ -38,7 +37,7 @@ const signUpuser = async (req,res) => {
     console.log(req.body);
     //Where the fuck is the body?
     try {
-      const {username,name,email,password}=req.body;
+      const {username,name,email,password,img,bio}=req.body;
       //It tries to find if the user exists in the DB by username or
       const user = await User.findOne({$or:[{email},{username}]});
 
@@ -86,6 +85,7 @@ const signUpuser = async (req,res) => {
 }
 
 const login = async (req,res) =>{
+    
     console.log("Login Request received");
     try{
         const {username,password} = req.body;
@@ -111,7 +111,10 @@ const login = async (req,res) =>{
             name: user.name,
             email: user.email,
             username: user.username,
-            profilePic: user.profilePic
+            profilePic: user.profilePic,
+            followers: user.followers,
+            following: user.following,
+
         })
 
     }catch(err){
