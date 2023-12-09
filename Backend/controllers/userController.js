@@ -350,7 +350,7 @@ const getSuggestedUsers = async (req, res) => {
 				$sample: { size: 10 },
 			},
 		]);
-        
+
 		const filteredUsers = users.filter((user) => !usersFollowedByYou.following.includes(user._id));
 		const suggestedUsers = filteredUsers.slice(0, 4);
 
@@ -365,4 +365,4 @@ const getSuggestedUsers = async (req, res) => {
 
 
 
-export {signUpuser,login,logout, followunfollowUser , updateUser, getUserProfile, forgotPassword, findUser,getUserPosts};
+export {signUpuser,login,logout, followunfollowUser , updateUser, getUserProfile, forgotPassword, findUser,getUserPosts,getSuggestedUsers};
