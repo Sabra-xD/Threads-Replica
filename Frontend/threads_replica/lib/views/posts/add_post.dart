@@ -5,6 +5,7 @@ import 'package:threads_replica/controller/PostController.dart';
 import 'package:threads_replica/controller/userInfo.dart';
 import 'package:threads_replica/utils/colors.dart';
 import 'package:another_flushbar/flushbar.dart';
+import 'package:threads_replica/widgets/text_input_field.dart';
 
 import '../../controller/bottomNavigationBarController.dart';
 
@@ -20,6 +21,8 @@ class PostScreen extends StatefulWidget {
 class _PostScreenState extends State<PostScreen> {
   final PostController createPost = Get.put(PostController());
   final UserInfo _userInfo = Get.find<UserInfo>();
+  RxBool addPic = RxBool(false);
+  TextEditingController picLink = TextEditingController();
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late Future<String> userName;
@@ -72,7 +75,7 @@ class _PostScreenState extends State<PostScreen> {
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    await createPost.createPost();
+                    await createPost.createPost(picLink.text);
                     if (createPost.createPoststatusCode.value == 200) {
                       // ignore: use_build_context_synchronously
                       await Flushbar(
@@ -219,7 +222,9 @@ class _PostScreenState extends State<PostScreen> {
                         width: MediaQuery.of(context).size.width * 0.18,
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          addPic.toggle();
+                        },
                         icon: const Icon(
                           Icons.camera_alt,
                           color: Colors.grey,
@@ -228,6 +233,19 @@ class _PostScreenState extends State<PostScreen> {
                       ),
                     ],
                   ),
+                  Obx((() {
+                    if (addPic.value) {
+                      return TextFieldInput(
+                          textEditingController: picLink,
+                          hintText: "Enter the picture's link",
+                          textInputType: TextInputType.text);
+                    } else {
+                      return const SizedBox(
+                        height: 0,
+                        width: 0,
+                      );
+                    }
+                  }))
                 ],
               );
             }

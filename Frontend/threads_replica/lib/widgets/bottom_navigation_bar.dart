@@ -43,15 +43,20 @@ class bottomNavBar extends StatelessWidget {
           }
           if (index == 3) {
             await _getUserProfile.getUserProfile(_userInfo.userId.value);
-            Get.offAllNamed("/ProfileScreen");
+            // Get.offAllNamed("/ProfileScreen");
             print("The response data: ${_getUserProfile.responseData.value}");
 
-            //This is the actual solution.
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => UsersProfileScreen(
-            //             fullUserInfo: _getUserProfile.responseData.value)));
+            // This is the actual solution.
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => UsersProfileScreen(
+                  fullUserInfo: _getUserProfile.responseData.value,
+                ),
+              ),
+              (Route<dynamic> route) =>
+                  false, // Route predicate always returns false, removes all existing routes
+            );
           }
         },
         items: const [

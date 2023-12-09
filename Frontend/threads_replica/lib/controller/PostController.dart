@@ -15,7 +15,7 @@ class PostController extends GetxController {
   AuthToken userCookie = AuthToken();
   RxInt createPoststatusCode = RxInt(0);
 
-  Future<void> createPost() async {
+  Future<void> createPost(String? pictureLink) async {
     String url = "${baseURL()}/api/posts/create";
 
     String authToken = await userCookie.getToken();
@@ -29,6 +29,10 @@ class PostController extends GetxController {
       'postedBy': authToken,
       'text': threadText.text,
     };
+
+    if (pictureLink != null) {
+      data['img'] = pictureLink;
+    }
 
     try {
       print("Printing from inside create Post: ${await userCookie.getToken()}");

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:threads_replica/styles/TextStyles.dart';
 import 'package:threads_replica/utils/colors.dart';
+import 'package:threads_replica/widgets/bottom_navigation_bar.dart';
 import '../controller/bottomNavigationBarController.dart';
 import "../controller/searchController.dart";
 import '../controller/userInfo.dart';
@@ -24,6 +25,7 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: bottomNavBar(barController: _barController),
       appBar: AppBar(
         elevation: 2,
         backgroundColor: mobileBackgroundColor,

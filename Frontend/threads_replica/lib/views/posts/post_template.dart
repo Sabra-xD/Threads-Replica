@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/PostController.dart';
+import 'package:threads_replica/controller/createdAt_controller.dart';
 import 'package:threads_replica/controller/userInfo.dart';
 import 'package:threads_replica/views/users_profile_screen.dart';
 import 'package:threads_replica/widgets/drop_down_delete.dart';
@@ -23,6 +24,7 @@ class PostTemplate extends StatelessWidget {
   int? repliesCount;
   String? postPic;
   bool? likedColor;
+  String createdAt;
   Map<String, dynamic> fullUserInfo;
   //We might need a dynamic variable here to have full user info so we can pass it to the
   //It includes all the information that we need though.
@@ -38,6 +40,7 @@ class PostTemplate extends StatelessWidget {
     this.postPic,
     required this.postedBy,
     required this.postID,
+    required this.createdAt,
     this.likedColor,
     required this.fullUserInfo,
   });
@@ -92,7 +95,7 @@ class PostTemplate extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  "5m",
+                  timeStamp(createdAt),
                   style: defaultTextStyle(fontWeight: FontWeight.w600),
                 ),
                 _userInfo.userId.value == postedBy

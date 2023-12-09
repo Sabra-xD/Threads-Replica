@@ -5,9 +5,11 @@ import 'package:threads_replica/controller/singleUserPostsController.dart';
 import 'package:threads_replica/styles/TextStyles.dart';
 import 'package:threads_replica/utils/colors.dart';
 import 'package:threads_replica/views/posts/post_template.dart';
+import 'package:threads_replica/widgets/profile_widgets.dart';
 
 import '../controller/bottomNavigationBarController.dart';
 import '../controller/userInfo.dart';
+import '../widgets/bottom_navigation_bar.dart';
 
 // ignore: must_be_immutable
 class UsersProfileScreen extends StatelessWidget {
@@ -30,20 +32,13 @@ class UsersProfileScreen extends StatelessWidget {
     UserInfo userInfo = Get.find<UserInfo>();
     RxBool isFollowing =
         RxBool(fullUserInfo['followers'].contains(userInfo.userId.value));
-    print("Is the user following? ${isFollowing.value}");
     return Scaffold(
-      appBar: AppBar(
-        elevation: 2,
-        backgroundColor: mobileBackgroundColor,
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          color: primaryColor,
-          onPressed: () {
-            Get.toNamed("/HomePage");
-            _barController.updateIndex(0);
-          },
-        ),
-      ),
+      bottomNavigationBar: fullUserInfo['_id'] == userInfo.userId.value
+          ? bottomNavBar(barController: _barController)
+          : null,
+      appBar: fullUserInfo['_id'] == userInfo.userId.value
+          ? personalAppBar(userInfo)
+          : defaultProfileAppBar(_barController),
       backgroundColor: mobileBackgroundColor,
       body: SafeArea(
           child: SingleChildScrollView(
@@ -79,28 +74,19 @@ class UsersProfileScreen extends StatelessWidget {
                     );
                   }),
 
+                  Text(
+                    "${fullUserInfo['following'].length} following",
+                    style: defaultTextStyle(textColor: Colors.grey),
+                  ),
+
                   const SizedBox(
                     height: 10,
                   ),
                   //The Text will be wrapepd in an OBX.
-
-                  ElevatedButton(onPressed: () async {
-                    await followeController.FollowOrUnFollow(
-                        fullUserInfo['_id']);
-                    if (followeController.statusCode.value == 200) {
-                      if (isFollowing.value) {
-                        numberOfFollowers.value = numberOfFollowers.value - 1;
-                      } else {
-                        numberOfFollowers.value = numberOfFollowers.value + 1;
-                      }
-                      isFollowing.value = !isFollowing.value;
-                    }
-                  }, child: Obx(() {
-                    return Text(
-                      isFollowing.value ? "Unfollow" : "Follow",
-                      style: defaultTextStyle(textColor: Colors.black),
-                    );
-                  })),
+                  fullUserInfo['_id'] == userInfo.userId.value
+                      ? editAndShareProfileButtons(context)
+                      : followUnFollowButton(followeController, isFollowing,
+                          numberOfFollowers, fullUserInfo),
 
                   const SizedBox(
                     height: 10,
@@ -119,7 +105,10 @@ class UsersProfileScreen extends StatelessWidget {
                     height: 12.5,
                   ),
                   finderUserThreads(
-                      findUserPosts: _findUserPosts, fullUserInfo: fullUserInfo)
+                    findUserPosts: _findUserPosts,
+                    fullUserInfo: fullUserInfo,
+                    userInfo: userInfo,
+                  )
                 ],
               ),
             ],
@@ -136,10 +125,12 @@ class finderUserThreads extends StatelessWidget {
     super.key,
     required findUserPosts findUserPosts,
     required this.fullUserInfo,
+    required this.userInfo,
   }) : _findUserPosts = findUserPosts;
 
   final findUserPosts _findUserPosts;
   final Map<String, dynamic> fullUserInfo;
+  final UserInfo userInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -176,10 +167,11 @@ class finderUserThreads extends StatelessWidget {
                   itemBuilder: (context, int index) {
                     final feedItem = _findUserPosts.posts[index];
                     return PostTemplate(
+                      createdAt: feedItem['createdAt'],
                       fullUserInfo: fullUserInfo,
                       postedBy: feedItem['postedBy'],
-                      likedColor:
-                          false, //We have to check, does it contain our user?
+                      likedColor: feedItem['likes'].contains(userInfo.userId
+                          .value), //We have to check, does it contain our user?
                       postID: feedItem['_id'],
                       text: feedItem['text'],
                       img: fullUserInfo['profilePic'],

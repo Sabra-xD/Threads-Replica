@@ -76,6 +76,7 @@ class HomePage extends StatelessWidget {
                                         child: PostTemplate(
                                           fullUserInfo: feedItem[1],
                                           postedBy: feedItem[0]['postedBy'],
+                                          createdAt: feedItem[0]['createdAt'],
                                           likedColor:
                                               liked, //We have to check, does it contain our user?
                                           postID: feedItem[0]['_id'],
