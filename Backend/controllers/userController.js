@@ -58,6 +58,15 @@ const signUpuser = async (req,res) => {
         password:hashedPassword,
 
       });
+      if(img){
+        newUser.profilePic = img;
+      }else{
+        newUser.profilePic = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJabgM-7U-CFnD-uhomLpnMPobJnkYiiFQTv-AuVfvyQ&s";
+      }
+
+      if(bio){
+        newUser.bio = bio;
+      }
       console.log(User.username)
       await newUser.save();
       if(newUser){
