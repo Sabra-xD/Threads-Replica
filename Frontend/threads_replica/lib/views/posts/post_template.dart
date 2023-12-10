@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:threads_replica/controller/PostController.dart';
 import 'package:threads_replica/controller/createdAt_controller.dart';
 import 'package:threads_replica/controller/userInfo.dart';
+import 'package:threads_replica/utils/noPicture.dart';
 import 'package:threads_replica/views/users_profile_screen.dart';
 import 'package:threads_replica/widgets/drop_down_delete.dart';
 import 'package:threads_replica/widgets/flush_bar.dart';
@@ -69,8 +70,7 @@ class PostTemplate extends StatelessWidget {
                 CircleAvatar(
                   foregroundImage: img != null && img != ""
                       ? NetworkImage(img!)
-                      : const NetworkImage(
-                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"),
+                      : NetworkImage(userHasNoPicture()),
                   radius: 20,
                 ),
                 const SizedBox(

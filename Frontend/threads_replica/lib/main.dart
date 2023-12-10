@@ -5,7 +5,6 @@ import 'package:threads_replica/views/forgot_password.dart';
 import 'package:threads_replica/views/home_screen.dart';
 import 'package:threads_replica/views/login_screen.dart';
 import 'package:threads_replica/views/posts/add_post.dart';
-import 'package:threads_replica/views/profile/edit_profile.dart';
 import 'package:threads_replica/views/search_screen.dart';
 import 'package:threads_replica/views/signup_screen.dart';
 
@@ -33,8 +32,8 @@ class MyApp extends StatelessWidget {
         GetPage(name: "/CreatePostScreen", page: () => const PostScreen()),
         GetPage(name: "/HomePage", page: () => const HomePage()),
         GetPage(name: "/SearchScreen", page: () => SearchScreen()),
-        GetPage(
-            name: "/EditProfileScreen", page: () => const EditProfileScreen()),
+        // GetPage(
+        //     name: "/EditProfileScreen", page: () =>  EditProfileScreen()),
       ],
       home: const MyHomePage(title: 'Threads-Replica'),
     );

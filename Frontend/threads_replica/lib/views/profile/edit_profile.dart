@@ -1,7 +1,8 @@
-// ignore_for_file: use_super_parameters, no_leading_underscores_for_local_identifiers
+// ignore_for_file: use_super_parameters, no_leading_underscores_for_local_identifiers, use_build_context_synchronously, must_be_immutable
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:threads_replica/controller/getUserProfileController.dart';
 import 'package:threads_replica/controller/updateUserProfile.dart';
 import 'package:threads_replica/controller/userInfo.dart';
 import 'package:threads_replica/styles/TextStyles.dart';
@@ -9,18 +10,29 @@ import 'package:threads_replica/utils/colors.dart';
 import 'package:threads_replica/views/profile/edit_password.dart';
 import 'package:threads_replica/widgets/text_input_field.dart';
 
+import '../users_profile_screen.dart';
 import 'edit_bio.dart';
 
 class EditProfileScreen extends StatelessWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+  EditProfileScreen(
+      {Key? key,
+      required this.username,
+      required this.profilePic,
+      required this.currentBio,
+      required this.userID})
+      : super(key: key);
+
+  String username;
+  String userID;
+  String profilePic;
+  String currentBio;
   @override
   Widget build(BuildContext context) {
-    UserInfo _userInfo = Get.put(UserInfo());
+    // UserInfo _userInfo = Get.put(UserInfo());
     updateUserProfileController _updateUser =
         Get.put(updateUserProfileController());
-
-    //Basically we created the instance in the main scree. Then we moved on to other screens and "found" that instance to use it.
-    //So any change in values is saved in it.
+    UserInfo _userInfo = Get.put(UserInfo());
+    GetUserProfile _getUserProfile = Get.put(GetUserProfile());
 
     return Scaffold(
       backgroundColor: mobileBackgroundColor,
@@ -43,18 +55,23 @@ class EditProfileScreen extends StatelessWidget {
         actions: [
           TextButton(
               onPressed: () async {
-                //Post?
                 print(
-                    "BioController value that was set @ the fucking EditBioScreen: ${_updateUser.bioController.text}");
-                print("New Image link: ${_updateUser.newImageController.text}");
+                    "Value of the bioController @ the Done button: ${_updateUser.bioController.text}");
                 await _updateUser.updateProfile();
                 if (_updateUser.statusCode.value == 200) {
-                  //Saving the new Bio in the local storage..
                   _userInfo.saveBio(_updateUser.bioController.text);
                   _userInfo.savedImage(_updateUser.newImageController.text);
                   _updateUser.imageChanged.value = false;
-                  // Get.toNamed("/ProfileScreen");
-                  Navigator.pop(context);
+                  await _getUserProfile.getUserProfile(userID);
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UsersProfileScreen(
+                        fullUserInfo: _getUserProfile.responseData.value,
+                      ),
+                    ),
+                    (Route<dynamic> route) => false,
+                  );
                   _updateUser.dispose();
                 }
               },
@@ -72,7 +89,6 @@ class EditProfileScreen extends StatelessWidget {
               width: MediaQuery.of(context).size.width *
                   0.9, // Adjust width as needed
               child: GetBuilder<UserInfo>(
-                init: _userInfo,
                 builder: (controller) {
                   if (controller.isLoading.value) {
                     controller.fetchData();
@@ -119,7 +135,7 @@ class EditProfileScreen extends StatelessWidget {
                                             style: defaultTextStyle(),
                                           ),
                                           Text(
-                                            "  ${_userInfo.userName.value}",
+                                            "  $username",
                                             style: defaultTextStyle(
                                               fontWeight: FontWeight.w400,
                                             ),
@@ -135,7 +151,7 @@ class EditProfileScreen extends StatelessWidget {
                                       },
                                       child: CircleAvatar(
                                         foregroundImage: NetworkImage(
-                                          controller.img.value,
+                                          profilePic,
                                         ),
                                         radius: 25,
                                       ),
@@ -172,7 +188,12 @@ class EditProfileScreen extends StatelessWidget {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const EditBioScreen()));
+                                                  EditBioScreen(
+                                                    username: username,
+                                                    currentBio: currentBio,
+                                                    userID: userID,
+                                                    profilePic: profilePic,
+                                                  )));
                                     },
                                     child: Column(
                                       children: [
@@ -181,7 +202,9 @@ class EditProfileScreen extends StatelessWidget {
                                           style: defaultTextStyle(),
                                         ),
                                         Text(
-                                          "+ Write Bio",
+                                          currentBio != ""
+                                              ? currentBio
+                                              : "+ Write Bio",
                                           style: defaultTextStyle(
                                             fontWeight: FontWeight.w400,
                                           ),
@@ -202,7 +225,12 @@ class EditProfileScreen extends StatelessWidget {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const EditPasswordScreen()));
+                                                EditPasswordScreen(
+                                                  username: username,
+                                                  currentBio: currentBio,
+                                                  userID: userID,
+                                                  profilePic: profilePic,
+                                                )));
                                   },
                                   child: Text(
                                     "Update your password",

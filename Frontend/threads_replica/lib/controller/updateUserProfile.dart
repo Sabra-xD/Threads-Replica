@@ -17,7 +17,7 @@ class updateUserProfileController extends GetxController {
 
   AuthToken userCookie = AuthToken();
   RxInt statusCode = RxInt(0);
-  final UserInfo _userInfo = Get.put(UserInfo());
+  final UserInfo _userInfo = Get.find<UserInfo>();
 
   Future<void> updateProfile() async {
     String url = "${baseURL()}/api/users/updateUser/${_userInfo.userId.value}";

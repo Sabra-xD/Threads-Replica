@@ -26,7 +26,7 @@ class FindSuggestUsers extends GetxController {
 
       final response = await http.get(Uri.parse(url), headers: headers);
       suggestedStatusCode.value = response.statusCode;
-      final receivedData = json.decode(response.body);
+      receivedData = json.decode(response.body);
       print("REceived Data List Length ${receivedData.length}");
     } catch (error) {
       print("Error in he FollowController :${error}");

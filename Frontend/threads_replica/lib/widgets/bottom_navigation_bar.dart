@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types, use_build_context_synchronously
+// ignore_for_file: camel_case_types, use_build_context_synchronously, no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -42,21 +42,24 @@ class bottomNavBar extends StatelessWidget {
             Get.offAllNamed("/CreatePostScreen");
           }
           if (index == 3) {
+            //Because once th
+            await _userInfo.fetchData();
             await _getUserProfile.getUserProfile(_userInfo.userId.value);
-            // Get.offAllNamed("/ProfileScreen");
-            print("The response data: ${_getUserProfile.responseData.value}");
+
+            if (_getUserProfile.statusCode.value == 200) {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UsersProfileScreen(
+                    fullUserInfo: _getUserProfile.responseData.value,
+                  ),
+                ),
+                (Route<dynamic> route) =>
+                    false, // Route predicate always returns false, removes all existing routes
+              );
+            }
 
             // This is the actual solution.
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => UsersProfileScreen(
-                  fullUserInfo: _getUserProfile.responseData.value,
-                ),
-              ),
-              (Route<dynamic> route) =>
-                  false, // Route predicate always returns false, removes all existing routes
-            );
           }
         },
         items: const [

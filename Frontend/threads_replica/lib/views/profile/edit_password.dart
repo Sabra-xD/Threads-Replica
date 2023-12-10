@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/updateUserProfile.dart';
@@ -8,7 +10,16 @@ import '../../styles/TextStyles.dart';
 import '../../utils/colors.dart';
 
 class EditPasswordScreen extends StatelessWidget {
-  const EditPasswordScreen({super.key});
+  EditPasswordScreen(
+      {super.key,
+      required this.username,
+      required this.profilePic,
+      required this.currentBio,
+      required this.userID});
+  String username;
+  String userID;
+  String profilePic;
+  String currentBio;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +74,12 @@ class EditPasswordScreen extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => EditProfileScreen()));
+                              builder: (context) => EditProfileScreen(
+                                    username: username,
+                                    currentBio: currentBio,
+                                    userID: userID,
+                                    profilePic: profilePic,
+                                  )));
                     }
                   }
                 }

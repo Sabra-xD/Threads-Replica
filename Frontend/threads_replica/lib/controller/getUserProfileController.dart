@@ -11,7 +11,8 @@ class GetUserProfile extends GetxController {
 
   Future<Map<String, dynamic>?> getUserProfile(String query) async {
     try {
-      String url = "${baseURL()}/api/users/profile/${query}";
+      String url = "${baseURL()}/api/users/profile/$query";
+      print("Our user Query: ${query}");
       final Map<String, String> headers = {
         'Content-Type': 'application/json',
       };
@@ -23,12 +24,13 @@ class GetUserProfile extends GetxController {
 
       // Checking the status code of the response
       statusCode.value = response.statusCode;
-
+      print("Status code from getUSer");
       if (response.statusCode == 200) {
         print("We got the userProfileSuccessfully");
         // Decoding the response body and returning it
         final userInfo = json.decode(response.body);
         responseData.value = userInfo;
+        print("Userinfo: ${userInfo}");
         return userInfo;
       }
     } catch (error) {

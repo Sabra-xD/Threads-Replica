@@ -2,8 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:threads_replica/utils/colors.dart';
+import 'package:threads_replica/utils/noPicture.dart';
 
 import '../styles/TextStyles.dart';
+import 'users_profile_screen.dart';
 
 class SuggestedUsersScreen extends StatelessWidget {
   SuggestedUsersScreen({super.key, required this.receivedData});
@@ -33,37 +35,53 @@ class SuggestedUsersScreen extends StatelessWidget {
           child: ListView.builder(
               itemCount: receivedData.length,
               itemBuilder: (BuildContext context, int index) {
-                return Row(
-                  children: [
-                    //User image:
-                    CircleAvatar(
-                      foregroundImage: NetworkImage(
-                        receivedData[index]['profilePic'] ??
-                            "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UsersProfileScreen(
+                          fullUserInfo: receivedData[index],
+                        ),
                       ),
-                      radius: 27,
-                    ),
-
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Column(
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
                       children: [
-                        Text(
-                          "${receivedData[index]["username"]}",
-                          style: defaultTextStyle(fontSize: 17),
+                        //User image:
+                        CircleAvatar(
+                          foregroundImage: NetworkImage(
+                            receivedData[index]['profilePic'] != ""
+                                ? receivedData[index]['profilePic']
+                                : userHasNoPicture(),
+                          ),
+                          radius: 27,
                         ),
+
                         const SizedBox(
-                          height: 5,
+                          width: 10,
                         ),
-                        Text(
-                          "${receivedData[index]['bio']}",
-                          style: defaultTextStyle(
-                              fontSize: 10, fontWeight: FontWeight.w400),
+                        Column(
+                          children: [
+                            Text(
+                              "${receivedData[index]["username"]}",
+                              style: defaultTextStyle(fontSize: 17),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "${receivedData[index]['bio']}",
+                              style: defaultTextStyle(
+                                  fontSize: 10, fontWeight: FontWeight.w400),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 );
               }),
         ));

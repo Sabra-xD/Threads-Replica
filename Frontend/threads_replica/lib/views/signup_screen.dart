@@ -145,11 +145,11 @@ class SignUpScreen extends StatelessWidget {
                   return Container();
                 }),
                 InkWell(
-                  onTap: () {
+                  onTap: () async {
                     FocusScope.of(context).unfocus();
 
                     if (formKey.currentState!.validate()) {
-                      signUpController.signup();
+                      await signUpController.signup();
                       if (signUpController.statusCode.value == 201) {
                         signUpController.dispose();
                         Get.offAllNamed("/HomePage");

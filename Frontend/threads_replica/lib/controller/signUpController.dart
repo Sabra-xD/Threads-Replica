@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'dart:convert';
 
 import 'package:cookie_jar/cookie_jar.dart';
@@ -24,7 +26,6 @@ class SignUpController extends GetxController {
 
   Future<void> signup() async {
     print("Inside the Sign UP Function");
-    print("Old saved Token: ${await saver.getToken()}");
     String url = "${baseURL()}/api/users/signup";
 
     final Map<String, String> headers = {
@@ -36,17 +37,23 @@ class SignUpController extends GetxController {
       'email': emailController.text,
       'name': nameController.text,
       'password': passwordController.text,
-      'bio': bioController.text,
     };
+    if (bioController.text.isNotEmpty) {
+      data['bio'] = bioController.text;
+    }
 
-    if (usernameController.text.isNotEmpty &&
-        passwordController.text.isNotEmpty &&
-        nameController.text.isNotEmpty) {
-      try {
+    try {
+      print("We are inside the try");
+      if (usernameController.text.isNotEmpty &&
+          passwordController.text.isNotEmpty &&
+          nameController.text.isNotEmpty) {
+        print("Posting...");
         final response = await http.post(Uri.parse(url),
             headers: headers, body: json.encode(data));
 
         statusCode.value = response.statusCode;
+
+        print("Posted the statusCode is ${response.statusCode}");
 
         if (response.statusCode == 201) {
           print("Response Data:${response.body}");
@@ -55,27 +62,22 @@ class SignUpController extends GetxController {
               receivedData['username'],
               receivedData['email'],
               receivedData['img'],
-              receivedData['_id'],
-              receivedData['followers'],
-              receivedData['following']);
-          //We should be doing something with that, huh?
-
+              receivedData['_id'], [], []);
           String? setCookieHeader = response.headers['set-cookie'];
           Cookie cookie = Cookie.fromSetCookieValue(setCookieHeader!);
-          print("Cookie name: ${cookie.name}");
-          print("Cookie received in the Sign UP Function: ${cookie.value}");
+          if (cookie.name == "jwt") {
+            print("Should've saved the cookie now");
+            saver.saveToken(cookie.value);
+          }
 
-          saver.saveToken(cookie.value);
-
+          print("Should've fetched the data");
           print("Cookie saved value: ${await saver.getToken()}");
-        } else {
-          print("Error: ${response.body}");
         }
-      } catch (error) {
-        print(error);
+      } else {
+        print("Error: Insufficient Input");
       }
-    } else {
-      print("Post was failed due to insuficient input.");
+    } catch (error) {
+      print(error);
     }
   }
 

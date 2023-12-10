@@ -30,7 +30,9 @@ class PostController extends GetxController {
       'text': threadText.text,
     };
 
-    if (pictureLink != null) {
+    if (pictureLink != null && pictureLink.isNotEmpty) {
+      print("Picutre link is not null?");
+      print("Pic Link text: ${pictureLink}");
       data['img'] = pictureLink;
     }
 

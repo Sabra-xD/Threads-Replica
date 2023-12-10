@@ -12,29 +12,29 @@ import '../controller/bottomNavigationBarController.dart';
 import '../controller/followUnfollowController.dart';
 import '../controller/userInfo.dart';
 import '../styles/TextStyles.dart';
+import '../views/profile/edit_profile.dart';
 
 AppBar personalAppBar(UserInfo _userInfo) {
   return AppBar(
     elevation: 2,
     backgroundColor: mobileBackgroundColor,
     leading: IconButton(
-      icon: const Icon(Icons.lock_outline),
+      icon: const Icon(Icons.add),
       color: primaryColor,
-      onPressed: () {
-        //Should display a list of users to follow
+      onPressed: () async {
+        FindSuggestUsers _findUsers = Get.put(FindSuggestUsers());
+        await _findUsers.suggestedUsers();
+
+        if (_findUsers.suggestedStatusCode.value == 200) {
+          Get.to(() => SuggestedUsersScreen(
+                receivedData: _findUsers.receivedData,
+              ));
+        }
       },
     ),
     actions: [
       IconButton(
-        onPressed: () async {
-          FindSuggestUsers _findUsers = Get.put(FindSuggestUsers());
-          await _findUsers.suggestedUsers();
-          if (_findUsers.suggestedStatusCode.value == 200) {
-            Get.to(() => SuggestedUsersScreen(
-                  receivedData: _findUsers.receivedData,
-                ));
-          }
-        },
+        onPressed: () {},
         icon: const Icon(
           Icons.camera_alt_sharp,
           color: primaryColor,
@@ -72,7 +72,8 @@ AppBar defaultProfileAppBar(BottomNavigationBarController _barController) {
   );
 }
 
-Padding editAndShareProfileButtons(BuildContext context) {
+Padding editAndShareProfileButtons(
+    BuildContext context, Map<String, dynamic> fullUserInfo) {
   return Padding(
     padding: const EdgeInsets.all(12.5),
     child: Row(
@@ -80,7 +81,16 @@ Padding editAndShareProfileButtons(BuildContext context) {
       children: [
         InkWell(
           onTap: () {
-            Get.toNamed("/EditProfileScreen");
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => EditProfileScreen(
+                        username: fullUserInfo['username'],
+                        currentBio: fullUserInfo['bio'],
+                        userID: fullUserInfo['_id'],
+                        profilePic: fullUserInfo['profilePic'],
+                      )),
+            );
           },
           child: Container(
             height: 35,

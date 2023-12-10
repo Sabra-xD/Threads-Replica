@@ -4,6 +4,7 @@ import 'package:threads_replica/controller/followUnfollowController.dart';
 import 'package:threads_replica/controller/singleUserPostsController.dart';
 import 'package:threads_replica/styles/TextStyles.dart';
 import 'package:threads_replica/utils/colors.dart';
+import 'package:threads_replica/utils/noPicture.dart';
 import 'package:threads_replica/views/posts/post_template.dart';
 import 'package:threads_replica/widgets/profile_widgets.dart';
 
@@ -23,7 +24,7 @@ class UsersProfileScreen extends StatelessWidget {
 
     // ignore: no_leading_underscores_for_local_identifiers
     BottomNavigationBarController _barController =
-        Get.find<BottomNavigationBarController>();
+        Get.put(BottomNavigationBarController());
 
     RxInt numberOfFollowers = RxInt(fullUserInfo['followers']?.length);
 
@@ -56,13 +57,34 @@ class UsersProfileScreen extends StatelessWidget {
                         style: defaultTextStyle(fontSize: 25),
                       ),
                       CircleAvatar(
-                        foregroundImage: NetworkImage(fullUserInfo[
-                                'profilePic'] ??
-                            "https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
+                        foregroundImage: NetworkImage(
+                            fullUserInfo['profilePic'] != ""
+                                ? fullUserInfo['profilePic']
+                                : userHasNoPicture()),
                         radius: 25,
                       ),
                     ],
                   ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  // Obx(() {
+                  //   return
+                  //       ? Text(
+                  //           fullUserInfo['bio']! ?? "",
+                  //           style: defaultTextStyle(fontSize: 25),
+                  //         )
+                  //       : const SizedBox(
+                  //           height: 0,
+                  //           width: 0,
+                  //         );
+                  // }),
+
+                  Text(
+                    fullUserInfo['bio']! ?? "",
+                    style: defaultTextStyle(fontSize: 25),
+                  ),
+
                   const SizedBox(
                     height: 10,
                   ),
@@ -84,7 +106,7 @@ class UsersProfileScreen extends StatelessWidget {
                   ),
                   //The Text will be wrapepd in an OBX.
                   fullUserInfo['_id'] == userInfo.userId.value
-                      ? editAndShareProfileButtons(context)
+                      ? editAndShareProfileButtons(context, fullUserInfo)
                       : followUnFollowButton(followeController, isFollowing,
                           numberOfFollowers, fullUserInfo),
 
@@ -134,6 +156,7 @@ class finderUserThreads extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("The error is in the Threads build");
     return FutureBuilder(
         future: _findUserPosts.findPosts(fullUserInfo['_id']),
         builder: (context, snapshot) {

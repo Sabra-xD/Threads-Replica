@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:threads_replica/controller/updateUserProfile.dart';
@@ -8,12 +10,19 @@ import 'package:threads_replica/views/profile/edit_profile.dart';
 import '../../styles/TextStyles.dart';
 
 class EditBioScreen extends StatelessWidget {
-  const EditBioScreen({super.key});
+  EditBioScreen(
+      {super.key,
+      required this.username,
+      required this.profilePic,
+      required this.currentBio,
+      required this.userID});
+  String username;
+  String userID;
+  String profilePic;
+  String currentBio;
 
   @override
   Widget build(BuildContext context) {
-    // updateUserProfileController _updateUserProfileController =
-    //     Get.put(updateUserProfileController());
     final updateUser = Get.find<updateUserProfileController>();
 
     return Scaffold(
@@ -24,11 +33,8 @@ class EditBioScreen extends StatelessWidget {
             icon: const Icon(Icons.close),
             color: primaryColor,
             onPressed: () {
-              //Close the current page and route to the most recent page.
-
-              //Dispose of the _updateBioController.
-              // _updateUserProfileController.dispose();
-              updateUser.dispose();
+              Navigator.pop(context);
+              // updateUser.dispose();
             },
           ),
           title: Text(
@@ -39,12 +45,18 @@ class EditBioScreen extends StatelessWidget {
             IconButton(
                 onPressed: () {
                   print(
-                      "The bioController that is related to the globla class: ${updateUser.bioController.text}");
-
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const EditProfileScreen()));
+                      "Value of the bioController ${updateUser.bioController.text}");
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EditProfileScreen(
+                              username: username,
+                              currentBio: currentBio,
+                              userID: userID,
+                              profilePic: profilePic,
+                            )),
+                    // Route predicate always returns false, removes all existing routes
+                  );
                 },
                 icon: const Icon(
                   Icons.check_sharp,
