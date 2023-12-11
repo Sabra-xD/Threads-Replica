@@ -22,10 +22,12 @@
   -Search for users using parts of bits of their usernames.
   -Update user's profile (bio,password and image)
   -Suggest users to follow for our current user.
+
+# Vidoes:
+    [![Watch the video](https://img.youtube.com/vi/1o2zoA7zqNMY9QnNuJ3P4479LfYPKJmGm/0.jpg)](https://drive.google.com/file/d/1o2zoA7zqNMY9QnNuJ3P4479LfYPKJmGm/view?usp=sharing)
+
   
-  
-  
-  #Screenshots:
+  ## Screenshots:
   
 
 
