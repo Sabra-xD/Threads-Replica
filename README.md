@@ -6,12 +6,12 @@
 - NodeJS
 - JWT
 
-  ##Flutter Packages Used:
+##Flutter Packages Used:
   -GetX for statemanagement
   -http to send & receive request with BE
   -SharedPrefs to store information of client's device.
 
-  #Application Features:
+#Application Features:
   -Authentication(Login,Sign up and Forgot Password)
   -Automatic login once the user is logged in once and the saved Authentication token is valid.
   -Log out (by deleting all the user information saved on the device)
